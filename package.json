@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "name": "flow-annotation-check",
+  "version": "0.0.1",
+  "author": "Ryan Albrecht",
+  "license": "",
+  "description": "",
+  "main": "./src/flow-annotation-check.js",
+  "dependencies": {
+    "args": "2.1.0",
+    "bluebird": "^3.4.6",
+    "glob": "7.1.1"
+  },
+  "devDependencies": {
+    "jest": "16.0.2"
+  }
+}

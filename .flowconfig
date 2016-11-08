@@ -1,0 +1,8 @@
+[ignore]
+.*/tests/fixtures/.*
+
+[include]
+
+[libs]
+
+[options]
