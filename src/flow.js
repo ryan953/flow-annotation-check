@@ -1,6 +1,7 @@
 const childProcess = require('child_process');
 const fs = require('fs');
 const glob = require('glob');
+const {flatten, unique} = require('./utils');
 
 const FLOW_MODE = {
   FLOW: 'flow',
@@ -122,16 +123,6 @@ function countVisibleFiles(cwd) {
       }
       return parseInt(stdout.trim(), 10);
     });
-}
-
-function flatten(arrays) {
-  return [].concat.apply([], arrays);
-}
-
-function unique(array) {
-  const obj = {};
-  array.forEach((item) => { obj[item] = true; });
-  return Object.keys(obj);
 }
 
 function forceErrors(cwd, files, flags) {

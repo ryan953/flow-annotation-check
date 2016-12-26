@@ -2,15 +2,12 @@ const args = require('args');
 const path = require('path');
 const flow = require('./flow');
 const globsToFileList = require('./globsToFileList');
+const {toArray} = require('./utils');
 
 const Promise = require('bluebird');
 
 function getCWD(sub) {
   return path.resolve(process.cwd(), sub[0] || '.');
-}
-
-function toArray(flag) {
-  return [].concat(flag).filter(_ => _);
 }
 
 function getReport(sub, flags) {

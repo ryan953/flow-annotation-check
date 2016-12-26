@@ -1,12 +1,5 @@
 const glob = require('glob');
-
-function toArray(flag) {
-  return [].concat(flag).filter(_ => _);
-}
-
-function flatten(arrays) {
-  return [].concat.apply([], arrays);
-}
+const {flatten, toArray} = require('./utils');
 
 function coalescePatterns(patterns, globOptions) {
   return flatten(
