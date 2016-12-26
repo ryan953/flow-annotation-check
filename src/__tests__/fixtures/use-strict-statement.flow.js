@@ -1,6 +1,5 @@
 'use strict';
 // @flow
 
-// expect failure
+// $FlowExpectedTestFailure
 const name: string = null;
-

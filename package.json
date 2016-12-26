@@ -13,5 +13,8 @@
   },
   "devDependencies": {
     "jest": "16.0.2"
+  },
+  "scripts": {
+    "flow-check": "flow check && flow check ./src/__tests__/fixtures"
   }
 }

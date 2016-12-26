@@ -3,5 +3,5 @@
  * @flow
  */
 
-// expect failure
+// $FlowExpectedTestFailure
 const name: string = null;
