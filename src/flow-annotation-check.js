@@ -17,7 +17,7 @@ function getReport(sub, flags) {
   });
   return Promise.mapSeries(
     files,
-    (file) => flow.checkFlowStatus(cwd, file).then((status) => ({
+    (file) => flow.checkFlowStatus(file).then((status) => ({
       file, status
     }))
   );

@@ -36,15 +36,14 @@ function astToFlowStatus(ast) {
     }
   }
   return FLOW_MODE.NO_FLOW;
-
 }
 
-function checkFlowStatus(cwd, file) {
+function checkFlowStatus(file) {
   const options = {};
+
   return exec(`flow ast ${file}`, options)
     .then(({stdout, stderr}) => {
       if (stderr) {
-        console.log('Error', stderr);
         return {};
       }
 
@@ -61,7 +60,6 @@ function countVisibleFiles(cwd) {
   return exec(`flow ls ${cwd} | wc -l`, options)
     .then(({stdout, stderr}) => {
       if (stderr) {
-        console.log('Error', stderr);
         return Infinity;
       }
       return parseInt(stdout.trim(), 10);
@@ -89,13 +87,16 @@ function forceErrors(cwd, files, flags) {
       return Promise
         .all(files.map((file) => truncate(file, ERROR_STATEMENT)))
         .then((_) => {
-          return unique(
-            flatten(
-              checkResult.errors.map((entry) => {
-                return entry.message.map((message) => message.path);
-              })
-            ).filter(_ => _)
-          );
+          if (checkResult.errors) {
+            return unique(
+              flatten(
+                checkResult.errors.map((entry) => {
+                  return entry.message.map((message) => message.path);
+                })
+              ).filter(_ => _)
+            );
+          }
+          return [];
         });
     });
 }
