@@ -2,8 +2,8 @@ function flatten(arrays) {
   return [].concat.apply([], arrays);
 }
 
-function toArray(flag) {
-  return [].concat(flag).filter(_ => _);
+function toArray(arg) {
+  return [].concat(arg).filter(_ => _);
 }
 
 function unique(array) {

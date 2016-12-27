@@ -12,9 +12,18 @@
     "glob": "7.1.1"
   },
   "devDependencies": {
-    "jest": "16.0.2"
+    "jest": "18.0.0"
   },
   "scripts": {
-    "flow-check": "flow check && flow check ./src/__tests__/fixtures"
+    "flow-check": "flow check && flow check ./src/__tests__/fixtures",
+    "test": "jest"
+  },
+  "jest": {
+    "testPathDirs": [
+      "src"
+    ],
+    "testPathIgnorePatterns": [
+      "__tests__/fixtures"
+    ]
   }
 }
