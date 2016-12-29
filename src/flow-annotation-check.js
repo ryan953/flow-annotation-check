@@ -7,7 +7,7 @@ const {toArray} = require('./utils');
 const Promise = require('bluebird');
 
 function getCWD(sub) {
-  return path.resolve(process.cwd(), sub[0] || '.');
+  return path.resolve(sub[0] || '.');
 }
 
 function getReport(sub, flags) {
