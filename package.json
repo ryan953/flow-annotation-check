@@ -1,11 +1,17 @@
 {
-  "private": true,
   "name": "flow-annotation-check",
   "version": "0.0.1",
+  "description": "Check your files for the presence of the `@flow` and `@flow weak` annotations",
   "author": "Ryan Albrecht",
   "license": "",
-  "description": "",
   "main": "./lib/flow-annotation-check.js",
+  "bin": {
+    "flow-coverage-report": "./bin/flow-annotation-check.js"
+  },
+  "files": [
+    "bin",
+    "lib"
+  ],
   "dependencies": {
     "args": "2.1.0",
     "bluebird": "^3.4.6",

@@ -1,8 +1,6 @@
-const args = require('args');
 const path = require('path');
 const flow = require('./flow');
 const globsToFileList = require('./globsToFileList');
-const {toArray} = require('./utils');
 
 const Promise = require('bluebird');
 
@@ -15,6 +13,7 @@ function getReport(sub, flags) {
   const files = globsToFileList(cwd, flags.include, flags.exclude, {
     absolute: flags.absolute,
   });
+
   return Promise.mapSeries(
     files,
     (file) => flow.checkFlowStatus(file).then((status) => ({
@@ -86,20 +85,6 @@ function printValidationReport(report) {
   console.log('');
 }
 
-function main(command, sub, flags) {
-  if (process.env.VERBOSE) {
-    console.log('Invoked:', {command, sub, flags});
-  }
-  switch(command) {
-    case 'validate':
-      validate(sub, flags).then(printValidationReport);
-      break;
-    default:
-      getReport(sub, flags).then(printStatusReport);
-      break;
-  }
-}
-
 function validate(sub, flags) {
   const cwd = getCWD(sub);
   return flow.countVisibleFiles(cwd)
@@ -117,21 +102,9 @@ function validate(sub, flags) {
     .then(([report, errorReport]) => coalesceReports(report, errorReport));
 }
 
-(function() {
-  let mainCommand;
-
-  const setCommand = (command, sub, flags) => {
-    mainCommand = command.shift();
-    main(mainCommand, sub, flags);
-  };
-
-  args
-    .option('absolute', 'Report absolute path names', false)
-    .option(['i', 'include'], 'Glob for files to include', '**/*.js')
-    .option(['x', 'exclude'], 'Glob of files to ignore', 'node_modules/**/*.js')
-    .command('validate', 'Inject errors in files to validate status', setCommand, ['v']);
-  const parsedFlags = args.parse(process.argv);
-  if (!mainCommand) {
-    main(mainCommand, args.sub, parsedFlags);
-  }
-})();
+module.exports = {
+  getReport,
+  printStatusReport,
+  printValidationReport,
+  validate,
+};
