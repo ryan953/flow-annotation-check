@@ -1,4 +1,4 @@
-const {flatten, toArray, unique} = require('../utils');
+const {flatten, toArray, unique} = require('../core');
 
 describe('flatten', () => {
   it('should flatten two arrays', () => {

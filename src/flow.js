@@ -1,4 +1,4 @@
-const {flatten, unique} = require('./utils');
+const {flatten, unique} = require('./core');
 const {exec, execFile, stat, append, truncate} = require('./promisified');
 
 const FLOW_MODE = {

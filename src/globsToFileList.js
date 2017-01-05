@@ -1,5 +1,5 @@
 const glob = require('glob');
-const {flatten, toArray} = require('./utils');
+const {flatten, toArray} = require('./core');
 
 function coalescePatterns(patterns, globOptions) {
   return flatten(
