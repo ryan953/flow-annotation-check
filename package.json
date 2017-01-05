@@ -2,11 +2,19 @@
   "name": "flow-annotation-check",
   "version": "0.0.1",
   "description": "Check your files for the presence of the `@flow` and `@flow weak` annotations",
-  "author": "Ryan Albrecht",
-  "license": "",
+  "author": {
+    "name": "Ryan Albrecht",
+    "email": "ryan@ryanalbrecht.ca",
+    "url": "ryanalbrecht.ca"
+  },
+  "license": "MIT",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/ryan953/flow-annotation-check.git"
+  },
   "main": "./lib/flow-annotation-check.js",
   "bin": {
-    "flow-coverage-report": "./bin/flow-annotation-check.js"
+    "flow-annotation-check": "./bin/flow-annotation-check.js"
   },
   "files": [
     "bin",
@@ -21,14 +29,19 @@
     "babel-cli": "^6.18.0",
     "babel-plugin-transform-flow-strip-types": "^6.21.0",
     "babel-preset-latest": "^6.16.0",
+    "flow-bin": "^0.37.4",
+    "flow-typed": "^2.0.0",
     "jest": "18.0.0"
   },
   "scripts": {
-    "preversion": "npm test && npm build",
-    "pretest": "npm run flow-check",
-    "test": "jest",
-    "flow-check": "flow check && flow check ./src/__tests__/fixtures",
-    "build": "rm -Rf lib && babel src --out-dir lib --ignore __tests__"
+    "preversion": "npm run test && npm run transpile",
+    "pretest": "npm run flow",
+    "test": "npm run jest",
+    "build": "npm run transpile",
+    "flow": "flow check && flow check ./src/__tests__/fixtures",
+    "jest": "jest",
+    "transpile": "rm -Rf lib && babel src --out-dir lib --ignore __tests__",
+    "flow-update-dfns": "flow-typed update"
   },
   "jest": {
     "testPathDirs": [
