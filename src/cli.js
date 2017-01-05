@@ -1,6 +1,7 @@
 'use strict';
 
 const args = require('args');
+const path = require('path');
 
 const {
   getReport,
@@ -13,13 +14,14 @@ function main(command, sub, flags) {
   if (process.env.VERBOSE) {
     console.log('Invoked:', {command, sub, flags});
   }
+  const cwd = path.resolve(sub[0] || '.');
   switch(command) {
     case 'validate':
-      validate(sub, flags).then(printValidationReport);
+      validate(cwd, flags).then(printValidationReport);
       break;
     default:
       console.log('Running report', sub, flags);
-      getReport(sub, flags).then(printStatusReport);
+      getReport(cwd, flags).then(printStatusReport);
       break;
   }
 }

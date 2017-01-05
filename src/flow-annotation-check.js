@@ -1,15 +1,9 @@
-const path = require('path');
 const flow = require('./flow');
 const globsToFileList = require('./globsToFileList');
 const isValidFlowStatus = require('./isValidFlowStatus');
 const Promise = require('bluebird');
 
-function getCWD(sub) {
-  return path.resolve(sub[0] || '.');
-}
-
-function getReport(sub, flags) {
-  const cwd = getCWD(sub);
+function getReport(cwd, flags) {
   const files = globsToFileList(cwd, flags.include, flags.exclude, {
     absolute: flags.absolute,
   });
@@ -22,8 +16,7 @@ function getReport(sub, flags) {
   );
 }
 
-function getFilesWithErrors(sub, flags) {
-  const cwd = getCWD(sub);
+function getFilesWithErrors(cwd, flags) {
   const files = globsToFileList(cwd, flags.include, flags.exclude, {
     absolute: flags.absolute,
   });
@@ -72,8 +65,7 @@ function printValidationReport(report) {
   console.log('');
 }
 
-function validate(sub, flags) {
-  const cwd = getCWD(sub);
+function validate(cwd, flags) {
   return flow.countVisibleFiles(cwd)
     .then((files) => {
       if (files > 10000) {
@@ -82,8 +74,8 @@ function validate(sub, flags) {
       }
 
       return Promise.all([
-        getReport(sub, flags),
-        getFilesWithErrors(sub, flags),
+        getReport(cwd, flags),
+        getFilesWithErrors(cwd, flags),
       ]);
     })
     .then(([report, errorReport]) => coalesceReports(report, errorReport));
