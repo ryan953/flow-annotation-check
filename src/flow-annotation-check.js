@@ -1,7 +1,7 @@
 const path = require('path');
 const flow = require('./flow');
 const globsToFileList = require('./globsToFileList');
-
+const isValidFlowStatus = require('./isValidFlowStatus');
 const Promise = require('bluebird');
 
 function getCWD(sub) {
@@ -29,19 +29,6 @@ function getFilesWithErrors(sub, flags) {
   });
 
   return flow.forceErrors(cwd, files, flags);
-}
-
-function isValidFlowStatus(status, threwError) {
-  switch(status) {
-    case 'flow':
-      return threwError;
-    case 'flow weak':
-      return threwError;
-    case 'no flow':
-      return !threwError;
-    default:
-      throw new Error(`invalid flow status '${status}'`);
-  };
 }
 
 function coalesceReports(report, errorReport) {
