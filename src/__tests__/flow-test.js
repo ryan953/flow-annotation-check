@@ -10,6 +10,7 @@ const flowDetectedFixtures = [
 const flowFailedFixtures = [
   {status: 'no flow', file: './fixtures/comment-blocks-10.js'},
   {status: 'no flow', file: './fixtures/comment-statement-10.js'},
+  {status: 'no flow', file: './fixtures/no-comments.js'},
 ];
 const magicStringFixtures = [
   {status: 'flow', file: './fixtures/use-babel-block.flow.js'},

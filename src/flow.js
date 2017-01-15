@@ -10,6 +10,9 @@ const FLOW_MODE = {
 function astToFlowStatus(ast) {
   for (let i = 0; i < 10; i++) {
     const comment = ast.comments[i];
+    if (!comment) {
+      return FLOW_MODE.NO_FLOW;
+    }
     switch (comment.type) {
       case 'Line':
         const trimmedLine = comment.value.trim();
