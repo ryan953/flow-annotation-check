@@ -9,8 +9,8 @@
   },
   "license": "MIT",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/ryan953/flow-annotation-check.git"
+    "type": "git",
+    "url": "https://github.com/ryan953/flow-annotation-check.git"
   },
   "main": "./lib/flow-annotation-check.js",
   "bin": {
@@ -21,7 +21,8 @@
     "lib"
   ],
   "dependencies": {
-    "args": "2.1.0",
+    "argparse": "^1.0.9",
+    "babel-plugin-transform-object-rest-spread": "^6.20.2",
     "bluebird": "^3.4.6",
     "glob": "7.1.1"
   },
