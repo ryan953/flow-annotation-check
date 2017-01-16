@@ -3,6 +3,8 @@
 const path = require('path');
 const {countVisibleFiles, checkFlowStatus, forceErrors} = require('../flow');
 
+const FIXTURE_FILE_COUNT = 11;
+
 const flowDetectedFixtures = [
   {status: 'flow', file: './fixtures/comment-blocks-09.flow.js'},
   {status: 'flow', file: './fixtures/comment-single-block-09.flow.js'},
@@ -26,7 +28,7 @@ describe('countVisibleFiles', () => {
     const dir = path.resolve(__dirname, './fixtures');
 
     return countVisibleFiles(dir).then((count) => {
-      expect(count).toEqual(10);
+      expect(count).toEqual(FIXTURE_FILE_COUNT);
     });
   });
 
