@@ -1,3 +1,5 @@
+'use strict';
+
 const {flatten, unique} = require('./core');
 const {exec, execFile, stat, append, truncate} = require('./promisified');
 

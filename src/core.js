@@ -1,3 +1,5 @@
+'use strict';
+
 function flatten(arrays) {
   return [].concat.apply([], arrays);
 }

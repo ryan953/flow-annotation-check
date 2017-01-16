@@ -1,3 +1,5 @@
+'use strict';
+
 const glob = require('glob');
 const {flatten, toArray} = require('./core');
 

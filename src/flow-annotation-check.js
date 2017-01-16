@@ -1,3 +1,5 @@
+'use strict';
+
 const flow = require('./flow');
 const globsToFileList = require('./globsToFileList');
 const isValidFlowStatus = require('./isValidFlowStatus');

@@ -1,3 +1,5 @@
+'use strict';
+
 function isValidFlowStatus(status, threwError) {
   switch(status) {
     case 'flow':
