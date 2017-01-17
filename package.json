@@ -41,7 +41,7 @@
     "build": "npm run transpile",
     "flow": "flow check && flow check ./src/__tests__/fixtures",
     "jest": "jest",
-    "transpile": "rm -Rf lib && babel src --out-dir lib --ignore __tests__",
+    "transpile": "rm -Rf lib/* && babel src --out-dir lib --ignore __tests__",
     "flow-update-dfns": "flow-typed update"
   },
   "jest": {
