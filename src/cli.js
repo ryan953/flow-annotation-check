@@ -1,18 +1,24 @@
 'use strict';
 
+/**
+ * @flow
+ */
+
+import type {Args, Flags} from './types';
+
 const path = require('path');
 const packageJSON = require('../package.json');
 
 const {ArgumentParser} = require('argparse');
 
 const {
-  getReport,
+  genReport,
   printStatusReport,
   printValidationReport,
   validate,
 } = require('./flow-annotation-check');
 
-function getParser() {
+function getParser(): ArgumentParser {
   const parser = new ArgumentParser({
     addHelp: true,
     version: packageJSON.version,
@@ -58,43 +64,34 @@ function getParser() {
   return parser;
 }
 
-function resolveArgs(args) {
-  if (!args.include) {
-    args.include = ['**/*.js'];
-  }
-  if (!args.exclude) {
-    args.exclude = ['node_modules/**/*.js'];
-  }
-  args.root = path.resolve(args.root);
-
-  return args;
+function resolveArgs(args: Args): Flags {
+  return {
+    ...args,
+    include: args.include || ['**/*.js'],
+    exclude: args.exclude || ['node_modules/**/*.js'],
+    root: path.resolve(args.root || '.'),
+  };
 }
 
-function main(args) {
-  const {
-    validate,
-    root,
-    ...flags,
-  } = args;
-
-  const command = validate ? 'validate' : 'report';
+function main(flags: Flags): void {
+  const command = flags.validate ? 'validate' : 'report';
 
   if (process.env.VERBOSE) {
-    console.log('Invoking:', {command, root, flags});
+    console.log('Invoking:', {command, flags});
   }
 
   switch(command) {
     case 'validate':
-      validate(root, flags).then(printValidationReport);
+      validate(flags.root, flags).then(printValidationReport);
       break;
     default:
-      getReport(root, flags).then(printStatusReport);
+      genReport(flags.root, flags).then(printStatusReport);
       break;
   }
 }
 
 module.exports = {
-  run() {
+  run(): void {
     main(resolveArgs(getParser().parseArgs()));
   },
 

@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * @flow
+ */
+
 const isValidFlowStatus = require('../isValidFlowStatus');
 
 function assertFixture(fixture) {

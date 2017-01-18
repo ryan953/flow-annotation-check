@@ -1,20 +1,31 @@
 'use strict';
 
+/**
+ * @flow
+ */
+
 const glob = require('glob');
 const {flatten, toArray} = require('./core');
 
-function coalescePatterns(patterns, globOptions) {
+type GlobOptions = {
+  absolute: boolean,
+};
+
+function coalescePatterns(
+  patterns: Array<string>,
+  globOptions: GlobOptions,
+): Array<string> {
   return flatten(
     patterns.map((pattern) => glob.sync(pattern, globOptions))
   );
 }
 
 function globsToFileList(
-  cwd,
-  includePatterns,
-  excludePatterns,
-  options
-) {
+  cwd: string,
+  includePatterns: Array<string>,
+  excludePatterns: Array<string>,
+  options: GlobOptions,
+): Array<string> {
   const globOptions = Object.assign({}, {
     cwd: cwd,
     cache: {},

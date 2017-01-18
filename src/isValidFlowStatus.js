@@ -1,6 +1,15 @@
 'use strict';
 
-function isValidFlowStatus(status, threwError) {
+/**
+ * @flow
+ */
+
+import type {FlowStatus} from './types';
+
+function isValidFlowStatus(
+  status: FlowStatus,
+  threwError: boolean,
+): boolean {
   switch(status) {
     case 'flow':
       return threwError;

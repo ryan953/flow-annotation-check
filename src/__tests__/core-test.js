@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * @flow
+ */
+
 const {flatten, toArray, unique} = require('../core');
 
 describe('flatten', () => {

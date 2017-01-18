@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * @flow
+ */
+
 const path = require('path');
 const {countVisibleFiles, checkFlowStatus, forceErrors} = require('../flow');
 
@@ -35,8 +39,13 @@ describe('countVisibleFiles', () => {
   it('should count the fixtures visible', () => {
     const dir = path.resolve(__dirname, './foo-bar');
 
-    return countVisibleFiles(dir).catch((error) => {
-      expect(count).toEqual(Infinity);
+    return countVisibleFiles(dir)
+      .then(() => {
+        expect(false).toBeTruthy();
+      }).catch((error) => {
+      expect(
+        error.toString()
+      ).toMatch(/Error: Could not find file or directory/);
     });
   });
 });
@@ -59,7 +68,7 @@ describe('checkFlowStatus', () => {
 
 describe('forceErrors', () => {
   const dir = path.resolve(__dirname, './fixtures');
-  const flags = {absolute: true};
+  const flags = {absolute: true, include: [], exclude: [], root: '.'};
 
   function testForceErrors(fixture) {
     const files = [path.resolve(__dirname, fixture.file)];

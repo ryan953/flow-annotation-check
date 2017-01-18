@@ -1,5 +1,15 @@
 'use strict';
 
+/**
+ * @flow
+ */
+
+import type {
+  ErrorReport,
+  Flags,
+  FlowStatus,
+} from './types';
+
 const {flatten, unique} = require('./core');
 const {exec, execFile, stat, append, truncate} = require('./promisified');
 
@@ -9,7 +19,7 @@ const FLOW_MODE = {
   NO_FLOW: 'no flow',
 };
 
-function astToFlowStatus(ast) {
+function astToFlowStatus(ast: Object): FlowStatus {
   for (let i = 0; i < 10; i++) {
     const comment = ast.comments[i];
     if (!comment) {
@@ -25,7 +35,6 @@ function astToFlowStatus(ast) {
         }
         break;
       case 'Block':
-        // TODO also split on \r and \r\n
         const lines = comment.value.split('\n').map((line) => {
           return line.trim().replace(/^\*/, '').trim();
         });
@@ -43,21 +52,20 @@ function astToFlowStatus(ast) {
   return FLOW_MODE.NO_FLOW;
 }
 
-function checkFlowStatus(file) {
+function checkFlowStatus(file: string): Promise<FlowStatus> {
   const options = {};
 
   return exec(`flow ast ${file}`, options)
-    .then(({stdout, stderr}) => {
+    .then(({stdout, stderr}): Object => {
       if (stderr) {
-        return {};
+        throw new Error(stderr);
       }
-
-      return JSON.parse(stdout);
+      return JSON.parse(String(stdout));
     })
     .then(astToFlowStatus);
 }
 
-function countVisibleFiles(cwd) {
+function countVisibleFiles(cwd: string): Promise<number> {
   const options = {
     maxBuffer: Infinity,
   };
@@ -65,13 +73,17 @@ function countVisibleFiles(cwd) {
   return exec(`flow ls ${cwd} | wc -l`, options)
     .then(({stdout, stderr}) => {
       if (stderr) {
-        return Infinity;
+        throw new Error(stderr);
       }
-      return parseInt(stdout.trim(), 10);
+      return parseInt(String(stdout).trim(), 10);
     });
 }
 
-function forceErrors(cwd, files, flags) {
+function forceErrors(
+  cwd: string,
+  files: Array<string>,
+  flags: Flags,
+): Promise<ErrorReport> {
   const flowCheck = flags.absolute
     ? ['check', '--json', '--show-all-errors', cwd]
     : ['check', '--json', '--show-all-errors', '--strip-root', cwd]
@@ -81,17 +93,28 @@ function forceErrors(cwd, files, flags) {
   const ERROR_STATEMENT = 'const FLOW_ANNOTATION_CHECK_INJECTED_ERROR: string = null;';
 
   return Promise
-    .all(files.map((file) => append(file, ERROR_STATEMENT)))
-    .then(() =>
-      execFile('flow', flowCheck, options)
-        .catch(({error, stdout, stderr}) => {
-          return JSON.parse(stdout);
-        })
+    .all(
+      files.map(
+        (file) => append(file, ERROR_STATEMENT)
+      )
     )
-    .then((checkResult) => {
-      return Promise
-        .all(files.map((file) => truncate(file, ERROR_STATEMENT)))
-        .then((_) => {
+    .then(
+      () => execFile(
+        'flow',
+        flowCheck,
+        options,
+      ).catch(
+        ({error, stdout, stderr}) => JSON.parse(stdout)
+      )
+    )
+    .then(
+      (checkResult) => Promise.all(
+        files.map(
+          (file) => truncate(file, ERROR_STATEMENT)
+        )
+      )
+      .then(
+        (_) => {
           if (checkResult.errors) {
             return unique(
               flatten(
@@ -102,8 +125,9 @@ function forceErrors(cwd, files, flags) {
             );
           }
           return [];
-        });
-    });
+        }
+      )
+    );
 }
 
 module.exports = {

@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * @flow
+ */
+
 jest.mock('child_process');
 jest.mock('fs');
 

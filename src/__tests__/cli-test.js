@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * @flow
+ */
+
 const path = require('path');
 const {
   getParser,
