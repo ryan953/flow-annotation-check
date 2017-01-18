@@ -1,4 +1,5 @@
 [ignore]
+.*/lib/.*
 .*/src/__tests__/fixtures/.*
 
 [include]
