@@ -38,6 +38,7 @@
     "preversion": "npm run test && npm run transpile",
     "pretest": "npm run flow",
     "test": "npm run jest",
+    "prebuild": "npm run flow && npm run jest",
     "build": "npm run transpile",
     "flow": "flow check && flow check ./src/__tests__/fixtures",
     "jest": "jest",
