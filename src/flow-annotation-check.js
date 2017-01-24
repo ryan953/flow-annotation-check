@@ -15,7 +15,7 @@ import type {
 
 import globsToFileList from './globsToFileList';
 import isValidFlowStatus from './isValidFlowStatus';
-import {checkFlowStatus, countVisibleFiles, forceErrors} from './flow';
+import {genCheckFlowStatus, genCountVisibleFiles, genForceErrors} from './flow';
 
 function executeSequentially(promiseFactories, defaultValue) {
   let result = Promise.resolve(defaultValue);
@@ -35,7 +35,7 @@ function genReport(
 
   return executeSequentially(files.map((file) => {
     return (entries) => {
-      return checkFlowStatus(file).then((status) => {
+      return genCheckFlowStatus(file).then((status) => {
         entries.push({file, status});
         return entries;
       });
@@ -43,7 +43,7 @@ function genReport(
   }), []);
 }
 
-function getFilesWithErrors(
+function genFilesWithErrors(
   cwd: string,
   flags: Flags,
 ): Promise<ErrorReport> {
@@ -51,7 +51,7 @@ function getFilesWithErrors(
     absolute: flags.absolute,
   });
 
-  return forceErrors(cwd, files, flags);
+  return genForceErrors(cwd, files, flags);
 }
 
 function coalesceReports(
@@ -70,7 +70,7 @@ function coalesceReports(
 }
 
 function genValidate(cwd: string, flags: Flags): Promise<ValidationReport> {
-  return countVisibleFiles(cwd)
+  return genCountVisibleFiles(cwd)
     .then((files) => {
       if (files > 10000) {
         throw new Error(`You have ${files} which is too many!`);
@@ -83,7 +83,7 @@ function genValidate(cwd: string, flags: Flags): Promise<ValidationReport> {
     })
     .then(() => Promise.all([
       genReport(cwd, flags),
-      getFilesWithErrors(cwd, flags),
+      genFilesWithErrors(cwd, flags),
     ]))
     .then(([report, errorReport]) => {
       return coalesceReports(report, errorReport);
@@ -91,7 +91,7 @@ function genValidate(cwd: string, flags: Flags): Promise<ValidationReport> {
 }
 
 module.exports = {
+  genCheckFlowStatus,
   genReport,
-  getStatus: checkFlowStatus,
-  validate: genValidate,
+  genValidate,
 };

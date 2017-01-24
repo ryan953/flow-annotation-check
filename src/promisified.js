@@ -67,8 +67,8 @@ function append(file: string, data: *): Promise<typeof undefined> {
   });
 }
 
-function truncate(file: string, data: string | Buffer): void {
-  stat(file).then((stat) => {
+function truncate(file: string, data: string | Buffer): Promise<void> {
+  return stat(file).then((stat) => {
     const fd = fs.openSync(file, 'r+');
     fs.ftruncateSync(fd, stat.size - data.length);
   });

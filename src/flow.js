@@ -48,7 +48,7 @@ function astToFlowStatus(ast: Object): FlowStatus {
   return FLOW_MODE.NO_FLOW;
 }
 
-function checkFlowStatus(file: string): Promise<FlowStatus> {
+function genCheckFlowStatus(file: string): Promise<FlowStatus> {
   const options = {};
 
   return exec(`flow ast ${file}`, options)
@@ -61,7 +61,7 @@ function checkFlowStatus(file: string): Promise<FlowStatus> {
     .then(astToFlowStatus);
 }
 
-function countVisibleFiles(cwd: string): Promise<number> {
+function genCountVisibleFiles(cwd: string): Promise<number> {
   const options = {
     maxBuffer: Infinity,
   };
@@ -75,7 +75,7 @@ function countVisibleFiles(cwd: string): Promise<number> {
     });
 }
 
-function forceErrors(
+function genForceErrors(
   cwd: string,
   files: Array<string>,
   flags: Flags,
@@ -127,7 +127,7 @@ function forceErrors(
 }
 
 module.exports = {
-  checkFlowStatus,
-  countVisibleFiles,
-  forceErrors,
+  genCheckFlowStatus,
+  genCountVisibleFiles,
+  genForceErrors,
 };

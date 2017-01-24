@@ -9,7 +9,7 @@ import type {Args, Flags, StatusReport, ValidationReport} from './types';
 import packageJSON from '../package.json';
 import path from 'path';
 import {ArgumentParser} from 'argparse';
-import {genReport, validate} from './flow-annotation-check';
+import {genReport, genValidate} from './flow-annotation-check';
 
 function getParser(): ArgumentParser {
   const parser = new ArgumentParser({
@@ -75,7 +75,7 @@ function main(flags: Flags): void {
 
   switch(command) {
     case 'validate':
-      validate(flags.root, flags).then(printValidationReport);
+      genValidate(flags.root, flags).then(printValidationReport);
       break;
     default:
       genReport(flags.root, flags).then(printStatusReport);

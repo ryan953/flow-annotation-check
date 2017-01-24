@@ -5,7 +5,7 @@
  */
 
 import path from 'path';
-import {countVisibleFiles, checkFlowStatus, forceErrors} from '../flow';
+import {genCountVisibleFiles, genCheckFlowStatus, genForceErrors} from '../flow';
 
 const FIXTURE_FILE_COUNT = 11;
 
@@ -27,11 +27,11 @@ const magicStringFixtures = [
   {status: 'flow', file: './fixtures/use-strict-statement.flow.js'},
 ];
 
-describe('countVisibleFiles', () => {
+describe('genCountVisibleFiles', () => {
   it('should count the fixtures visible', () => {
     const dir = path.resolve(__dirname, './fixtures');
 
-    return countVisibleFiles(dir).then((count) => {
+    return genCountVisibleFiles(dir).then((count) => {
       expect(count).toEqual(FIXTURE_FILE_COUNT);
     });
   });
@@ -39,7 +39,7 @@ describe('countVisibleFiles', () => {
   it('should count the fixtures visible', () => {
     const dir = path.resolve(__dirname, './foo-bar');
 
-    return countVisibleFiles(dir)
+    return genCountVisibleFiles(dir)
       .then(() => {
         expect(false).toBeTruthy();
       }).catch((error) => {
@@ -50,10 +50,10 @@ describe('countVisibleFiles', () => {
   });
 });
 
-describe('checkFlowStatus', () => {
+describe('genCheckFlowStatus', () => {
   function testCheckFlowStatus(fixture) {
     it(`should return ${fixture.status} for ${fixture.file}`, () => {
-      return checkFlowStatus(
+      return genCheckFlowStatus(
         path.resolve(__dirname, fixture.file)
       ).then((status) => {
         expect(status).toEqual(fixture.status);
@@ -66,7 +66,7 @@ describe('checkFlowStatus', () => {
   magicStringFixtures.forEach(testCheckFlowStatus);
 });
 
-describe('forceErrors', () => {
+describe('genForceErrors', () => {
   const dir = path.resolve(__dirname, './fixtures');
   const flags = {absolute: true, include: [], exclude: [], root: '.'};
 
@@ -77,14 +77,14 @@ describe('forceErrors', () => {
       case 'flow':
       case 'flow weak':
         it(`should list ${fixture.file} because flow checks it`, () => {
-          return forceErrors(dir, files, flags).then((results) => {
+          return genForceErrors(dir, files, flags).then((results) => {
             expect(results).toEqual(files);
           });
         });
         break;
       case 'no flow':
         it(`should not list ${fixture.file} because flow can't see it`, () => {
-          return forceErrors(dir, files, flags).then((results) => {
+          return genForceErrors(dir, files, flags).then((results) => {
             expect(results).toEqual([]);
           });
         });
