@@ -13,6 +13,16 @@ describe('cli', () => {
       root: '.',
     };
 
+    it('should add all the default fields', () => {
+      const result = resolveArgs({});
+      expect(result).toEqual({
+        exclude: ['node_modules/**/*.js'],
+        flow_path: 'flow',
+        include: ['**/*.js'],
+        root: path.resolve(path.join(__dirname, '../..')),
+      });
+    });
+
     it('should parse the root into a full path', () => {
       const result = resolveArgs(MOCK_ARGS);
       expect(result.root).toMatch(/\//);

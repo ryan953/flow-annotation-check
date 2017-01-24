@@ -48,10 +48,13 @@ function astToFlowStatus(ast: Object): FlowStatus {
   return FLOW_MODE.NO_FLOW;
 }
 
-function genCheckFlowStatus(file: string): Promise<FlowStatus> {
+function genCheckFlowStatus(
+  flowPath: string,
+  file: string,
+): Promise<FlowStatus> {
   const options = {};
 
-  return exec(`flow ast ${file}`, options)
+  return exec(`${flowPath} ast ${file}`, options)
     .then(({stdout, stderr}): Object => {
       if (stderr) {
         throw new Error(stderr);
@@ -61,12 +64,12 @@ function genCheckFlowStatus(file: string): Promise<FlowStatus> {
     .then(astToFlowStatus);
 }
 
-function genCountVisibleFiles(cwd: string): Promise<number> {
+function genCountVisibleFiles(flowPath: string, cwd: string): Promise<number> {
   const options = {
     maxBuffer: Infinity,
   };
 
-  return exec(`flow ls ${cwd} | wc -l`, options)
+  return exec(`${flowPath} ls ${cwd} | wc -l`, options)
     .then(({stdout, stderr}) => {
       if (stderr) {
         throw new Error(stderr);
@@ -96,7 +99,7 @@ function genForceErrors(
     )
     .then(
       () => execFile(
-        'flow',
+        flags.flow_path,
         flowCheck,
         options,
       ).catch(

@@ -18,6 +18,13 @@ function getParser(): ArgumentParser {
   });
 
   parser.addArgument(
+    ['-f', '--flow-path'],
+    {
+      action: 'store',
+      help: 'The path to the flow command. (default: `flow`)',
+    },
+  );
+  parser.addArgument(
     ['-a', '--absolute'],
     {
       action: 'storeTrue',
@@ -67,8 +74,9 @@ function getParser(): ArgumentParser {
 function resolveArgs(args: Args): Flags {
   return {
     ...args,
-    include: args.include || ['**/*.js'],
     exclude: args.exclude || ['node_modules/**/*.js'],
+    flow_path: args.flow_path || 'flow',
+    include: args.include || ['**/*.js'],
     root: path.resolve(args.root || '.'),
   };
 }
@@ -102,7 +110,6 @@ function main(flags: Flags): void {
 
 
 function printStatusReport(report: StatusReport, flags: Flags): void {
-  console.log('flags are', flags);
   report.forEach((entry) => {
     console.log(`${entry.status}\t${entry.file}`);
   });

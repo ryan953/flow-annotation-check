@@ -35,7 +35,7 @@ function genReport(
 
   return executeSequentially(files.map((file) => {
     return (entries) => {
-      return genCheckFlowStatus(file).then((status) => {
+      return genCheckFlowStatus(flags.flow_path, file).then((status) => {
         entries.push({file, status});
         return entries;
       });
@@ -70,7 +70,7 @@ function coalesceReports(
 }
 
 function genValidate(cwd: string, flags: Flags): Promise<ValidationReport> {
-  return genCountVisibleFiles(cwd)
+  return genCountVisibleFiles(flags.flow_path, cwd)
     .then(() => Promise.all([
       genReport(cwd, flags),
       genFilesWithErrors(cwd, flags),

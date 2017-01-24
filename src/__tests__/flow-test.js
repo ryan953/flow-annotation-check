@@ -31,7 +31,7 @@ describe('genCountVisibleFiles', () => {
   it('should count the fixtures visible', () => {
     const dir = path.resolve(__dirname, './fixtures');
 
-    return genCountVisibleFiles(dir).then((count) => {
+    return genCountVisibleFiles('flow', dir).then((count) => {
       expect(count).toEqual(FIXTURE_FILE_COUNT);
     });
   });
@@ -39,7 +39,7 @@ describe('genCountVisibleFiles', () => {
   it('should count the fixtures visible', () => {
     const dir = path.resolve(__dirname, './foo-bar');
 
-    return genCountVisibleFiles(dir)
+    return genCountVisibleFiles('flow', dir)
       .then(() => {
         expect(false).toBeTruthy();
       }).catch((error) => {
@@ -54,6 +54,7 @@ describe('genCheckFlowStatus', () => {
   function testCheckFlowStatus(fixture) {
     it(`should return ${fixture.status} for ${fixture.file}`, () => {
       return genCheckFlowStatus(
+        'flow',
         path.resolve(__dirname, fixture.file)
       ).then((status) => {
         expect(status).toEqual(fixture.status);
@@ -71,8 +72,9 @@ describe('genForceErrors', () => {
   const flags = {
     absolute: true,
     allow_weak: false,
-    include: [],
     exclude: [],
+    flow_path: 'flow',
+    include: [],
     root: '.',
   };
 
