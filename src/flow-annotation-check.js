@@ -13,13 +13,9 @@ import type {
   ValidationReport,
 } from './types';
 
-import {
-  checkFlowStatus,
-  countVisibleFiles,
-  forceErrors,
-} from './flow';
 import globsToFileList from './globsToFileList';
 import isValidFlowStatus from './isValidFlowStatus';
+import {checkFlowStatus, countVisibleFiles, forceErrors} from './flow';
 
 function executeSequentially(promiseFactories, defaultValue) {
   let result = Promise.resolve(defaultValue);
@@ -94,42 +90,8 @@ function genValidate(cwd: string, flags: Flags): Promise<ValidationReport> {
     });
 }
 
-function printStatusReport(report: StatusReport) {
-  report.forEach((entry) => {
-    console.log(`${entry.status}\t${entry.file}`);
-  });
-
-  // count non-flow files and return 1 if there are some
-  // also add a flag to toggle between weak being valid/invalid
-}
-
-function printValidationReport(report: ValidationReport): void {
-  if (process.env.VERBOSE) {
-    console.log('All Entries');
-    report.forEach((entry) => {
-      console.log(`${entry.isValid ? 'valid' : 'invalid'}\t${entry.file}`);
-    });
-    console.log('');
-  }
-
-  console.log('Invalid Entries');
-  const invalidEntries = report.filter((entry) => !entry.isValid);
-  if (invalidEntries.length == 0) {
-    console.log(' - none -');
-    // exit 0
-  } else {
-    invalidEntries.forEach((entry) => {
-      console.log(`${entry.isValid ? 'valid' : 'invalid'}\t${entry.status}\t${entry.threwError ? 'threw' : 'passed'}\t${entry.file}`);
-    });
-    // exit 1
-  }
-  console.log('');
-}
-
 module.exports = {
   genReport,
   getStatus: checkFlowStatus,
-  printStatusReport,
-  printValidationReport,
   validate: genValidate,
 };
