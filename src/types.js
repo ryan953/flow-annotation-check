@@ -4,6 +4,7 @@
 
 export type Args = {
   absolute?: boolean,
+  allow_weak?: boolean,
   exclude?: Array<string>,
   include?: Array<string>,
   root?: string,
@@ -11,6 +12,7 @@ export type Args = {
 
 export type Flags = {
   absolute: boolean,
+  allow_weak: boolean,
   exclude: string | Array<string>,
   include: string | Array<string>,
   root: string,

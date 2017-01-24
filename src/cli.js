@@ -25,6 +25,13 @@ function getParser(): ArgumentParser {
     },
   );
   parser.addArgument(
+    ['--allow-weak'],
+    {
+      action: 'storeTrue',
+      help: 'Consider `@flow weak` as a accepable annotation. See https://flowtype.org/docs/existing.html#weak-mode for reasons why this should only be used temporarily. (default: false)',
+    },
+  );
+  parser.addArgument(
     ['-i', '--include'],
     {
       action: 'append',
@@ -76,7 +83,7 @@ function main(flags: Flags): void {
   switch(command) {
     case 'validate':
       genValidate(flags.root, flags)
-        .then(printValidationReport)
+        .then((report) => printValidationReport(report, flags))
         .catch((error) => {
           console.log('Validate error:', error);
           process.exitCode = 2;
@@ -84,7 +91,7 @@ function main(flags: Flags): void {
       break;
     default:
       genReport(flags.root, flags)
-        .then(printStatusReport)
+        .then((report) => printStatusReport(report, flags))
         .catch((error) => {
           console.log('Report error:', error);
           process.exitCode = 2;
@@ -94,16 +101,21 @@ function main(flags: Flags): void {
 }
 
 
-function printStatusReport(report: StatusReport): void {
+function printStatusReport(report: StatusReport, flags: Flags): void {
+  console.log('flags are', flags);
   report.forEach((entry) => {
     console.log(`${entry.status}\t${entry.file}`);
   });
 
-  // count non-flow files and return 1 if there are some
-  // also add a flag to toggle between weak being valid/invalid
+  const noFlowFiles = report.filter((entry) => entry.status == 'no flow');
+  const weakFlowFiles = report.filter((entry) => entry.status == 'flow weak');
+  const failingFileCount = flags.allow_weak
+    ? noFlowFiles.length
+    : noFlowFiles.length + weakFlowFiles.length;
+  process.exitCode = failingFileCount ? 1 : 0;
 }
 
-function printValidationReport(report: ValidationReport): void {
+function printValidationReport(report: ValidationReport, flags: Flags): void {
   if (process.env.VERBOSE) {
     console.log('All Entries');
     report.forEach((entry) => {
@@ -112,12 +124,9 @@ function printValidationReport(report: ValidationReport): void {
     console.log('');
   }
 
-  console.log('Invalid Entries');
   const invalidEntries = report.filter((entry) => !entry.isValid);
-  if (invalidEntries.length == 0) {
-    console.log(' - none -');
-    process.exitCode = 0;
-  } else {
+  if (invalidEntries.length > 0) {
+    console.log('Invalid Entries');
     invalidEntries.forEach((entry) => {
       console.log(`${entry.isValid ? 'valid' : 'invalid'}\t${entry.status}\t${entry.threwError ? 'threw' : 'passed'}\t${entry.file}`);
     });

@@ -68,7 +68,13 @@ describe('genCheckFlowStatus', () => {
 
 describe('genForceErrors', () => {
   const dir = path.resolve(__dirname, './fixtures');
-  const flags = {absolute: true, include: [], exclude: [], root: '.'};
+  const flags = {
+    absolute: true,
+    allow_weak: false,
+    include: [],
+    exclude: [],
+    root: '.',
+  };
 
   function testForceErrors(fixture) {
     const files = [path.resolve(__dirname, fixture.file)];
