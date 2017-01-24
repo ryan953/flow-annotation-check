@@ -8,7 +8,7 @@ jest.mock('glob');
 
 // $FlowFixMe need definitions for jest extensions
 const glob = require.requireMock('glob');
-const globsToFileList = require('../globsToFileList');
+import globsToFileList from '../globsToFileList';
 
 describe('globsToFileList', () => {
   beforeEach(() => {
@@ -74,11 +74,11 @@ describe('globsToFileList', () => {
 
     expect(glob.sync).toHaveBeenCalledWith(
       '*.test.js', {
-        cwd: '.',
-        cache: {},
-        matchBase: false,
         absolute: true,
+        cache: {},
+        cwd: '.',
         foo: 'bar',
+        matchBase: false,
       },
     );
   });

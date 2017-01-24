@@ -4,7 +4,7 @@
  * @flow
  */
 
-const isValidFlowStatus = require('../isValidFlowStatus');
+import isValidFlowStatus from '../isValidFlowStatus';
 
 function assertFixture(fixture) {
   expect(

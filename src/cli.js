@@ -6,17 +6,15 @@
 
 import type {Args, Flags} from './types';
 
-const path = require('path');
-const packageJSON = require('../package.json');
-
-const {ArgumentParser} = require('argparse');
-
-const {
+import packageJSON from '../package.json';
+import path from 'path';
+import {ArgumentParser} from 'argparse';
+import {
   genReport,
   printStatusReport,
   printValidationReport,
   validate,
-} = require('./flow-annotation-check');
+} from './flow-annotation-check';
 
 function getParser(): ArgumentParser {
   const parser = new ArgumentParser({

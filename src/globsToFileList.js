@@ -4,11 +4,12 @@
  * @flow
  */
 
-const glob = require('glob');
-const {flatten, toArray} = require('./core');
+
+import glob from 'glob';
+import {flatten, toArray} from './core';
 
 type GlobOptions = {
-  absolute: boolean,
+  absolute?: boolean,
 };
 
 function coalescePatterns(
@@ -22,8 +23,8 @@ function coalescePatterns(
 
 function globsToFileList(
   cwd: string,
-  includePatterns: Array<string>,
-  excludePatterns: Array<string>,
+  includePatterns: string | Array<string>,
+  excludePatterns: string | Array<string>,
   options: GlobOptions,
 ): Array<string> {
   const globOptions = Object.assign({}, {

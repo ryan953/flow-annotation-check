@@ -13,13 +13,13 @@ import type {
   ValidationReport,
 } from './types';
 
-const {
+import {
   checkFlowStatus,
   countVisibleFiles,
   forceErrors,
-} = require('./flow');
-const globsToFileList = require('./globsToFileList');
-const isValidFlowStatus = require('./isValidFlowStatus');
+} from './flow';
+import globsToFileList from './globsToFileList';
+import isValidFlowStatus from './isValidFlowStatus';
 
 function executeSequentially(promiseFactories, defaultValue) {
   let result = Promise.resolve(defaultValue);

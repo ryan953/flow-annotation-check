@@ -4,8 +4,8 @@
  * @flow
  */
 
-const path = require('path');
-const {countVisibleFiles, checkFlowStatus, forceErrors} = require('../flow');
+import path from 'path';
+import {countVisibleFiles, checkFlowStatus, forceErrors} from '../flow';
 
 const FIXTURE_FILE_COUNT = 11;
 

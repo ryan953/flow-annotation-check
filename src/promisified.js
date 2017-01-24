@@ -4,8 +4,8 @@
  * @flow
  */
 
-const childProcess = require('child_process');
-const fs = require('fs');
+import childProcess from 'child_process';
+import fs from 'fs';
 
 type IO = {
   stdout: string | Buffer,

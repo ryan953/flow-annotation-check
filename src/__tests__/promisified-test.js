@@ -7,7 +7,7 @@
 jest.mock('child_process');
 jest.mock('fs');
 
-const {exec, execFile, stat, append, truncate} = require('../promisified');
+import {exec, execFile, stat, append, truncate} from '../promisified';
 const childProcess = require('child_process');
 const fs = require('fs');
 

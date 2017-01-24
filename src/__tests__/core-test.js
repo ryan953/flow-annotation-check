@@ -4,7 +4,7 @@
  * @flow
  */
 
-const {flatten, toArray, unique} = require('../core');
+import {flatten, toArray, unique} from '../core';
 
 describe('flatten', () => {
   it('should flatten two arrays', () => {

@@ -4,12 +4,8 @@
  * @flow
  */
 
-const path = require('path');
-const {
-  getParser,
-  main,
-  resolveArgs,
-} = require('../cli');
+import path from 'path';
+import {getParser, main, resolveArgs} from '../cli';
 
 describe('cli', () => {
   describe('resolveArgs', () => {

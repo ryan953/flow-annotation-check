@@ -11,8 +11,8 @@ export type Args = {
 
 export type Flags = {
   absolute: boolean,
-  exclude: Array<string>,
-  include: Array<string>,
+  exclude: string | Array<string>,
+  include: string | Array<string>,
   root: string,
 };
 

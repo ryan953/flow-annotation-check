@@ -4,14 +4,10 @@
  * @flow
  */
 
-import type {
-  ErrorReport,
-  Flags,
-  FlowStatus,
-} from './types';
+import type {ErrorReport, Flags, FlowStatus} from './types';
 
-const {flatten, unique} = require('./core');
-const {exec, execFile, stat, append, truncate} = require('./promisified');
+import {flatten, unique} from './core';
+import {exec, execFile, stat, append, truncate} from './promisified';
 
 const FLOW_MODE = {
   FLOW: 'flow',

@@ -13,3 +13,4 @@
 
 // $FlowExpectedTestFailure
 const name: string = null;
+const FLOW_ANNOTATION_CHECK_INJECTED_ERROR: string = null;
