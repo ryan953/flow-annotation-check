@@ -75,10 +75,20 @@ function main(flags: Flags): void {
 
   switch(command) {
     case 'validate':
-      genValidate(flags.root, flags).then(printValidationReport);
+      genValidate(flags.root, flags)
+        .then(printValidationReport)
+        .catch((error) => {
+          console.log('Validate error:', error);
+          process.exitCode = 2;
+        });
       break;
     default:
-      genReport(flags.root, flags).then(printStatusReport);
+      genReport(flags.root, flags)
+        .then(printStatusReport)
+        .catch((error) => {
+          console.log('Report error:', error);
+          process.exitCode = 2;
+        });
       break;
   }
 }
@@ -106,12 +116,12 @@ function printValidationReport(report: ValidationReport): void {
   const invalidEntries = report.filter((entry) => !entry.isValid);
   if (invalidEntries.length == 0) {
     console.log(' - none -');
-    // exit 0
+    process.exitCode = 0;
   } else {
     invalidEntries.forEach((entry) => {
       console.log(`${entry.isValid ? 'valid' : 'invalid'}\t${entry.status}\t${entry.threwError ? 'threw' : 'passed'}\t${entry.file}`);
     });
-    // exit 1
+    process.exitCode = 1;
   }
   console.log('');
 }

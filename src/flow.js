@@ -42,7 +42,7 @@ function astToFlowStatus(ast: Object): FlowStatus {
         }
         break;
       default:
-        console.log('Unknown comment type', comment.type, comment);
+        throw new Error('Unknown comment type', comment.type, comment);
     }
   }
   return FLOW_MODE.NO_FLOW;

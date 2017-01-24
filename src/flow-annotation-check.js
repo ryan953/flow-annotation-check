@@ -71,16 +71,6 @@ function coalesceReports(
 
 function genValidate(cwd: string, flags: Flags): Promise<ValidationReport> {
   return genCountVisibleFiles(cwd)
-    .then((files) => {
-      if (files > 10000) {
-        throw new Error(`You have ${files} which is too many!`);
-      }
-      return;
-    })
-    .catch((error) => {
-      console.log('Validate error:', error);
-      // exit 2
-    })
     .then(() => Promise.all([
       genReport(cwd, flags),
       genFilesWithErrors(cwd, flags),
