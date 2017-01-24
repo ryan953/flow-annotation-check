@@ -12,6 +12,7 @@
     "type": "git",
     "url": "https://github.com/ryan953/flow-annotation-check.git"
   },
+  "bugs": "https://github.com/ryan953/flow-annotation-check/issues",
   "main": "./lib/flow-annotation-check.js",
   "bin": {
     "flow-annotation-check": "./bin/flow-annotation-check.js"
