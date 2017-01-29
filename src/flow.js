@@ -52,7 +52,7 @@ function genCheckFlowStatus(
   flowPath: string,
   file: string,
 ): Promise<FlowStatus> {
-  const options = {};
+  const options = {maxBuffer: Infinity};
 
   return exec(`${flowPath} ast ${file}`, options)
     .then(({stdout, stderr}): Object => {
