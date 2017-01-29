@@ -59,7 +59,7 @@ function coalesceReports(
   errorReport: ErrorReport,
 ): ValidationReport {
   return report.map((entry) => {
-    const threwError = errorReport.includes(entry.file);
+    const threwError = errorReport.indexOf(entry.file) >= 0;
     return {
       status: entry.status,
       threwError: threwError,

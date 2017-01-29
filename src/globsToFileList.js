@@ -36,7 +36,7 @@ function globsToFileList(
   const includeFiles = coalescePatterns(toArray(includePatterns), globOptions);
   const excludeFiles = coalescePatterns(toArray(excludePatterns), globOptions);
 
-  return includeFiles.filter((file) => !excludeFiles.includes(file));
+  return includeFiles.filter((file) => excludeFiles.indexOf(file) < 0);
 }
 
 export default globsToFileList;

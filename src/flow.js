@@ -35,9 +35,9 @@ function astToFlowStatus(ast: Object): FlowStatus {
           return line.trim().replace(/^\*/, '').trim();
         });
 
-        if (lines.includes('@flow')) {
+        if (lines.indexOf('@flow') >= 0) {
           return FLOW_MODE.FLOW;
-        } else if (lines.includes('@flow weak')) {
+        } else if (lines.indexOf('@flow weak') >= 0) {
           return FLOW_MODE.FLOW_WEAK;
         }
         break;
