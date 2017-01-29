@@ -36,9 +36,9 @@
     "babel-cli": "^6.18.0",
     "babel-plugin-transform-flow-strip-types": "^6.21.0",
     "babel-preset-latest": "^6.16.0",
-    "flow-bin": "^0.37.4",
+    "flow-bin": "^0.38.0",
     "flow-typed": "^2.0.0",
-    "jest": "18.0.0"
+    "jest": "18.1.0"
   },
   "scripts": {
     "preversion": "npm run test && npm run transpile",
