@@ -22,4 +22,4 @@ function isValidFlowStatus(
   };
 }
 
-module.exports = isValidFlowStatus;
+export default isValidFlowStatus;

@@ -39,4 +39,4 @@ function globsToFileList(
   return includeFiles.filter((file) => !excludeFiles.includes(file));
 }
 
-module.exports = globsToFileList;
+export default globsToFileList;

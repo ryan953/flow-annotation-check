@@ -18,7 +18,7 @@ function unique(array: Array<any>): Array<string> {
   return Object.keys(obj);
 }
 
-module.exports = {
+export {
   flatten,
   toArray,
   unique,

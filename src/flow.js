@@ -129,7 +129,7 @@ function genForceErrors(
     );
 }
 
-module.exports = {
+export {
   genCheckFlowStatus,
   genCountVisibleFiles,
   genForceErrors,

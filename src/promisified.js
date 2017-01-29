@@ -74,7 +74,7 @@ function truncate(file: string, data: string | Buffer): Promise<void> {
   });
 }
 
-module.exports = {
+export {
   exec,
   execFile,
   stat,

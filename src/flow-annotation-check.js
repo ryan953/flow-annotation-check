@@ -80,8 +80,5 @@ function genValidate(cwd: string, flags: Flags): Promise<ValidationReport> {
     });
 }
 
-module.exports = {
-  genCheckFlowStatus,
-  genReport,
-  genValidate,
-};
+export default genReport;
+export {genCheckFlowStatus, genValidate};
