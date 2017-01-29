@@ -51,6 +51,13 @@
     "transpile": "rm -Rf lib/* && babel src --out-dir lib --ignore __tests__",
     "flow-update-dfns": "flow-typed update"
   },
+  "babel": {
+    "presets": ["latest"],
+    "plugins": [
+      "transform-flow-strip-types",
+      "transform-object-rest-spread"
+    ]
+  },
   "jest": {
     "testPathDirs": [
       "src"
