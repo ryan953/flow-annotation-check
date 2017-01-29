@@ -1,6 +1,6 @@
 {
   "name": "flow-annotation-check",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Check your files for the presence of the `@flow` and `@flow weak` annotations",
   "author": {
     "name": "Ryan Albrecht",
@@ -52,7 +52,9 @@
     "flow-update-dfns": "flow-typed update"
   },
   "babel": {
-    "presets": ["latest"],
+    "presets": [
+      "latest"
+    ],
     "plugins": [
       "transform-flow-strip-types",
       "transform-object-rest-spread"
