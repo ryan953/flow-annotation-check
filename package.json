@@ -61,7 +61,7 @@
     ]
   },
   "jest": {
-    "testPathDirs": [
+    "roots": [
       "src"
     ],
     "testPathIgnorePatterns": [
