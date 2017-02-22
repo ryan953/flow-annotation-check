@@ -38,7 +38,7 @@
     "babel-preset-latest": "^6.16.0",
     "flow-bin": "^0.39.0",
     "flow-typed": "^2.0.0",
-    "jest": "18.1.0"
+    "jest": "19.0.0"
   },
   "scripts": {
     "preversion": "npm run test && npm run transpile",
@@ -61,7 +61,7 @@
     ]
   },
   "jest": {
-    "testPathDirs": [
+    "roots": [
       "src"
     ],
     "testPathIgnorePatterns": [
