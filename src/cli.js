@@ -49,7 +49,7 @@ function getParser(): ArgumentParser {
     ['-x', '--exclude'],
     {
       action: 'append',
-      help: 'Glob for files to exclude. Can be set multiple times. (default: `node_modules/**/*.js`)',
+      help: 'Glob for files to exclude. Can be set multiple times. (default: `+(node_modules|build|flow-typed)/**/*.js`)',
     },
   );
   parser.addArgument(
@@ -74,7 +74,7 @@ function getParser(): ArgumentParser {
 function resolveArgs(args: Args): Flags {
   return {
     ...args,
-    exclude: args.exclude || ['node_modules/**/*.js'],
+    exclude: args.exclude || ['+(node_modules|build|flow-typed)/**/*.js'],
     flow_path: args.flow_path || 'flow',
     include: args.include || ['**/*.js'],
     root: path.resolve(args.root || '.'),

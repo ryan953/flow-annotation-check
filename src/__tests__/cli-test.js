@@ -16,7 +16,7 @@ describe('cli', () => {
     it('should add all the default fields', () => {
       const result = resolveArgs({});
       expect(result).toEqual({
-        exclude: ['node_modules/**/*.js'],
+        exclude: ['+(node_modules|build|flow-typed)/**/*.js'],
         flow_path: 'flow',
         include: ['**/*.js'],
         root: path.resolve(path.join(__dirname, '../..')),
@@ -41,7 +41,7 @@ describe('cli', () => {
     it('should setup defaults for exclude', () => {
       const result = resolveArgs(MOCK_ARGS);
       expect(result).toMatchObject({
-        exclude: ['node_modules/**/*.js'],
+        exclude: ['+(node_modules|build|flow-typed)/**/*.js'],
       });
     });
 
