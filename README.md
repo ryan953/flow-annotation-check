@@ -112,6 +112,8 @@ The common settings you will use are:
 * `-x`, `--exclude`  Glob for files to exclude. Can be set multiple times.
 * `-a`, `--absolute` Report absolute path names. The default is to report only filenames.
 
+Setting `--exclude` will override the defaults. So don't forget to ignore `node_modules/**/*.js` in addition to project specific folders.
+
 ### Validate mode
 
 Flow has some internal limits on what annotations it will detect. This might mean some files might not report errors when you run `flow check` on the cli (see [docblock.ml](https://github.com/facebook/flow/blob/master/src/parsing/docblock.ml#L39-L101) in facebook/flow). You can use the `validate` command to verify your existing annotations.
