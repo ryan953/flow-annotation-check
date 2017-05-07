@@ -6,6 +6,7 @@
 
 import type {Args, Flags, StatusReport, ValidationReport} from './types';
 
+import findPackageJson from 'find-package-json';
 import genReport, {genValidate} from './flow-annotation-check';
 import packageJSON from '../package.json';
 import path from 'path';
@@ -84,13 +85,27 @@ function getParser(): ArgumentParser {
   return parser;
 }
 
-function resolveArgs(args: Args): Flags {
+function getPackageJsonArgs(root: ?string, defaults: Flags): Flags {
+  const finder = findPackageJson(path.resolve(root || defaults.root));
+  let it = finder.next();
+  while (!it.done) {
+    const pkg = it.value;
+    if (pkg && pkg['flow-annotation-check']) {
+      return resolveArgs(pkg['flow-annotation-check'], defaults);
+    }
+    it = finder.next();
+  }
+  return defaults;
+}
+
+function resolveArgs(args: Args, defaults: Flags): Flags {
   return {
-    ...args,
-    exclude: args.exclude || ['+(node_modules|build|flow-typed)/**/*.js'],
-    flow_path: args.flow_path || 'flow',
-    include: args.include || ['**/*.js'],
-    root: path.resolve(args.root || '.'),
+    absolute: args.absolute || defaults.absolute,
+    allow_weak: args.allow_weak || defaults.allow_weak,
+    exclude: args.exclude || defaults.exclude,
+    flow_path: args.flow_path || defaults.flow_path,
+    include: args.include || defaults.include,
+    root: path.resolve(args.root || defaults.root),
   };
 }
 
@@ -120,7 +135,6 @@ function main(flags: Flags): void {
       break;
   }
 }
-
 
 function printStatusReport(report: StatusReport, flags: Flags): void {
   report.forEach((entry) => {
@@ -156,7 +170,13 @@ function printValidationReport(report: ValidationReport, flags: Flags): void {
 }
 
 function run(): void {
-  main(resolveArgs(getParser().parseArgs()));
+  const parsed = getParser().parseArgs();
+  main(
+    resolveArgs(
+      parsed,
+      getPackageJsonArgs(parsed.root, DEFAULT_FLAGS),
+    ),
+  );
 }
 
 export {

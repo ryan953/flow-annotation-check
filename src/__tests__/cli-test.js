@@ -7,6 +7,15 @@
 import path from 'path';
 import {getParser, main, resolveArgs} from '../cli';
 
+const DEFAULT_FLAGS = {
+  absolute: false,
+  allow_weak: false,
+  exclude: ['+(node_modules|build|flow-typed)/**/*.js'],
+  flow_path: 'flow',
+  include: ['**/*.js'],
+  root: '.',
+};
+
 describe('cli', () => {
   describe('getParser', () => {
     it('should print the help message', () => {
@@ -19,8 +28,10 @@ describe('cli', () => {
     };
 
     it('should add all the default fields', () => {
-      const result = resolveArgs({});
+      const result = resolveArgs({}, DEFAULT_FLAGS);
       expect(result).toEqual({
+        absolute: false,
+        allow_weak: false,
         exclude: ['+(node_modules|build|flow-typed)/**/*.js'],
         flow_path: 'flow',
         include: ['**/*.js'],
@@ -29,7 +40,7 @@ describe('cli', () => {
     });
 
     it('should parse the root into a full path', () => {
-      const result = resolveArgs(MOCK_ARGS);
+      const result = resolveArgs(MOCK_ARGS, DEFAULT_FLAGS);
       expect(result.root).toMatch(/\//);
       expect(result).toMatchObject({
         root: path.resolve(path.join(__dirname, '../..')),
@@ -37,14 +48,14 @@ describe('cli', () => {
     });
 
     it('should setup defaults for include', () => {
-      const result = resolveArgs(MOCK_ARGS);
+      const result = resolveArgs(MOCK_ARGS, DEFAULT_FLAGS);
       expect(result).toMatchObject({
         include: ['**/*.js'],
       });
     });
 
     it('should setup defaults for exclude', () => {
-      const result = resolveArgs(MOCK_ARGS);
+      const result = resolveArgs(MOCK_ARGS, DEFAULT_FLAGS);
       expect(result).toMatchObject({
         exclude: ['+(node_modules|build|flow-typed)/**/*.js'],
       });
@@ -55,7 +66,7 @@ describe('cli', () => {
         include: ['*.js'],
         exclude: ['*.coffee'],
         root: '.',
-      });
+      }, DEFAULT_FLAGS);
       expect(result).toMatchObject({
         include: ['*.js'],
         exclude: ['*.coffee'],
