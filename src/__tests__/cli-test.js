@@ -8,6 +8,11 @@ import path from 'path';
 import {getParser, main, resolveArgs} from '../cli';
 
 describe('cli', () => {
+  describe('getParser', () => {
+    it('should print the help message', () => {
+      expect(getParser().formatHelp()).toMatchSnapshot();
+    });
+  });
   describe('resolveArgs', () => {
     const MOCK_ARGS = {
       root: '.',

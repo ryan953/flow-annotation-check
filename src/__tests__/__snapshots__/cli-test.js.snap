@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`cli getParser should print the help message 1`] = `
+"usage: index.js [-h] [-v] [-f FLOW_PATH] [-a] [--allow-weak] [-i INCLUDE]
+                [-x EXCLUDE] [--validate]
+                [root]
+
+Positional arguments:
+  root                  The root directory to glob files from. (default: \`\\".
+                        \\"\`)
+
+Optional arguments:
+  -h, --help            Show this help message and exit.
+  -v, --version         Show program's version number and exit.
+  -f FLOW_PATH, --flow-path FLOW_PATH
+                        The path to the flow command. (default: \`\\"flow\\"\`)
+  -a, --absolute        Report absolute path names. (default: \`false\`)
+  --allow-weak          Consider \`@flow weak\` as a accepable annotation. See 
+                        https://flowtype.org/docs/existing.html#weak-mode for 
+                        reasons why this should only be used temporarily. 
+                        (default: \`false\`)
+  -i INCLUDE, --include INCLUDE
+                        Glob for files to include. Can be set multiple times. 
+                        (default: \`[\\"**/*.js\\"]\`)
+  -x EXCLUDE, --exclude EXCLUDE
+                        Glob for files to exclude. Can be set multiple times. 
+                        (default: \`[\\"+(node_modules build flow-typed)/**/*.
+                        js\\"]\`)
+  --validate            Run in validation mode. This injects errors into 
+                        globbed files and checks the flow-annotation status
+"
+`;
