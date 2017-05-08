@@ -7,15 +7,16 @@
 import childProcess from 'child_process';
 import fs from 'fs';
 
-type IO = {
+export type IOResult = {
   stdout: string | Buffer,
   stderr: string | Buffer,
+  error?: Error,
 };
 
 function exec(
   cmd: string,
   options: Object,
-): Promise<IO> {
+): Promise<IOResult> {
   return new Promise((resolve, reject) => {
     childProcess.exec(cmd, options, (error, stdout, stderr) => {
       if (error) {
@@ -31,7 +32,7 @@ function execFile(
   file: string,
   args: Array<string>,
   options: Object,
-): Promise<IO> {
+): Promise<IOResult> {
   return new Promise((resolve, reject) => {
     childProcess.execFile(file, args, options, (error, stdout, stderr) => {
       if (error) {

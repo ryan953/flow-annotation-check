@@ -5,9 +5,28 @@
  */
 
 import type {ErrorReport, Flags, FlowStatus} from './types';
+import type {IOResult} from './promisified';
 
 import {flatten, unique} from './core';
 import {exec, execFile, stat, append, truncate} from './promisified';
+
+type ASTComment = {
+  type: 'Line' | 'Block' | string,
+  value: string,
+};
+type AST = {
+  comments: Array<ASTComment>,
+};
+
+type FlowCheckResult = {
+  errors: Array<{
+    kind: string,
+    level: string,
+    message: Array<{
+      path: string,
+    }>,
+  }>,
+};
 
 const FLOW_MODE = {
   FLOW: 'flow',
@@ -15,7 +34,7 @@ const FLOW_MODE = {
   NO_FLOW: 'no flow',
 };
 
-function astToFlowStatus(ast: Object): FlowStatus {
+function astToFlowStatus(ast: AST): FlowStatus {
   for (let i = 0; i < 10; i++) {
     const comment = ast.comments[i];
     if (!comment) {
@@ -55,7 +74,7 @@ function genCheckFlowStatus(
   const options = {maxBuffer: Infinity};
 
   return exec(`${flowPath} ast ${file}`, options)
-    .then(({stdout, stderr}): Object => {
+    .then(({stdout, stderr}): AST => {
       if (stderr) {
         throw new Error(stderr);
       }
@@ -98,12 +117,12 @@ function genForceErrors(
       )
     )
     .then(
-      () => execFile(
+      (): Promise<FlowCheckResult> => execFile(
         flags.flow_path,
         flowCheck,
         options,
       ).catch(
-        ({error, stdout, stderr}) => JSON.parse(stdout)
+        ({error, stdout, stderr}: IOResult) => JSON.parse(String(stdout))
       )
     )
     .then(
@@ -120,7 +139,7 @@ function genForceErrors(
                 checkResult.errors.map((entry) => {
                   return entry.message.map((message) => message.path);
                 })
-              ).filter(_ => _)
+              ).filter((_: any) => _)
             );
           }
           return [];

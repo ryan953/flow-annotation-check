@@ -1,6 +1,6 @@
-# flow-annotation-check [![Build Status](https://travis-ci.org/ryan953/flow-annotation-check.svg?branch=master)](https://travis-ci.org/ryan953/flow-annotation-check)
+# flow-annotation-check
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/ryan953/flow-annotation-check.svg)](https://greenkeeper.io/)
+[![Build Status](https://travis-ci.org/ryan953/flow-annotation-check.svg?branch=master)](https://travis-ci.org/ryan953/flow-annotation-check) [![Greenkeeper badge](https://badges.greenkeeper.io/ryan953/flow-annotation-check.svg)](https://greenkeeper.io/)
 
 Verify the `@flow` and `@flow weak` annotations in your javascript files.
 
@@ -86,6 +86,9 @@ If you don't want to install the package globally you can run `flow-annotation-c
 
 ```json
 {
+  "dependencies": {
+    "flow-annotation-check": "^1.0.0"
+  },
   "scripts": {
     "annotations": "flow-annotation-check"
   }
@@ -113,6 +116,24 @@ The common settings you will use are:
 * `-a`, `--absolute` Report absolute path names. The default is to report only filenames.
 
 Setting `--exclude` will override the defaults. So don't forget to ignore `node_modules/**/*.js` in addition to project specific folders.
+
+You can also configure cli arguments directly inside your package.json file. Example:
+
+```json
+{
+  "dependencies": {
+    "flow-annotation-check": "^1.0.0"
+  },
+  "flow-annotation-check": {
+    "absolute": false,
+    "allow_weak": false
+    "exclude": ['+(node_modules|build|flow-typed)/**/*.js'],
+    "flow_path": "flow"
+    "include": ['**/*.js'],
+    "root": "."
+  }
+}
+```
 
 ### Validate mode
 

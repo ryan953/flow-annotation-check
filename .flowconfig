@@ -1,6 +1,7 @@
 [ignore]
 .*/lib/.*
 .*/src/__tests__/fixtures/.*
+.*/node_modules/find-package-json/fixture/.*
 
 [include]
 

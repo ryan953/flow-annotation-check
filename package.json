@@ -30,6 +30,7 @@
   "dependencies": {
     "argparse": "^1.0.9",
     "babel-plugin-transform-object-rest-spread": "^6.20.2",
+    "find-package-json": "^1.0.0",
     "glob": "7.1.1"
   },
   "devDependencies": {
@@ -37,16 +38,20 @@
     "babel-plugin-transform-flow-strip-types": "^6.21.0",
     "babel-preset-latest": "^6.16.0",
     "flow-bin": "^0.45.0",
+    "flow-coverage-report": "^0.3.0",
     "flow-typed": "^2.1.1",
     "jest": "19.0.0"
   },
   "scripts": {
-    "preversion": "npm run test && npm run transpile",
-    "pretest": "npm run flow",
+    "preversion": "npm run clean && npm run test && npm run transpile",
+    "pretest": "npm run flow:check && npm run flow:annotations && npm run flow:coverage",
     "test": "npm run jest",
-    "prebuild": "npm run flow && npm run jest",
+    "prebuild": "npm run clean && npm run test",
     "build": "npm run transpile",
-    "flow": "flow check && flow check ./src/__tests__/fixtures",
+    "clean": "rm -Rf npm-debug.log lib flow-coverage",
+    "flow:check": "flow check && flow check ./src/__tests__/fixtures",
+    "flow:annotations": "npm run transpile && bin/flow-annotation-check.js",
+    "flow:coverage": "flow-coverage-report report",
     "jest": "jest",
     "transpile": "rm -Rf lib/* && babel src --out-dir lib --ignore __tests__",
     "flow-update-dfns": "flow-typed update"
@@ -58,6 +63,25 @@
     "plugins": [
       "transform-flow-strip-types",
       "transform-object-rest-spread"
+    ]
+  },
+  "flow-annotation-check": {
+    "include": [
+      "src/**/*.js"
+    ],
+    "exclude": [
+      "src/__tests__/fixtures/comment-blocks-10.js",
+      "src/__tests__/fixtures/comment-statement-10.js",
+      "src/__tests__/fixtures/no-comments.js"
+    ]
+  },
+  "flow-coverage-report": {
+    "includeGlob": [
+      "src/**/*.js"
+    ],
+    "type": [
+      "text",
+      "html"
     ]
   },
   "jest": {

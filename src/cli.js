@@ -6,10 +6,24 @@
 
 import type {Args, Flags, StatusReport, ValidationReport} from './types';
 
+import findPackageJson from 'find-package-json';
+import genReport, {genValidate} from './flow-annotation-check';
 import packageJSON from '../package.json';
 import path from 'path';
 import {ArgumentParser} from 'argparse';
-import genReport, {genValidate} from './flow-annotation-check';
+
+const DEFAULT_FLAGS = {
+  absolute: false,
+  allow_weak: false,
+  exclude: ['+(node_modules|build|flow-typed)/**/*.js'],
+  flow_path: 'flow',
+  include: ['**/*.js'],
+  root: '.',
+};
+
+function printDefault(value) {
+  return `(default: \`${JSON.stringify(value)}\`)`;
+}
 
 function getParser(): ArgumentParser {
   const parser = new ArgumentParser({
@@ -21,35 +35,35 @@ function getParser(): ArgumentParser {
     ['-f', '--flow-path'],
     {
       action: 'store',
-      help: 'The path to the flow command. (default: `flow`)',
+      help: `The path to the flow command. ${printDefault(DEFAULT_FLAGS.flow_path)}`,
     },
   );
   parser.addArgument(
     ['-a', '--absolute'],
     {
       action: 'storeTrue',
-      help: 'Report absolute path names. (default: false)',
+      help: `Report absolute path names. ${printDefault(DEFAULT_FLAGS.absolute)}`,
     },
   );
   parser.addArgument(
     ['--allow-weak'],
     {
       action: 'storeTrue',
-      help: 'Consider `@flow weak` as a accepable annotation. See https://flowtype.org/docs/existing.html#weak-mode for reasons why this should only be used temporarily. (default: false)',
+      help: `Consider \`@flow weak\` as a accepable annotation. See https://flowtype.org/docs/existing.html#weak-mode for reasons why this should only be used temporarily. ${printDefault(DEFAULT_FLAGS.allow_weak)}`,
     },
   );
   parser.addArgument(
     ['-i', '--include'],
     {
       action: 'append',
-      help: 'Glob for files to include. Can be set multiple times. (default: `**/*.js`)',
+      help: `Glob for files to include. Can be set multiple times. ${printDefault(DEFAULT_FLAGS.include)}`,
     },
   );
   parser.addArgument(
     ['-x', '--exclude'],
     {
       action: 'append',
-      help: 'Glob for files to exclude. Can be set multiple times. (default: `+(node_modules|build|flow-typed)/**/*.js`)',
+      help: `Glob for files to exclude. Can be set multiple times. ${printDefault(DEFAULT_FLAGS.exclude)}`,
     },
   );
   parser.addArgument(
@@ -63,7 +77,7 @@ function getParser(): ArgumentParser {
     ['root'],
     {
       defaultValue: '.',
-      help: 'The root directory to glob files from. (default: `.`)',
+      help: `The root directory to glob files from. ${printDefault(DEFAULT_FLAGS.root)}`,
       nargs: '?',
     },
   );
@@ -71,13 +85,27 @@ function getParser(): ArgumentParser {
   return parser;
 }
 
-function resolveArgs(args: Args): Flags {
+function getPackageJsonArgs(root: ?string, defaults: Flags): Flags {
+  const finder = findPackageJson(path.resolve(root || defaults.root));
+  let it = finder.next();
+  while (!it.done) {
+    const pkg = it.value;
+    if (pkg && pkg['flow-annotation-check']) {
+      return resolveArgs(pkg['flow-annotation-check'], defaults);
+    }
+    it = finder.next();
+  }
+  return defaults;
+}
+
+function resolveArgs(args: Args, defaults: Flags): Flags {
   return {
-    ...args,
-    exclude: args.exclude || ['+(node_modules|build|flow-typed)/**/*.js'],
-    flow_path: args.flow_path || 'flow',
-    include: args.include || ['**/*.js'],
-    root: path.resolve(args.root || '.'),
+    absolute: args.absolute || defaults.absolute,
+    allow_weak: args.allow_weak || defaults.allow_weak,
+    exclude: args.exclude || defaults.exclude,
+    flow_path: args.flow_path || defaults.flow_path,
+    include: args.include || defaults.include,
+    root: path.resolve(args.root || defaults.root),
   };
 }
 
@@ -107,7 +135,6 @@ function main(flags: Flags): void {
       break;
   }
 }
-
 
 function printStatusReport(report: StatusReport, flags: Flags): void {
   report.forEach((entry) => {
@@ -143,7 +170,13 @@ function printValidationReport(report: ValidationReport, flags: Flags): void {
 }
 
 function run(): void {
-  main(resolveArgs(getParser().parseArgs()));
+  const parsed = getParser().parseArgs();
+  main(
+    resolveArgs(
+      parsed,
+      getPackageJsonArgs(parsed.root, DEFAULT_FLAGS),
+    ),
+  );
 }
 
 export {
