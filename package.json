@@ -44,6 +44,7 @@
   },
   "scripts": {
     "preversion": "npm run clean && npm run test && npm run transpile",
+    "postversion": "git push && git push --tags",
     "pretest": "npm run flow:check && npm run flow:annotations && npm run flow:coverage",
     "test": "npm run jest",
     "prebuild": "npm run clean && npm run test",
