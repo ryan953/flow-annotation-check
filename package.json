@@ -43,12 +43,13 @@
     "jest": "19.0.0"
   },
   "scripts": {
-    "preversion": "npm run test && npm run transpile",
-    "pretest": "npm run flow && npm run flow:annotations && npm run flow:coverage",
+    "preversion": "npm run clean && npm run test && npm run transpile",
+    "pretest": "npm run flow:check && npm run flow:annotations && npm run flow:coverage",
     "test": "npm run jest",
-    "prebuild": "npm run flow && npm run flow:annotations && npm run flow:coverage && npm run jest",
+    "prebuild": "npm run clean && npm run test",
     "build": "npm run transpile",
-    "flow": "flow check && flow check ./src/__tests__/fixtures",
+    "clean": "rm -Rf npm-debug.log lib flow-coverage",
+    "flow:check": "flow check && flow check ./src/__tests__/fixtures",
     "flow:annotations": "npm run transpile && bin/flow-annotation-check.js",
     "flow:coverage": "flow-coverage-report report",
     "jest": "jest",
