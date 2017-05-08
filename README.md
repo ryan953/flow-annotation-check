@@ -126,10 +126,10 @@ You can also configure cli arguments directly inside your package.json file. Exa
   },
   "flow-annotation-check": {
     "absolute": false,
-    "allow_weak": false
-    "exclude": ['+(node_modules|build|flow-typed)/**/*.js'],
-    "flow_path": "flow"
-    "include": ['**/*.js'],
+    "allow_weak": false,
+    "exclude": ["+(node_modules|build|flow-typed)/**/*.js"],
+    "flow_path": "flow",
+    "include": ["**/*.js"],
     "root": "."
   }
 }
