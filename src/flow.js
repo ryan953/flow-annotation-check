@@ -19,7 +19,7 @@ type AST = {
 };
 
 type FlowCheckResult = {
-  errors: Array<{
+  errors?: Array<{
     kind: string,
     level: string,
     message: Array<{
@@ -117,16 +117,24 @@ function genForceErrors(
       )
     )
     .then(
-      (): Promise<FlowCheckResult> => execFile(
+      () => execFile(
         flags.flow_path,
         flowCheck,
         options,
+      ).then(
+        ({stdout, stderr}: IOResult) => JSON.parse(String(stdout))
       ).catch(
-        ({error, stdout, stderr}: IOResult) => JSON.parse(String(stdout))
+        ({error, stdout, stderr}: IOResult) => {
+          try {
+            return JSON.parse(String(stdout));
+          } catch (e) {
+            return {};
+          }
+        }
       )
     )
     .then(
-      (checkResult) => Promise.all(
+      (checkResult: FlowCheckResult) => Promise.all(
         files.map(
           (file) => truncate(file, ERROR_STATEMENT)
         )
