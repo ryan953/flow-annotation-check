@@ -18,7 +18,7 @@ function isValidFlowStatus(
     case 'no flow':
       return !threwError;
     default:
-      throw new Error(`invalid flow status '${status}'`);
+      throw new Error(`Invalid flow status '${status}'`);
   };
 }
 
