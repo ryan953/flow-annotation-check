@@ -33,4 +33,9 @@ describe('isValidFlowStatus', () => {
   it('should return false when the @flow annotation is not present because this file errored when it should not have', () => {
     assertFixture({status: 'no flow', fileErrored: true, expected: false});
   });
+
+  it('should throw when the annotation is some unexpected value', () => {
+    // $FlowFixMe expected that foobar is not in enum 'flow' | 'flow weak' | 'no flow'
+    expect(() => isValidFlowStatus('foobar')).toThrow(`Invalid flow status 'foobar'`);
+  });
 });
