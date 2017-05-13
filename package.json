@@ -47,7 +47,7 @@
     "preversion": "npm run clean && npm run test && npm run transpile",
     "postversion": "git push && git push --tags && npm publish",
     "test": "npm run flow && jest",
-    "test:ci": "npm run flow && jest -- --coverage && codecov",
+    "test:ci": "npm run flow && jest --coverage && codecov",
     "prebuild": "npm run clean && npm run test",
     "build": "npm run transpile",
     "clean": "rm -Rf npm-debug.log lib coverage flow-coverage",
