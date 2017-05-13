@@ -49,7 +49,7 @@
     "pretest": "npm run flow:check && npm run flow:annotations && npm run flow:coverage",
     "test": "npm run jest",
     "test:coverage": "npm run jest -- --coverage",
-    "test:ci": "npm run test:coverage && npm run codecov",
+    "test:ci": "npm run test:coverage && codecov",
     "prebuild": "npm run clean && npm run test",
     "build": "npm run transpile",
     "clean": "rm -Rf npm-debug.log lib coverage flow-coverage",
