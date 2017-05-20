@@ -30,8 +30,8 @@
   "dependencies": {
     "argparse": "^1.0.9",
     "babel-plugin-transform-object-rest-spread": "^6.20.2",
-    "find-package-json": "^1.0.0",
-    "glob": "7.1.1"
+    "glob": "7.1.1",
+    "load-pkg": "^3.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

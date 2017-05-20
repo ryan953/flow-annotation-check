@@ -6,8 +6,8 @@
 
 import type {Args, Flags, StatusReport, ValidationReport} from './types';
 
-import findPackageJson from 'find-package-json';
 import genReport, {genValidate} from './flow-annotation-check';
+import loadPkg from 'load-pkg';
 import packageJSON from '../package.json';
 import path from 'path';
 import {ArgumentParser} from 'argparse';
@@ -86,14 +86,9 @@ function getParser(): ArgumentParser {
 }
 
 function getPackageJsonArgs(root: ?string, defaults: Flags): Flags {
-  const finder = findPackageJson(path.resolve(root || defaults.root));
-  let it = finder.next();
-  while (!it.done) {
-    const pkg = it.value;
-    if (pkg && pkg['flow-annotation-check']) {
-      return resolveArgs(pkg['flow-annotation-check'], defaults);
-    }
-    it = finder.next();
+  var pkg = require('load-pkg').sync(path.resolve(root || defaults.root));
+  if (pkg && pkg['flow-annotation-check']) {
+    return resolveArgs(pkg['flow-annotation-check'], defaults);
   }
   return defaults;
 }
