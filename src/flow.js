@@ -8,7 +8,7 @@ import type {ErrorReport, Flags, FlowStatus} from './types';
 import type {IOResult} from './promisified';
 
 import {flatten, unique} from './core';
-import {exec, execFile, stat, append, truncate} from './promisified';
+import {escapeShell, exec, execFile, stat, append, truncate} from './promisified';
 
 type ASTComment = {
   type: 'Line' | 'Block' | string,
@@ -73,7 +73,7 @@ function genCheckFlowStatus(
 ): Promise<FlowStatus> {
   const options = {maxBuffer: Infinity};
 
-  return exec(`${flowPath} ast ${file}`, options)
+  return exec(`${flowPath} ast ${escapeShell(file)}`, options)
     .then(({stdout, stderr}): AST => {
       if (stderr) {
         throw new Error(stderr);
@@ -88,7 +88,7 @@ function genCountVisibleFiles(flowPath: string, cwd: string): Promise<number> {
     maxBuffer: Infinity,
   };
 
-  return exec(`${flowPath} ls ${cwd} | wc -l`, options)
+  return exec(`${flowPath} ls ${escapeShell(cwd)} | wc -l`, options)
     .then(({stdout, stderr}) => {
       if (stderr) {
         throw new Error(stderr);

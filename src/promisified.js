@@ -13,6 +13,10 @@ export type IOResult = {
   error?: Error,
 };
 
+function escapeShell(cmd: string): string {
+  return '"'+cmd.replace(/(["\s'$`\\])/g,'\\$1')+'"';
+}
+
 function exec(
   cmd: string,
   options: Object,
@@ -76,6 +80,7 @@ function truncate(file: string, data: string | Buffer): Promise<void> {
 }
 
 export {
+  escapeShell,
   exec,
   execFile,
   stat,

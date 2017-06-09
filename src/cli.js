@@ -86,7 +86,7 @@ function getParser(): ArgumentParser {
 }
 
 function getPackageJsonArgs(root: ?string, defaults: Flags): Flags {
-  var pkg = require('load-pkg').sync(path.resolve(root || defaults.root));
+  var pkg = loadPkg.sync(path.resolve(root || defaults.root));
   if (pkg && pkg['flow-annotation-check']) {
     return resolveArgs(pkg['flow-annotation-check'], defaults);
   }
