@@ -14,7 +14,7 @@ export type IOResult = {
 };
 
 function escapeShell(cmd: string): string {
-  return '"'+cmd.replace(/(["\s'$`\\])/g,'\\$1')+'"';
+  return cmd.replace(/(["\s'$`\\])/g,'\\$1');
 }
 
 function exec(
