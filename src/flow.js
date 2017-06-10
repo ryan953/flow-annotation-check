@@ -61,7 +61,7 @@ function astToFlowStatus(ast: AST): FlowStatus {
         }
         break;
       default:
-        throw new Error('Unknown comment type', comment.type, comment);
+        throw new Error(`Unknown comment type ${comment.type} for comment ${JSON.stringify(comment)}`);
     }
   }
   return FLOW_MODE.NO_FLOW;
