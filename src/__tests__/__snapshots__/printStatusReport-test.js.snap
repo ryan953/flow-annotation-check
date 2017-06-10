@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`printStatusReport should print a simple csv report 1`] = `
+Array [
+  "\\"flow\\", \\"./a.js\\"",
+  "\\"flow weak\\", \\"./b.js\\"",
+  "\\"no flow\\", \\"./c.js\\"",
+]
+`;
+
+exports[`printStatusReport should print a simple html-table report 1`] = `
+Array [
+  "<table>",
+  "<tbody>",
+  "<tr data-status=\\"flow\\">
+        <td>flow</td>
+        <td>./a.js</td>
+      </tr>",
+  "<tr data-status=\\"flow weak\\">
+        <td>flow weak</td>
+        <td>./b.js</td>
+      </tr>",
+  "<tr data-status=\\"no flow\\">
+        <td>no flow</td>
+        <td>./c.js</td>
+      </tr>",
+  "</tbody>",
+  "<tfoot>",
+  "<tr><td>@flow</td><td>1 (33.33%)</td></tr>",
+  "<tr><td>@flow weak</td><td>1 (33.33%)</td></tr>",
+  "<tr><td>no flow</td><td>1 (33.33%)</td></tr>",
+  "<tr><td>Total Files</td><td>3</td></tr>",
+  "</tfoot>",
+  "</table>",
+]
+`;
+
+exports[`printStatusReport should print a simple text report 1`] = `
+Array [
+  "flow	./a.js",
+  "flow weak	./b.js",
+  "no flow	./c.js",
+]
+`;
+
+exports[`printStatusReport should print an empty html-table report 1`] = `
+Array [
+  "<table>",
+  "<tbody>",
+  "</tbody>",
+  "<tfoot>",
+  "<tr><td>@flow</td><td>0</td></tr>",
+  "<tr><td>@flow weak</td><td>0</td></tr>",
+  "<tr><td>no flow</td><td>0</td></tr>",
+  "<tr><td>Total Files</td><td>0</td></tr>",
+  "</tfoot>",
+  "</table>",
+]
+`;
+
+exports[`printStatusReport should print an html-table report with even percentages 1`] = `
+Array [
+  "<table>",
+  "<tbody>",
+  "<tr data-status=\\"flow\\">
+        <td>flow</td>
+        <td>./a.js</td>
+      </tr>",
+  "<tr data-status=\\"flow weak\\">
+        <td>flow weak</td>
+        <td>./b.js</td>
+      </tr>",
+  "</tbody>",
+  "<tfoot>",
+  "<tr><td>@flow</td><td>1 (50%)</td></tr>",
+  "<tr><td>@flow weak</td><td>1 (50%)</td></tr>",
+  "<tr><td>no flow</td><td>0 (0%)</td></tr>",
+  "<tr><td>Total Files</td><td>2</td></tr>",
+  "</tfoot>",
+  "</table>",
+]
+`;

@@ -13,6 +13,7 @@ const DEFAULT_FLAGS = {
   exclude: ['+(node_modules|build|flow-typed)/**/*.js'],
   flow_path: 'flow',
   include: ['**/*.js'],
+  output: 'text',
   root: '.',
 };
 
@@ -35,6 +36,7 @@ describe('cli', () => {
         exclude: ['+(node_modules|build|flow-typed)/**/*.js'],
         flow_path: 'flow',
         include: ['**/*.js'],
+        output: 'text',
         root: path.resolve(path.join(__dirname, '../..')),
       });
     });

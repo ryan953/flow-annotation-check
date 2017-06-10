@@ -114,6 +114,7 @@ The common settings you will use are:
 * `-i`, `--include`  Glob for files to include. Can be set multiple times.
 * `-x`, `--exclude`  Glob for files to exclude. Can be set multiple times.
 * `-a`, `--absolute` Report absolute path names. The default is to report only filenames.
+* `-o`, `--output`   Choose from either `text`, `csv`, or `html` format.
 
 Setting `--exclude` will override the defaults. So don't forget to ignore `node_modules/**/*.js` in addition to project specific folders.
 
@@ -130,9 +131,47 @@ You can also configure cli arguments directly inside your package.json file. Exa
     "exclude": ["+(node_modules|build|flow-typed)/**/*.js"],
     "flow_path": "flow",
     "include": ["**/*.js"],
+    "output": "text",
     "root": "."
   }
 }
+```
+
+### Output format
+
+You can use the `--output` flag, or `-o` to set the output format of the report. All reports are printed to stdio using console.log. The `--output` flag has no affect when `--validate` is set.
+
+The default format is `text` which prints a two column list of status value (one of `flow`, `flow weak` or `no flow`) and filename separated by the Tab character.
+
+The `csv` option prints a two column list of status value and filename with each field wrapped in quotes and separated by `,`.
+
+The `html-table` option prints an opening and closing `<table>` tag with two columns of data. Each row contains a `data-status` attribute which can be useful for styling. There is a summary of the rows inside the `<tfoot>` element. This does not print a full, valid, html page but it is possible to render it directly.
+
+### VERBOSE
+
+If the `VERBOSE` env variable is set to a truthy value then the resolved configuration params will be printed:
+
+```
+$ VERBOSE=1 ./bin/flow-annotation-check.js
+Invoking: { command: 'report',
+  flags:
+   { absolute: false,
+     allow_weak: false,
+     exclude:
+      [ 'src/__tests__/fixtures/comment-blocks-10.js',
+        'src/__tests__/fixtures/comment-statement-10.js',
+        'src/__tests__/fixtures/no-comments.js' ],
+     flow_path: 'flow',
+     include: [ 'src/**/*.js' ],
+     output: 'text',
+     root: '/Users/ryan/Code/flow-annotation-check' } }
+flow  src/__tests__/cli-test.js
+flow  src/__tests__/core-test.js
+flow  src/__tests__/fixtures/comment-blocks-09.flow.js
+flow  src/__tests__/fixtures/comment-single-block-09.flow.js
+flow  src/__tests__/fixtures/comment-single-block-10.flow.js
+flow  src/__tests__/fixtures/comment-statement-09.flow.js
+... snip ...
 ```
 
 ### Validate mode

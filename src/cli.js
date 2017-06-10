@@ -11,13 +11,19 @@ import loadPkg from 'load-pkg';
 import packageJSON from '../package.json';
 import path from 'path';
 import {ArgumentParser} from 'argparse';
+import {
+  asText as printStatusReportAsText,
+  asHTMLTable as printStatusReportAsHTMLTable,
+  asCSV as printStatusReportAsCSV,
+} from './printStatusReport';
 
-const DEFAULT_FLAGS = {
+const DEFAULT_FLAGS: Flags = {
   absolute: false,
   allow_weak: false,
   exclude: ['+(node_modules|build|flow-typed)/**/*.js'],
   flow_path: 'flow',
   include: ['**/*.js'],
+  output: 'text',
   root: '.',
 };
 
@@ -36,6 +42,14 @@ function getParser(): ArgumentParser {
     {
       action: 'store',
       help: `The path to the flow command. ${printDefault(DEFAULT_FLAGS.flow_path)}`,
+    },
+  );
+  parser.addArgument(
+    ['-o', '--output'],
+    {
+      action: 'store',
+      help: `Output format for status/filename pairs. ${printDefault(DEFAULT_FLAGS.output)} `,
+      choices: ['text', 'html-table', 'csv'],
     },
   );
   parser.addArgument(
@@ -100,6 +114,7 @@ function resolveArgs(args: Args, defaults: Flags): Flags {
     exclude: args.exclude || defaults.exclude,
     flow_path: args.flow_path || defaults.flow_path,
     include: args.include || defaults.include,
+    output: args.output || defaults.output,
     root: path.resolve(args.root || defaults.root),
   };
 }
@@ -131,10 +146,21 @@ function main(flags: Flags): void {
   }
 }
 
+function getReport(report: StatusReport, flags: Flags): Array<string> {
+  switch (flags.output) {
+    case 'text':
+      return printStatusReportAsText(report);
+    case 'html-table':
+      return printStatusReportAsHTMLTable(report);
+    case 'csv':
+      return printStatusReportAsCSV(report);
+    default:
+      throw new Error(`Invalid flag \`output\`. Found: ${JSON.stringify(flags.output)}`);
+  }
+}
+
 function printStatusReport(report: StatusReport, flags: Flags): void {
-  report.forEach((entry) => {
-    console.log(`${entry.status}\t${entry.file}`);
-  });
+  getReport(report, flags).map((line) => console.log(line));
 
   const noFlowFiles = report.filter((entry) => entry.status == 'no flow');
   const weakFlowFiles = report.filter((entry) => entry.status == 'flow weak');

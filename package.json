@@ -53,7 +53,6 @@
     "clean": "rm -Rf npm-debug.log lib coverage flow-coverage",
     "flow:check": "flow check && flow check ./src/__tests__/fixtures",
     "flow:annotations": "npm run transpile && bin/flow-annotation-check.js",
-    "flow:html-annotations": "./bin/html-annotations.sh",
     "flow:coverage": "flow-coverage-report report",
     "flow": "npm run flow:check && npm run flow:annotations && npm run flow:coverage",
     "jest": "jest",
