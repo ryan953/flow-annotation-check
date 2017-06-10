@@ -2,12 +2,15 @@
  * @flow
  */
 
+export type OutputFormat = 'text' | 'html-table' | 'csv';
+
 export type Args = {
   absolute?: boolean,
   allow_weak?: boolean,
   exclude?: Array<string>,
   flow_path?: string,
   include?: Array<string>,
+  output?: OutputFormat,
   root?: string,
 };
 
@@ -17,6 +20,7 @@ export type Flags = {
   exclude: string | Array<string>,
   flow_path: string,
   include: string | Array<string>,
+  output: OutputFormat,
   root: string,
 };
 

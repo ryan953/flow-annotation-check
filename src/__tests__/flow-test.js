@@ -82,6 +82,7 @@ describe('genForceErrors', () => {
     exclude: [],
     flow_path: 'flow',
     include: [],
+    output: 'text',
     root: '.',
   };
 

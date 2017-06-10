@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`cli getParser should print the help message 1`] = `
-"usage: index.js [-h] [-v] [-f FLOW_PATH] [-a] [--allow-weak] [-i INCLUDE]
-                [-x EXCLUDE] [--validate]
+"usage: index.js [-h] [-v] [-f FLOW_PATH] [-o {text,html-table,csv}] [-a]
+                [--allow-weak] [-i INCLUDE] [-x EXCLUDE] [--validate]
                 [root]
 
 Positional arguments:
@@ -14,6 +14,9 @@ Optional arguments:
   -v, --version         Show program's version number and exit.
   -f FLOW_PATH, --flow-path FLOW_PATH
                         The path to the flow command. (default: \`\\"flow\\"\`)
+  -o {text,html-table,csv}, --output {text,html-table,csv}
+                        Output format for status/filename pairs. (default: 
+                        \`\\"text\\"\`)
   -a, --absolute        Report absolute path names. (default: \`false\`)
   --allow-weak          Consider \`@flow weak\` as a accepable annotation. See 
                         https://flowtype.org/docs/existing.html#weak-mode for 
