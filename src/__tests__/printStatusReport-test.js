@@ -10,7 +10,7 @@ import {
   asCSV,
 } from '../printStatusReport';
 
-const BASIC_REPORT: StatusReport = [
+const BASIC_REPORT = [
   {status: 'flow', file: './a.js'},
   {status: 'flow weak', file: './b.js'},
   {status: 'no flow', file: './c.js'},
