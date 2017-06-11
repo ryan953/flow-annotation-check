@@ -2,7 +2,7 @@
  * @flow
  */
 
-export type OutputFormat = 'text' | 'html-table' | 'csv';
+export type OutputFormat = 'text' | 'html-table' | 'csv' | 'xunit';
 
 export type Args = {
   absolute?: boolean,

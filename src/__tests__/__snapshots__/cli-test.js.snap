@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`cli getParser should print the help message 1`] = `
-"usage: index.js [-h] [-v] [-f FLOW_PATH] [-o {text,html-table,csv}] [-a]
+"usage: index.js [-h] [-v] [-f FLOW_PATH] [-o {text,html-table,csv,xunit}] [-a]
                 [--allow-weak] [-i INCLUDE] [-x EXCLUDE] [--validate]
                 [root]
 
@@ -14,7 +14,7 @@ Optional arguments:
   -v, --version         Show program's version number and exit.
   -f FLOW_PATH, --flow-path FLOW_PATH
                         The path to the flow command. (default: \`\\"flow\\"\`)
-  -o {text,html-table,csv}, --output {text,html-table,csv}
+  -o {text,html-table,csv,xunit}, --output {text,html-table,csv,xunit}
                         Output format for status/filename pairs. (default: 
                         \`\\"text\\"\`)
   -a, --absolute        Report absolute path names. (default: \`false\`)

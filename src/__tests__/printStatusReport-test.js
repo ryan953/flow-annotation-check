@@ -8,7 +8,10 @@ import {
   asText,
   asHTMLTable,
   asCSV,
+  asXUnit,
 } from '../printStatusReport';
+
+import os from 'os';
 
 const BASIC_REPORT = [
   {status: 'flow', file: './a.js'},
@@ -17,6 +20,13 @@ const BASIC_REPORT = [
 ];
 
 describe('printStatusReport', () => {
+  beforeEach(() => {
+    global.Date = jest.fn(() => ({
+      toISOString: () => '-mock date-',
+    }));
+    os.hostname = jest.fn(() => 'test-host');
+  });
+
   it('should print a simple text report', () => {
     expect(asText(BASIC_REPORT)).toMatchSnapshot();
   });
@@ -36,5 +46,8 @@ describe('printStatusReport', () => {
       {status: 'flow weak', file: './b.js'},
     ];
     expect(asHTMLTable(report)).toMatchSnapshot();
+  });
+  it('should print an xunit compatible report', () => {
+    expect(asXUnit(BASIC_REPORT)).toMatchSnapshot();
   });
 });

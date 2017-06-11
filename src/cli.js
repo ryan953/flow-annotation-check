@@ -15,6 +15,7 @@ import {
   asText as printStatusReportAsText,
   asHTMLTable as printStatusReportAsHTMLTable,
   asCSV as printStatusReportAsCSV,
+  asXUnit as printStatusReportAsXUnit,
 } from './printStatusReport';
 
 const DEFAULT_FLAGS: Flags = {
@@ -49,7 +50,7 @@ function getParser(): ArgumentParser {
     {
       action: 'store',
       help: `Output format for status/filename pairs. ${printDefault(DEFAULT_FLAGS.output)} `,
-      choices: ['text', 'html-table', 'csv'],
+      choices: ['text', 'html-table', 'csv', 'xunit'],
     },
   );
   parser.addArgument(
@@ -154,6 +155,8 @@ function getReport(report: StatusReport, flags: Flags): Array<string> {
       return printStatusReportAsHTMLTable(report);
     case 'csv':
       return printStatusReportAsCSV(report);
+    case 'xunit':
+      return printStatusReportAsXUnit(report);
     default:
       throw new Error(`Invalid flag \`output\`. Found: ${JSON.stringify(flags.output)}`);
   }
