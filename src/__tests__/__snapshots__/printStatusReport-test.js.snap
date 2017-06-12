@@ -4,8 +4,8 @@ exports[`printStatusReport should print a jUnit compatible report 1`] = `
 Array [
   "<testsuite name=\\"flow-annotation-check\\" timestamp=\\"-mock date-\\" time=\\"0\\" hostname=\\"test-host\\" tests=\\"3\\" failures=\\"2\\" errors=\\"0\\">",
   "<testcase classname=\\"./a.js\\" name=\\"HasFlowStatus\\" time=\\"0\\" />",
-  "<testcase classname=\\"./b.js\\" name=\\"HasFlowStatus\\" time=\\"0\\"><failure type=\\"HasFlowWeakStatus\\">File has status flow weak</failure></testcase>",
-  "<testcase classname=\\"./c.js\\" name=\\"HasFlowStatus\\" time=\\"0\\"><failure type=\\"HasNoneStatus\\">File has status no flow</failure></testcase>",
+  "<testcase classname=\\"./b.js\\" name=\\"HasFlowStatus\\" time=\\"0\\"><failure type=\\"HasFlowWeakStatus\\">Status is \\"flow weak\\"</failure></testcase>",
+  "<testcase classname=\\"./c.js\\" name=\\"HasFlowStatus\\" time=\\"0\\"><failure type=\\"HasNoneStatus\\">Status is \\"no flow\\"</failure></testcase>",
   "</testsuite>",
 ]
 `;
