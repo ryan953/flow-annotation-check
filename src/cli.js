@@ -4,100 +4,21 @@
  * @flow
  */
 
-import type {Args, Flags, StatusReport, ValidationReport} from './types';
+import type {Args, Flags, OutputFormat, StatusReport, ValidationReport} from './types';
+import {DEFAULT_FLAGS} from './types';
 
 import genReport, {genValidate} from './flow-annotation-check';
+import getParser from './parser';
 import loadPkg from 'load-pkg';
-import packageJSON from '../package.json';
 import path from 'path';
-import {ArgumentParser} from 'argparse';
+import {write} from './promisified';
 import {
   asText as printStatusReportAsText,
   asHTMLTable as printStatusReportAsHTMLTable,
   asCSV as printStatusReportAsCSV,
+  asJUnit as printStatusReportAsJUnit,
 } from './printStatusReport';
 
-const DEFAULT_FLAGS: Flags = {
-  absolute: false,
-  allow_weak: false,
-  exclude: ['+(node_modules|build|flow-typed)/**/*.js'],
-  flow_path: 'flow',
-  include: ['**/*.js'],
-  output: 'text',
-  root: '.',
-};
-
-function printDefault(value) {
-  return `(default: \`${JSON.stringify(value)}\`)`;
-}
-
-function getParser(): ArgumentParser {
-  const parser = new ArgumentParser({
-    addHelp: true,
-    version: packageJSON.version,
-  });
-
-  parser.addArgument(
-    ['-f', '--flow-path'],
-    {
-      action: 'store',
-      help: `The path to the flow command. ${printDefault(DEFAULT_FLAGS.flow_path)}`,
-    },
-  );
-  parser.addArgument(
-    ['-o', '--output'],
-    {
-      action: 'store',
-      help: `Output format for status/filename pairs. ${printDefault(DEFAULT_FLAGS.output)} `,
-      choices: ['text', 'html-table', 'csv'],
-    },
-  );
-  parser.addArgument(
-    ['-a', '--absolute'],
-    {
-      action: 'storeTrue',
-      help: `Report absolute path names. ${printDefault(DEFAULT_FLAGS.absolute)}`,
-    },
-  );
-  parser.addArgument(
-    ['--allow-weak'],
-    {
-      action: 'storeTrue',
-      help: `Consider \`@flow weak\` as a accepable annotation. See https://flowtype.org/docs/existing.html#weak-mode for reasons why this should only be used temporarily. ${printDefault(DEFAULT_FLAGS.allow_weak)}`,
-    },
-  );
-  parser.addArgument(
-    ['-i', '--include'],
-    {
-      action: 'append',
-      help: `Glob for files to include. Can be set multiple times. ${printDefault(DEFAULT_FLAGS.include)}`,
-    },
-  );
-  parser.addArgument(
-    ['-x', '--exclude'],
-    {
-      action: 'append',
-      help: `Glob for files to exclude. Can be set multiple times. ${printDefault(DEFAULT_FLAGS.exclude)}`,
-    },
-  );
-  parser.addArgument(
-    ['--validate'],
-    {
-      action: 'storeTrue',
-      help: 'Run in validation mode. This injects errors into globbed files and checks the flow-annotation status',
-    },
-  );
-  parser.addArgument(
-    ['root'],
-    {
-      defaultValue: '.',
-      help: `The root directory to glob files from. ${printDefault(DEFAULT_FLAGS.root)}`,
-      nargs: '?',
-    },
-  );
-
-  return parser;
-}
 
 function getPackageJsonArgs(root: ?string, defaults: Flags): Flags {
   var pkg = loadPkg.sync(path.resolve(root || defaults.root));
@@ -115,6 +36,9 @@ function resolveArgs(args: Args, defaults: Flags): Flags {
     flow_path: args.flow_path || defaults.flow_path,
     include: args.include || defaults.include,
     output: args.output || defaults.output,
+    html_file: args.html_file || defaults.html_file,
+    csv_file: args.csv_file || defaults.csv_file,
+    junit_file: args.junit_file || defaults.junit_file,
     root: path.resolve(args.root || defaults.root),
   };
 }
@@ -138,6 +62,17 @@ function main(flags: Flags): void {
     default:
       genReport(flags.root, flags)
         .then((report) => printStatusReport(report, flags))
+        .then((report) => Promise.all([
+          flags.html_file
+            ? saveReportToFile(flags.html_file, report, 'html-table')
+            : null,
+          flags.csv_file
+            ? saveReportToFile(flags.csv_file, report, 'csv')
+            : null,
+          flags.junit_file
+            ? saveReportToFile(flags.junit_file, report, 'junit')
+            : null,
+        ]))
         .catch((error) => {
           console.log('Report error:', error);
           process.exitCode = 2;
@@ -146,21 +81,34 @@ function main(flags: Flags): void {
   }
 }
 
-function getReport(report: StatusReport, flags: Flags): Array<string> {
-  switch (flags.output) {
+function saveReportToFile(
+  filename:string,
+  report: StatusReport,
+  output: OutputFormat,
+) {
+  if (process.env.VERBOSE) {
+    console.log(`Saving report as ${output} to ${filename}`);
+  }
+  return write(filename, getReport(report, output).join("\n"));
+}
+
+function getReport(report: StatusReport, output: OutputFormat): Array<string> {
+  switch (output) {
     case 'text':
       return printStatusReportAsText(report);
     case 'html-table':
       return printStatusReportAsHTMLTable(report);
     case 'csv':
       return printStatusReportAsCSV(report);
+    case 'junit':
+      return printStatusReportAsJUnit(report);
     default:
-      throw new Error(`Invalid flag \`output\`. Found: ${JSON.stringify(flags.output)}`);
+      throw new Error(`Invalid flag \`output\`. Found: ${JSON.stringify(output)}`);
   }
 }
 
-function printStatusReport(report: StatusReport, flags: Flags): void {
-  getReport(report, flags).map((line) => console.log(line));
+function printStatusReport(report: StatusReport, flags: Flags): StatusReport {
+  getReport(report, flags.output).map((line) => console.log(line));
 
   const noFlowFiles = report.filter((entry) => entry.status == 'no flow');
   const weakFlowFiles = report.filter((entry) => entry.status == 'flow weak');
@@ -168,6 +116,8 @@ function printStatusReport(report: StatusReport, flags: Flags): void {
     ? noFlowFiles.length
     : noFlowFiles.length + weakFlowFiles.length;
   process.exitCode = failingFileCount ? 1 : 0;
+
+  return report;
 }
 
 function printValidationReport(report: ValidationReport, flags: Flags): void {

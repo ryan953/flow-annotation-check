@@ -60,6 +60,18 @@ function stat(file: string): Promise<{size: number}> {
   });
 }
 
+function write(file: string, data: *): Promise<typeof undefined> {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(file, data, (error) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
 function append(file: string, data: *): Promise<typeof undefined> {
   return new Promise((resolve, reject) => {
     fs.appendFile(file, data, (error) => {
@@ -86,4 +98,5 @@ export {
   stat,
   append,
   truncate,
+  write,
 };

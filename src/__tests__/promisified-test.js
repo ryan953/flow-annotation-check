@@ -7,7 +7,7 @@
 jest.mock('child_process');
 jest.mock('fs');
 
-import {exec, execFile, stat, append, truncate} from '../promisified';
+import {exec, execFile, stat, write, append, truncate} from '../promisified';
 const childProcess = require('child_process');
 const fs = require('fs');
 
@@ -136,6 +136,44 @@ describe('promisified', () => {
 
       const callbackArg = fs.stat.mock.calls[0][1];
       callbackArg('failed', 'bytes: ?');
+
+      return promise;
+    });
+  });
+
+  describe('write', () => {
+    beforeEach(() => {
+      fs.writeFile.mockReset();
+    });
+
+    it('passes args through to fs.writeFile', () => {
+      write('foo.js', 'foo bar');
+
+      expect(fs.writeFile).toHaveBeenCalledWith(
+        'foo.js',
+        'foo bar',
+        expect.any(Function),
+      );
+    });
+
+    it('resolves when no cli error is thrown', () => {
+      const promise = write('foo.js', 'foo bar').then((result) => {
+        expect(result).toBeUndefined();
+      });
+
+      const callbackArg = fs.writeFile.mock.calls[0][2];
+      callbackArg(null, 'foo bar');
+
+      return promise;
+    });
+
+    it('throws when a cli error happens', () => {
+      const promise = write('foo.js', 'foo bar').catch((result) => {
+        expect(result).toEqual('failed');
+      });
+
+      const callbackArg = fs.writeFile.mock.calls[0][2];
+      callbackArg('failed', 'foo bar');
 
       return promise;
     });
