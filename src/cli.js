@@ -5,7 +5,7 @@
  */
 
 import type {Args, Flags, OutputFormat, StatusReport, ValidationReport} from './types';
-import {OutputFormats} from './types';
+import {DEFAULT_FLAGS, OutputFormats} from './types';
 
 import genReport, {genValidate} from './flow-annotation-check';
 import loadPkg from 'load-pkg';
@@ -19,19 +19,6 @@ import {
   asCSV as printStatusReportAsCSV,
   asJUnit as printStatusReportAsJUnit,
 } from './printStatusReport';
-
-const DEFAULT_FLAGS: Flags = {
-  absolute: false,
-  allow_weak: false,
-  exclude: ['+(node_modules|build|flow-typed)/**/*.js'],
-  flow_path: 'flow',
-  include: ['**/*.js'],
-  output: 'text',
-  html_file: null,
-  csv_file: null,
-  junit_file: null,
-  root: '.',
-};
 
 function printDefault(value) {
   return `(default: \`${JSON.stringify(value)}\`)`;

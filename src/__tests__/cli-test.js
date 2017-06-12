@@ -6,19 +6,7 @@
 
 import path from 'path';
 import {getParser, main, resolveArgs} from '../cli';
-
-const DEFAULT_FLAGS = {
-  absolute: false,
-  allow_weak: false,
-  exclude: ['+(node_modules|build|flow-typed)/**/*.js'],
-  flow_path: 'flow',
-  include: ['**/*.js'],
-  output: 'text',
-  html_file: null,
-  csv_file: null,
-  junit_file: null,
-  root: '.',
-};
+import {DEFAULT_FLAGS} from '../types';
 
 describe('cli', () => {
   describe('getParser', () => {

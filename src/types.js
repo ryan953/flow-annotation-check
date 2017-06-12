@@ -36,6 +36,19 @@ export type Flags = {
   root: string,
 };
 
+export const DEFAULT_FLAGS: Flags = {
+  absolute: false,
+  allow_weak: false,
+  exclude: ['+(node_modules|build|flow-typed)/**/*.js'],
+  flow_path: 'flow',
+  include: ['**/*.js'],
+  output: 'text',
+  html_file: null,
+  csv_file: null,
+  junit_file: null,
+  root: '.',
+};
+
 export type FlowStatus = 'flow' | 'flow weak' | 'no flow';
 
 export type StatusEntry = {
