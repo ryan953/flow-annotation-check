@@ -72,7 +72,7 @@ export function asJUnit(report: StatusReport): Array<string> {
       : [
           `<testcase classname="${escapeXML(entry.file)}" name="HasFlowStatus" time="0">`,
           `<failure type="${entry.status === 'no flow' ? 'HasNoneStatus' : 'HasFlowWeakStatus'}">`,
-          `File has status ${entry.status}`,
+          `Status is "${entry.status}"`,
           `</failure>`,
           `</testcase>`,
         ].join(''),
