@@ -114,7 +114,7 @@ The common settings you will use are:
 * `-i`, `--include`  Glob for files to include. Can be set multiple times.
 * `-x`, `--exclude`  Glob for files to exclude. Can be set multiple times.
 * `-a`, `--absolute` Report absolute path names. The default is to report only filenames.
-* `-o`, `--output`   Choose from either `text`, `csv`, or `html` format.
+* `-o`, `--output`   Choose from either `text`, `csv`, 'junit', or `html` format.
 
 Setting `--exclude` will override the defaults. So don't forget to ignore `node_modules/**/*.js` in addition to project specific folders.
 
@@ -145,14 +145,21 @@ The default format is `text` which prints a two column list of status value (one
 
 The `csv` option prints a two column list of status value and filename with each field wrapped in quotes and separated by `,`.
 
-The `html-table` option prints an opening and closing `<table>` tag with two columns of data. Each row contains a `data-status` attribute which can be useful for styling. There is a summary of the rows inside the `<tfoot>` element. This does not print a full, valid, html page but it is possible to render it directly.
+The `junit` option prints an xml report suitable to be consumed by CI tools like Jenkins.
+
+The `html-table` option prints an opening and closing `<table>` tag with two columns of data. Each row contains a `data-status` attribute which can be useful for styling. There is a summary of the rows inside the `<tfoot>` element. This does not print a full, valid, html page but it is possible to render it directly. This option, with some custom CSS, could be used as part of a dashboard where only the names of the non-flow files are listed.
+
+In addition to the `--output` flag there are other flags that will return the report in different formats and save it directly to a file for you. You can set `--html-file`, `--csv-file` or `--junit-file` and each one will create a file containing the respective report. This is useful for getting the report in multiple formats at the same time.
+
+For example, it is desirable for CI logs to not have any extra markup and use the default `text` format with the `-o` flag. But at the same time possible to use the `--junit-file` flag to feed some data into jenkins for tracking over time.
+
 
 ### VERBOSE
 
-If the `VERBOSE` env variable is set to a truthy value then the resolved configuration params will be printed:
+If the `VERBOSE` env variable is set to a truthy value then the resolved configuration params will be printed. The config is a union of defaults, values in package.json, and CLI flags. Example:
 
 ```
-$ VERBOSE=1 ./bin/flow-annotation-check.js
+$ VERBOSE=1 flow-annotation-check
 Invoking: { command: 'report',
   flags:
    { absolute: false,
