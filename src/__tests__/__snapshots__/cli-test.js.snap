@@ -1,8 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`cli getParser should print the help message 1`] = `
-"usage: index.js [-h] [-v] [-f FLOW_PATH] [-o {text,html-table,csv,xunit}] [-a]
-                [--allow-weak] [-i INCLUDE] [-x EXCLUDE] [--validate]
+"usage: index.js [-h] [-v] [-f FLOW_PATH] [-o {text,html-table,csv,xunit}]
+                [--html-file HTML_FILE] [--csv-file CSV_FILE]
+                [--junit-file JUNIT_FILE] [-a] [--allow-weak] [-i INCLUDE]
+                [-x EXCLUDE] [--validate]
                 [root]
 
 Positional arguments:
@@ -17,6 +19,14 @@ Optional arguments:
   -o {text,html-table,csv,xunit}, --output {text,html-table,csv,xunit}
                         Output format for status/filename pairs. (default: 
                         \`\\"text\\"\`)
+  --html-file HTML_FILE
+                        Save the html table output directly into HTML_FILE. 
+                        (default: \`null\`)
+  --csv-file CSV_FILE   Save CSV output directly into CSV_FILE. (default: 
+                        \`null\`)
+  --junit-file JUNIT_FILE
+                        Save jUnit output directly into JUNIT_FILE. (default: 
+                        \`null\`)
   -a, --absolute        Report absolute path names. (default: \`false\`)
   --allow-weak          Consider \`@flow weak\` as a accepable annotation. See 
                         https://flowtype.org/docs/existing.html#weak-mode for 

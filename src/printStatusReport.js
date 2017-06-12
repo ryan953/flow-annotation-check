@@ -60,9 +60,9 @@ export function asCSV(report: StatusReport): Array<string> {
   );
 }
 
-export function asXUnit(report: StatusReport): Array<string> {
+export function asJUnit(report: StatusReport): Array<string> {
   const date = (new Date()).toISOString();
-  const host = os.hostname() || 'unknown';
+  const host = os.hostname();
   const tests = report.length;
   const failures = report.length - report.filter((entry) => entry.status === 'flow').length;
   return [

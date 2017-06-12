@@ -8,7 +8,7 @@ import {
   asText,
   asHTMLTable,
   asCSV,
-  asXUnit,
+  asJUnit,
 } from '../printStatusReport';
 
 import os from 'os';
@@ -47,7 +47,7 @@ describe('printStatusReport', () => {
     ];
     expect(asHTMLTable(report)).toMatchSnapshot();
   });
-  it('should print an xunit compatible report', () => {
-    expect(asXUnit(BASIC_REPORT)).toMatchSnapshot();
+  it('should print a jUnit compatible report', () => {
+    expect(asJUnit(BASIC_REPORT)).toMatchSnapshot();
   });
 });

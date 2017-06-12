@@ -14,6 +14,9 @@ const DEFAULT_FLAGS = {
   flow_path: 'flow',
   include: ['**/*.js'],
   output: 'text',
+  html_file: null,
+  csv_file: null,
+  junit_file: null,
   root: '.',
 };
 
@@ -37,6 +40,9 @@ describe('cli', () => {
         flow_path: 'flow',
         include: ['**/*.js'],
         output: 'text',
+        html_file: null,
+        csv_file: null,
+        junit_file: null,
         root: path.resolve(path.join(__dirname, '../..')),
       });
     });

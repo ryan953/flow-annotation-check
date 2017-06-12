@@ -4,18 +4,20 @@
  * @flow
  */
 
-import type {Args, Flags, StatusReport, ValidationReport} from './types';
+import type {Args, Flags, OutputFormat, StatusReport, ValidationReport} from './types';
+import {OutputFormats} from './types';
 
 import genReport, {genValidate} from './flow-annotation-check';
 import loadPkg from 'load-pkg';
 import packageJSON from '../package.json';
 import path from 'path';
 import {ArgumentParser} from 'argparse';
+import {write} from './promisified';
 import {
   asText as printStatusReportAsText,
   asHTMLTable as printStatusReportAsHTMLTable,
   asCSV as printStatusReportAsCSV,
-  asXUnit as printStatusReportAsXUnit,
+  asJUnit as printStatusReportAsJUnit,
 } from './printStatusReport';
 
 const DEFAULT_FLAGS: Flags = {
@@ -25,6 +27,9 @@ const DEFAULT_FLAGS: Flags = {
   flow_path: 'flow',
   include: ['**/*.js'],
   output: 'text',
+  html_file: null,
+  csv_file: null,
+  junit_file: null,
   root: '.',
 };
 
@@ -50,7 +55,28 @@ function getParser(): ArgumentParser {
     {
       action: 'store',
       help: `Output format for status/filename pairs. ${printDefault(DEFAULT_FLAGS.output)} `,
-      choices: ['text', 'html-table', 'csv', 'xunit'],
+      choices: OutputFormats,
+    },
+  );
+  parser.addArgument(
+    ['--html-file'],
+    {
+      action: 'store',
+      help: `Save the html table output directly into HTML_FILE. ${printDefault(DEFAULT_FLAGS.html_file)} `,
+    },
+  );
+  parser.addArgument(
+    ['--csv-file'],
+    {
+      action: 'store',
+      help: `Save CSV output directly into CSV_FILE. ${printDefault(DEFAULT_FLAGS.csv_file)} `,
+    },
+  );
+  parser.addArgument(
+    ['--junit-file'],
+    {
+      action: 'store',
+      help: `Save jUnit output directly into JUNIT_FILE. ${printDefault(DEFAULT_FLAGS.junit_file)} `,
     },
   );
   parser.addArgument(
@@ -116,6 +142,9 @@ function resolveArgs(args: Args, defaults: Flags): Flags {
     flow_path: args.flow_path || defaults.flow_path,
     include: args.include || defaults.include,
     output: args.output || defaults.output,
+    html_file: args.html_file || defaults.html_file,
+    csv_file: args.csv_file || defaults.csv_file,
+    junit_file: args.junit_file || defaults.junit_file,
     root: path.resolve(args.root || defaults.root),
   };
 }
@@ -139,6 +168,17 @@ function main(flags: Flags): void {
     default:
       genReport(flags.root, flags)
         .then((report) => printStatusReport(report, flags))
+        .then((report) => Promise.all([
+          flags.html_file
+            ? saveReportToFile(flags.html_file, report, 'html-table')
+            : null,
+          flags.csv_file
+            ? saveReportToFile(flags.csv_file, report, 'csv')
+            : null,
+          flags.junit_file
+            ? saveReportToFile(flags.junit_file, report, 'junit')
+            : null,
+        ]))
         .catch((error) => {
           console.log('Report error:', error);
           process.exitCode = 2;
@@ -147,23 +187,34 @@ function main(flags: Flags): void {
   }
 }
 
-function getReport(report: StatusReport, flags: Flags): Array<string> {
-  switch (flags.output) {
+function saveReportToFile(
+  filename:string,
+  report: StatusReport,
+  output: OutputFormat,
+) {
+  if (process.env.VERBOSE) {
+    console.log(`Saving report as ${output} to ${filename}`);
+  }
+  return write(filename, getReport(report, output).join("\n"));
+}
+
+function getReport(report: StatusReport, output: OutputFormat): Array<string> {
+  switch (output) {
     case 'text':
       return printStatusReportAsText(report);
     case 'html-table':
       return printStatusReportAsHTMLTable(report);
     case 'csv':
       return printStatusReportAsCSV(report);
-    case 'xunit':
-      return printStatusReportAsXUnit(report);
+    case 'junit':
+      return printStatusReportAsJUnit(report);
     default:
-      throw new Error(`Invalid flag \`output\`. Found: ${JSON.stringify(flags.output)}`);
+      throw new Error(`Invalid flag \`output\`. Found: ${JSON.stringify(output)}`);
   }
 }
 
-function printStatusReport(report: StatusReport, flags: Flags): void {
-  getReport(report, flags).map((line) => console.log(line));
+function printStatusReport(report: StatusReport, flags: Flags): StatusReport {
+  getReport(report, flags.output).map((line) => console.log(line));
 
   const noFlowFiles = report.filter((entry) => entry.status == 'no flow');
   const weakFlowFiles = report.filter((entry) => entry.status == 'flow weak');
@@ -171,6 +222,8 @@ function printStatusReport(report: StatusReport, flags: Flags): void {
     ? noFlowFiles.length
     : noFlowFiles.length + weakFlowFiles.length;
   process.exitCode = failingFileCount ? 1 : 0;
+
+  return report;
 }
 
 function printValidationReport(report: ValidationReport, flags: Flags): void {

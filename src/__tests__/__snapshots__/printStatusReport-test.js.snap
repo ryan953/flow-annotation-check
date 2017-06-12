@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`printStatusReport should print a jUnit compatible report 1`] = `
+Array [
+  "<testsuite name=\\"flow-annotation-check\\" timestamp=\\"-mock date-\\" time=\\"0\\" hostname=\\"test-host\\" tests=\\"3\\" failures=\\"2\\" errors=\\"0\\">",
+  "<testcase classname=\\"./a.js\\" name=\\"HasFlowStatus\\" time=\\"0\\" />",
+  "<testcase classname=\\"./b.js\\" name=\\"HasFlowStatus\\" time=\\"0\\"><failure type=\\"HasFlowWeakStatus\\">File has status flow weak</failure></testcase>",
+  "<testcase classname=\\"./c.js\\" name=\\"HasFlowStatus\\" time=\\"0\\"><failure type=\\"HasNoneStatus\\">File has status no flow</failure></testcase>",
+  "</testsuite>",
+]
+`;
+
 exports[`printStatusReport should print a simple csv report 1`] = `
 Array [
   "\\"flow\\", \\"./a.js\\"",
@@ -78,15 +88,5 @@ Array [
   "<tr><td>Total Files</td><td>2</td></tr>",
   "</tfoot>",
   "</table>",
-]
-`;
-
-exports[`printStatusReport should print an xunit compatible report 1`] = `
-Array [
-  "<testsuite name=\\"flow-annotation-check\\" timestamp=\\"-mock date-\\" time=\\"0\\" hostname=\\"test-host\\" tests=\\"3\\" failures=\\"2\\" errors=\\"0\\">",
-  "<testcase classname=\\"./a.js\\" name=\\"HasFlowStatus\\" time=\\"0\\" />",
-  "<testcase classname=\\"./b.js\\" name=\\"HasFlowStatus\\" time=\\"0\\"><failure type=\\"HasFlowWeakStatus\\">File has status flow weak</failure></testcase>",
-  "<testcase classname=\\"./c.js\\" name=\\"HasFlowStatus\\" time=\\"0\\"><failure type=\\"HasNoneStatus\\">File has status no flow</failure></testcase>",
-  "</testsuite>",
 ]
 `;

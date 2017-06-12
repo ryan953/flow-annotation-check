@@ -2,7 +2,13 @@
  * @flow
  */
 
-export type OutputFormat = 'text' | 'html-table' | 'csv' | 'xunit';
+export type OutputFormat = 'text' | 'html-table' | 'csv' | 'junit';
+export const OutputFormats = {
+  text: 'text',
+  'html-table': 'html-table',
+  csv: 'csv',
+  junit: 'junit',
+};
 
 export type Args = {
   absolute?: boolean,
@@ -11,6 +17,9 @@ export type Args = {
   flow_path?: string,
   include?: Array<string>,
   output?: OutputFormat,
+  html_file?: string,
+  csv_file?: string,
+  junit_file?: string,
   root?: string,
 };
 
@@ -21,6 +30,9 @@ export type Flags = {
   flow_path: string,
   include: string | Array<string>,
   output: OutputFormat,
+  html_file: ?string,
+  csv_file: ?string,
+  junit_file: ?string,
   root: string,
 };
 
