@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`cli getParser should print the help message 1`] = `
+exports[`getParser should print the help message 1`] = `
 "usage: index.js [-h] [-v] [-f FLOW_PATH] [-o {text,html-table,csv,junit}]
                 [--html-file HTML_FILE] [--csv-file CSV_FILE]
                 [--junit-file JUNIT_FILE] [-a] [--allow-weak] [-i INCLUDE]

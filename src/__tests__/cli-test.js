@@ -9,11 +9,6 @@ import {getParser, main, resolveArgs} from '../cli';
 import {DEFAULT_FLAGS} from '../types';
 
 describe('cli', () => {
-  describe('getParser', () => {
-    it('should print the help message', () => {
-      expect(getParser().formatHelp()).toMatchSnapshot();
-    });
-  });
   describe('resolveArgs', () => {
     const MOCK_ARGS = {
       root: '.',
