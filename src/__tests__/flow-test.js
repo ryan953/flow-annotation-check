@@ -7,7 +7,7 @@
 import path from 'path';
 import {genCountVisibleFiles, genCheckFlowStatus, genForceErrors} from '../flow';
 
-const FIXTURE_FILE_COUNT = 16;
+const FIXTURE_FILE_COUNT = 17;
 
 const flowDetectedFixtures = [
   {status: 'flow', file: './fixtures/comment-blocks-09.flow.js'},
@@ -19,6 +19,7 @@ const flowDetectedFixtures = [
   {status: 'flow', file: './fixtures/file-with-$-money.js'},
   {status: 'flow', file: './fixtures/file-with a-space.js'},
   {status: 'flow', file: './fixtures/file-with-\\-a-slash.js'},
+  {status: 'flow', file: './fixtures/file-with-`backtick`-quotes.js'},
 ];
 const flowFailedFixtures = [
   {status: 'no flow', file: './fixtures/comment-blocks-10.js'},
