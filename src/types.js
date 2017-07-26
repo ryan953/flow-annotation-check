@@ -3,6 +3,7 @@
  */
 
 export type OutputFormat = 'text' | 'html-table' | 'csv' | 'junit';
+
 export const OutputFormats = {
   text: 'text',
   'html-table': 'html-table',
@@ -17,6 +18,7 @@ export type Args = {
   flow_path?: string,
   include?: Array<string>,
   output?: OutputFormat,
+  summary_only?: boolean,
   html_file?: string,
   csv_file?: string,
   junit_file?: string,
@@ -30,6 +32,7 @@ export type Flags = {
   flow_path: string,
   include: string | Array<string>,
   output: OutputFormat,
+  summary_only: boolean,
   html_file: ?string,
   csv_file: ?string,
   junit_file: ?string,
@@ -43,6 +46,7 @@ export const DEFAULT_FLAGS: Flags = {
   flow_path: 'flow',
   include: ['**/*.js'],
   output: 'text',
+  summary_only: false,
   html_file: null,
   csv_file: null,
   junit_file: null,

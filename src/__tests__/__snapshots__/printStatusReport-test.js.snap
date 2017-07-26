@@ -1,6 +1,99 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`printStatusReport should print a jUnit compatible report 1`] = `
+exports[`printStatusReport asCSV should print a simple csv report 1`] = `
+Array [
+  "\\"flow\\", \\"./a.js\\"",
+  "\\"flow weak\\", \\"./b.js\\"",
+  "\\"no flow\\", \\"./c.js\\"",
+]
+`;
+
+exports[`printStatusReport asCSV should print a summarized csv report 1`] = `
+Array [
+  "\\"@flow\\", \\"1 (33.33%)\\"",
+  "\\"@flow weak\\", \\"1 (33.33%)\\"",
+  "\\"no flow\\", \\"1 (33.33%)\\"",
+  "\\"Total Files\\", \\"3\\"",
+]
+`;
+
+exports[`printStatusReport asHTMLTable should print a simple html-table report 1`] = `
+Array [
+  "<table>",
+  "<tfoot>",
+  "<tr><td>@flow</td><td>1 (33.33%)</td></tr>",
+  "<tr><td>@flow weak</td><td>1 (33.33%)</td></tr>",
+  "<tr><td>no flow</td><td>1 (33.33%)</td></tr>",
+  "<tr><td>Total Files</td><td>3</td></tr>",
+  "</tfoot>",
+  "<tbody>",
+  "<tr data-status=\\"flow\\">
+<td>flow</td>
+<td>./a.js</td>
+</tr>",
+  "<tr data-status=\\"flow weak\\">
+<td>flow weak</td>
+<td>./b.js</td>
+</tr>",
+  "<tr data-status=\\"no flow\\">
+<td>no flow</td>
+<td>./c.js</td>
+</tr>",
+  "</tbody>",
+  "</table>",
+]
+`;
+
+exports[`printStatusReport asHTMLTable should print a summarized html-table report 1`] = `
+Array [
+  "<table>",
+  "<tr><td>@flow</td><td>1 (33.33%)</td></tr>",
+  "<tr><td>@flow weak</td><td>1 (33.33%)</td></tr>",
+  "<tr><td>no flow</td><td>1 (33.33%)</td></tr>",
+  "<tr><td>Total Files</td><td>3</td></tr>",
+  "</table>",
+]
+`;
+
+exports[`printStatusReport asHTMLTable should print an empty html-table report 1`] = `
+Array [
+  "<table>",
+  "<tfoot>",
+  "<tr><td>@flow</td><td>0</td></tr>",
+  "<tr><td>@flow weak</td><td>0</td></tr>",
+  "<tr><td>no flow</td><td>0</td></tr>",
+  "<tr><td>Total Files</td><td>0</td></tr>",
+  "</tfoot>",
+  "<tbody>",
+  "</tbody>",
+  "</table>",
+]
+`;
+
+exports[`printStatusReport asHTMLTable should print an html-table report with even percentages 1`] = `
+Array [
+  "<table>",
+  "<tfoot>",
+  "<tr><td>@flow</td><td>1 (50%)</td></tr>",
+  "<tr><td>@flow weak</td><td>1 (50%)</td></tr>",
+  "<tr><td>no flow</td><td>0 (0%)</td></tr>",
+  "<tr><td>Total Files</td><td>2</td></tr>",
+  "</tfoot>",
+  "<tbody>",
+  "<tr data-status=\\"flow\\">
+<td>flow</td>
+<td>./a.js</td>
+</tr>",
+  "<tr data-status=\\"flow weak\\">
+<td>flow weak</td>
+<td>./b.js</td>
+</tr>",
+  "</tbody>",
+  "</table>",
+]
+`;
+
+exports[`printStatusReport asJUnit should print a jUnit compatible report 1`] = `
 Array [
   "<testsuite name=\\"flow-annotation-check\\" timestamp=\\"-mock date-\\" time=\\"0\\" hostname=\\"test-host\\" tests=\\"3\\" failures=\\"2\\" errors=\\"0\\">",
   "<testcase classname=\\"./a.js\\" name=\\"HasFlowStatus\\" time=\\"0\\" />",
@@ -10,42 +103,14 @@ Array [
 ]
 `;
 
-exports[`printStatusReport should print a simple csv report 1`] = `
+exports[`printStatusReport asJUnit should print a jUnit summary report 1`] = `
 Array [
-  "\\"flow\\", \\"./a.js\\"",
-  "\\"flow weak\\", \\"./b.js\\"",
-  "\\"no flow\\", \\"./c.js\\"",
+  "<testsuite name=\\"flow-annotation-check\\" timestamp=\\"-mock date-\\" time=\\"0\\" hostname=\\"test-host\\" tests=\\"3\\" failures=\\"2\\" errors=\\"0\\">",
+  "</testsuite>",
 ]
 `;
 
-exports[`printStatusReport should print a simple html-table report 1`] = `
-Array [
-  "<table>",
-  "<tbody>",
-  "<tr data-status=\\"flow\\">
-        <td>flow</td>
-        <td>./a.js</td>
-      </tr>",
-  "<tr data-status=\\"flow weak\\">
-        <td>flow weak</td>
-        <td>./b.js</td>
-      </tr>",
-  "<tr data-status=\\"no flow\\">
-        <td>no flow</td>
-        <td>./c.js</td>
-      </tr>",
-  "</tbody>",
-  "<tfoot>",
-  "<tr><td>@flow</td><td>1 (33.33%)</td></tr>",
-  "<tr><td>@flow weak</td><td>1 (33.33%)</td></tr>",
-  "<tr><td>no flow</td><td>1 (33.33%)</td></tr>",
-  "<tr><td>Total Files</td><td>3</td></tr>",
-  "</tfoot>",
-  "</table>",
-]
-`;
-
-exports[`printStatusReport should print a simple text report 1`] = `
+exports[`printStatusReport asText should print a simple text report 1`] = `
 Array [
   "flow	./a.js",
   "flow weak	./b.js",
@@ -53,40 +118,11 @@ Array [
 ]
 `;
 
-exports[`printStatusReport should print an empty html-table report 1`] = `
+exports[`printStatusReport asText should print a summarized text report 1`] = `
 Array [
-  "<table>",
-  "<tbody>",
-  "</tbody>",
-  "<tfoot>",
-  "<tr><td>@flow</td><td>0</td></tr>",
-  "<tr><td>@flow weak</td><td>0</td></tr>",
-  "<tr><td>no flow</td><td>0</td></tr>",
-  "<tr><td>Total Files</td><td>0</td></tr>",
-  "</tfoot>",
-  "</table>",
-]
-`;
-
-exports[`printStatusReport should print an html-table report with even percentages 1`] = `
-Array [
-  "<table>",
-  "<tbody>",
-  "<tr data-status=\\"flow\\">
-        <td>flow</td>
-        <td>./a.js</td>
-      </tr>",
-  "<tr data-status=\\"flow weak\\">
-        <td>flow weak</td>
-        <td>./b.js</td>
-      </tr>",
-  "</tbody>",
-  "<tfoot>",
-  "<tr><td>@flow</td><td>1 (50%)</td></tr>",
-  "<tr><td>@flow weak</td><td>1 (50%)</td></tr>",
-  "<tr><td>no flow</td><td>0 (0%)</td></tr>",
-  "<tr><td>Total Files</td><td>2</td></tr>",
-  "</tfoot>",
-  "</table>",
+  "@flow 1 (33.33%)",
+  "@flow weak 1 (33.33%)",
+  "no flow 1 (33.33%)",
+  "Total Files 3",
 ]
 `;

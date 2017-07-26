@@ -36,6 +36,7 @@ function resolveArgs(args: Args, defaults: Flags): Flags {
     flow_path: args.flow_path || defaults.flow_path,
     include: args.include || defaults.include,
     output: args.output || defaults.output,
+    summary_only: args.summary_only || defaults.summary_only,
     html_file: args.html_file || defaults.html_file,
     csv_file: args.csv_file || defaults.csv_file,
     junit_file: args.junit_file || defaults.junit_file,
@@ -89,26 +90,32 @@ function saveReportToFile(
   if (process.env.VERBOSE) {
     console.log(`Saving report as ${output} to ${filename}`);
   }
-  return write(filename, getReport(report, output).join("\n"));
+  return write(filename, getReport(report, output, false).join("\n"));
 }
 
-function getReport(report: StatusReport, output: OutputFormat): Array<string> {
+function getReport(
+  report: StatusReport,
+  output: OutputFormat,
+  summaryOnly: boolean,
+): Array<string> {
   switch (output) {
     case 'text':
-      return printStatusReportAsText(report);
+      return printStatusReportAsText(report, summaryOnly);
     case 'html-table':
-      return printStatusReportAsHTMLTable(report);
+      return printStatusReportAsHTMLTable(report, summaryOnly);
     case 'csv':
-      return printStatusReportAsCSV(report);
+      return printStatusReportAsCSV(report, summaryOnly);
     case 'junit':
-      return printStatusReportAsJUnit(report);
+      return printStatusReportAsJUnit(report, summaryOnly);
     default:
       throw new Error(`Invalid flag \`output\`. Found: ${JSON.stringify(output)}`);
   }
 }
 
 function printStatusReport(report: StatusReport, flags: Flags): StatusReport {
-  getReport(report, flags.output).map((line) => console.log(line));
+  getReport(report, flags.output, flags.summary_only).map(
+    (line) => console.log(line)
+  );
 
   const noFlowFiles = report.filter((entry) => entry.status == 'no flow');
   const weakFlowFiles = report.filter((entry) => entry.status == 'flow weak');

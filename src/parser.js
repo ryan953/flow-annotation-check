@@ -34,6 +34,13 @@ export default function getParser(): ArgumentParser {
     },
   );
   parser.addArgument(
+    ['--summary-only'],
+    {
+      action: 'storeTrue',
+      help: `Output just the summary data, skipping the long list of files. Does not apply to saved file output. ${printDefault(DEFAULT_FLAGS.summary_only)} `,
+    },
+  );
+  parser.addArgument(
     ['--html-file'],
     {
       action: 'store',

@@ -27,56 +27,91 @@ function escapeXML(value: string): string {
     .replace(/'/g, '&#039;');
 }
 
-export function asText(report: StatusReport): Array<string> {
-  return report.map((entry) => `${entry.status}\t${entry.file}`);
+export function asText(report: StatusReport, summaryOnly: boolean): Array<string> {
+  if (summaryOnly) {
+    return [
+      `@flow ${countByStatus(report, 'flow')}`,
+      `@flow weak ${countByStatus(report, 'flow weak')}`,
+      `no flow ${countByStatus(report, 'no flow')}`,
+      `Total Files ${String(report.length)}`,
+    ];
+  } else {
+    return report.map((entry) => `${entry.status}\t${entry.file}`);
+  }
 }
 
-export function asHTMLTable(report: StatusReport): Array<string> {
-  return [
-    '<table>',
-    '<tbody>',
-    ...report.map((entry) =>
-      `<tr data-status="${entry.status}">
-        <td>${entry.status}</td>
-        <td>${escapeXML(entry.file)}</td>
-      </tr>`
-    ),
-    '</tbody>',
-    '<tfoot>',
-    htmlPair('@flow', countByStatus(report, 'flow')),
-    htmlPair('@flow weak', countByStatus(report, 'flow weak')),
-    htmlPair('no flow', countByStatus(report, 'no flow')),
-    htmlPair('Total Files', String(report.length)),
-    '</tfoot>',
-    '</table>'
-  ];
+export function asHTMLTable(report: StatusReport, summaryOnly: boolean): Array<string> {
+  if (summaryOnly) {
+    return [
+      '<table>',
+      htmlPair('@flow', countByStatus(report, 'flow')),
+      htmlPair('@flow weak', countByStatus(report, 'flow weak')),
+      htmlPair('no flow', countByStatus(report, 'no flow')),
+      htmlPair('Total Files', String(report.length)),
+      '</table>'
+    ];
+  } else {
+    return [
+      '<table>',
+      '<tfoot>',
+      htmlPair('@flow', countByStatus(report, 'flow')),
+      htmlPair('@flow weak', countByStatus(report, 'flow weak')),
+      htmlPair('no flow', countByStatus(report, 'no flow')),
+      htmlPair('Total Files', String(report.length)),
+      '</tfoot>',
+      '<tbody>',
+      ...report.map((entry) => [
+        `<tr data-status="${entry.status}">`,
+          `<td>${entry.status}</td>`,
+          `<td>${escapeXML(entry.file)}</td>`,
+        `</tr>`
+      ].join("\n")),
+      '</tbody>',
+      '</table>'
+    ];
+  }
 }
 
-export function asCSV(report: StatusReport): Array<string> {
-  return report.map((entry) => [
+export function asCSV(report: StatusReport, summaryOnly: boolean): Array<string> {
+  if (summaryOnly) {
+    return [
+      `"@flow", "${countByStatus(report, 'flow')}"`,
+      `"@flow weak", "${countByStatus(report, 'flow weak')}"`,
+      `"no flow", "${countByStatus(report, 'no flow')}"`,
+      `"Total Files", "${String(report.length)}"`,
+    ];
+  } else {
+    return report.map((entry) => [
       JSON.stringify(entry.status),
       JSON.stringify(entry.file),
-    ].join(', ')
-  );
+    ].join(', '));
+  }
 }
 
-export function asJUnit(report: StatusReport): Array<string> {
+export function asJUnit(report: StatusReport, summaryOnly: boolean): Array<string> {
   const date = (new Date()).toISOString();
   const host = os.hostname();
   const tests = report.length;
   const failures = report.length - report.filter((entry) => entry.status === 'flow').length;
-  return [
-    `<testsuite name="flow-annotation-check" timestamp="${date}" time="0" hostname="${host}" tests="${tests}" failures="${failures}" errors="0">`,
-    ...report.map((entry) => entry.status === 'flow'
-      ? `<testcase classname="${escapeXML(entry.file)}" name="HasFlowStatus" time="0" />`
-      : [
-          `<testcase classname="${escapeXML(entry.file)}" name="HasFlowStatus" time="0">`,
-          `<failure type="${entry.status === 'no flow' ? 'HasNoneStatus' : 'HasFlowWeakStatus'}">`,
-          `Status is "${entry.status}"`,
-          `</failure>`,
-          `</testcase>`,
-        ].join(''),
-    ),
-    '</testsuite>',
-  ];
+  if (summaryOnly) {
+    return [
+      `<testsuite name="flow-annotation-check" timestamp="${date}" time="0" hostname="${host}" tests="${tests}" failures="${failures}" errors="0">`,
+      '</testsuite>',
+    ];
+  } else {
+    return [
+      `<testsuite name="flow-annotation-check" timestamp="${date}" time="0" hostname="${host}" tests="${tests}" failures="${failures}" errors="0">`,
+      ...report.map((entry) => entry.status === 'flow'
+        ? `<testcase classname="${escapeXML(entry.file)}" name="HasFlowStatus" time="0" />`
+        : [
+            `<testcase classname="${escapeXML(entry.file)}" name="HasFlowStatus" time="0">`,
+            `<failure type="${entry.status === 'no flow' ? 'HasNoneStatus' : 'HasFlowWeakStatus'}">`,
+            `Status is "${entry.status}"`,
+            `</failure>`,
+            `</testcase>`,
+          ].join(''),
+      ),
+      '</testsuite>',
+    ];
+  }
 }

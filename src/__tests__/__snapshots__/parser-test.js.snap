@@ -2,7 +2,7 @@
 
 exports[`getParser should print the help message 1`] = `
 "usage: index.js [-h] [-v] [-f FLOW_PATH] [-o {text,html-table,csv,junit}]
-                [--html-file HTML_FILE] [--csv-file CSV_FILE]
+                [--summary-only] [--html-file HTML_FILE] [--csv-file CSV_FILE]
                 [--junit-file JUNIT_FILE] [-a] [--allow-weak] [-i INCLUDE]
                 [-x EXCLUDE] [--validate]
                 [root]
@@ -19,6 +19,9 @@ Optional arguments:
   -o {text,html-table,csv,junit}, --output {text,html-table,csv,junit}
                         Output format for status/filename pairs. (default: 
                         \`\\"text\\"\`)
+  --summary-only        Output just the summary data, skipping the long list 
+                        of files. Does not apply to saved file output. 
+                        (default: \`false\`)
   --html-file HTML_FILE
                         Save the html table output directly into HTML_FILE. 
                         (default: \`null\`)
