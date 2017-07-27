@@ -84,6 +84,7 @@ describe('genForceErrors', () => {
     flow_path: 'flow',
     include: [],
     output: 'text',
+    summary_only: false,
     html_file: null,
     csv_file: null,
     junit_file: null,
