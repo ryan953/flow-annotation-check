@@ -1,6 +1,6 @@
 {
   "name": "flow-annotation-check",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "Check your files for the presence of the `@flow` and `@flow weak` annotations",
   "author": {
     "name": "Ryan Albrecht",
