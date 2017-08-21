@@ -78,6 +78,7 @@ describe('genCheckFlowStatus', () => {
 describe('genForceErrors', () => {
   const dir = path.resolve(__dirname, './fixtures');
   const flags = {
+    validate: false,
     absolute: true,
     allow_weak: false,
     exclude: [],

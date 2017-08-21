@@ -12,6 +12,7 @@ export const OutputFormats = {
 };
 
 export type Args = {
+  validate?: boolean,
   absolute?: boolean,
   allow_weak?: boolean,
   exclude?: Array<string>,
@@ -26,6 +27,7 @@ export type Args = {
 };
 
 export type Flags = {
+  validate: boolean,
   absolute: boolean,
   allow_weak: boolean,
   exclude: string | Array<string>,
@@ -40,6 +42,7 @@ export type Flags = {
 };
 
 export const DEFAULT_FLAGS: Flags = {
+  validate: false,
   absolute: false,
   allow_weak: false,
   exclude: ['+(node_modules|build|flow-typed)/**/*.js'],

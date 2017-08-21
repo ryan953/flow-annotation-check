@@ -17,6 +17,7 @@ describe('cli', () => {
     it('should add all the default fields', () => {
       const result = resolveArgs({}, DEFAULT_FLAGS);
       expect(result).toEqual({
+        validate: false,
         absolute: false,
         allow_weak: false,
         exclude: ['+(node_modules|build|flow-typed)/**/*.js'],
