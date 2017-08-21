@@ -20,7 +20,7 @@ import {
 } from './printStatusReport';
 
 
-function getPackageJsonArgs(root: ?string, defaults: Flags): Flags {
+function getPackageJsonArgs(root: string, defaults: Flags): Flags {
   var pkg = loadPkg.sync(path.resolve(root || defaults.root));
   if (pkg && pkg['flow-annotation-check']) {
     return resolveArgs(pkg['flow-annotation-check'], defaults);
@@ -30,24 +30,25 @@ function getPackageJsonArgs(root: ?string, defaults: Flags): Flags {
 
 function resolveArgs(args: Args, defaults: Flags): Flags {
   return {
-    absolute: args.absolute || defaults.absolute,
-    allow_weak: args.allow_weak || defaults.allow_weak,
+    validate: args.validate || defaults.validate, // flowlint-line sketchy-null-bool:off
+    absolute: args.absolute || defaults.absolute, // flowlint-line sketchy-null-bool:off
+    allow_weak: args.allow_weak || defaults.allow_weak, // flowlint-line sketchy-null-bool:off
     exclude: args.exclude || defaults.exclude,
-    flow_path: args.flow_path || defaults.flow_path,
+    flow_path: args.flow_path || defaults.flow_path, // flowlint-line sketchy-null-string:off
     include: args.include || defaults.include,
     output: args.output || defaults.output,
-    summary_only: args.summary_only || defaults.summary_only,
-    html_file: args.html_file || defaults.html_file,
-    csv_file: args.csv_file || defaults.csv_file,
-    junit_file: args.junit_file || defaults.junit_file,
-    root: path.resolve(args.root || defaults.root),
+    summary_only: args.summary_only || defaults.summary_only, // flowlint-line sketchy-null-bool:off
+    html_file: args.html_file || defaults.html_file, // flowlint-line sketchy-null-string:off
+    csv_file: args.csv_file || defaults.csv_file, // flowlint-line sketchy-null-string:off
+    junit_file: args.junit_file || defaults.junit_file, // flowlint-line sketchy-null-string:off
+    root: path.resolve(args.root || defaults.root), // flowlint-line sketchy-null-string:off
   };
 }
 
 function main(flags: Flags): void {
   const command = flags.validate ? 'validate' : 'report';
 
-  if (process.env.VERBOSE) {
+  if (process.env.VERBOSE) { // flowlint-line sketchy-null-string:off
     console.log('Invoking:', {command, flags});
   }
 
@@ -64,13 +65,13 @@ function main(flags: Flags): void {
       genReport(flags.root, flags)
         .then((report) => printStatusReport(report, flags))
         .then((report) => Promise.all([
-          flags.html_file
+          flags.html_file // flowlint-line sketchy-null-string:off
             ? saveReportToFile(flags.html_file, report, 'html-table')
             : null,
-          flags.csv_file
+          flags.csv_file // flowlint-line sketchy-null-string:off
             ? saveReportToFile(flags.csv_file, report, 'csv')
             : null,
-          flags.junit_file
+          flags.junit_file // flowlint-line sketchy-null-string:off
             ? saveReportToFile(flags.junit_file, report, 'junit')
             : null,
         ]))
@@ -87,7 +88,7 @@ function saveReportToFile(
   report: StatusReport,
   output: OutputFormat,
 ) {
-  if (process.env.VERBOSE) {
+  if (process.env.VERBOSE) { // flowlint-line sketchy-null-string:off
     console.log(`Saving report as ${output} to ${filename}`);
   }
   return write(filename, getReport(report, output, false).join("\n"));
@@ -128,7 +129,7 @@ function printStatusReport(report: StatusReport, flags: Flags): StatusReport {
 }
 
 function printValidationReport(report: ValidationReport, flags: Flags): void {
-  if (process.env.VERBOSE) {
+  if (process.env.VERBOSE) { // flowlint-line sketchy-null-string:off
     console.log('All Entries');
     report.forEach((entry) => {
       console.log(`${entry.isValid ? 'valid' : 'invalid'}\t${entry.file}`);
@@ -152,7 +153,7 @@ function run(): void {
   main(
     resolveArgs(
       parsed,
-      getPackageJsonArgs(parsed.root, DEFAULT_FLAGS),
+      getPackageJsonArgs(parsed.root || '', DEFAULT_FLAGS),
     ),
   );
 }
