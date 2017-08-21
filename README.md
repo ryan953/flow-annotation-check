@@ -114,7 +114,7 @@ The common settings you will use are:
 * `-i`, `--include`  Glob for files to include. Can be set multiple times.
 * `-x`, `--exclude`  Glob for files to exclude. Can be set multiple times.
 * `-a`, `--absolute` Report absolute path names. The default is to report only filenames.
-* `-o`, `--output`   Choose from either `text`, `csv`, 'junit', or `html` format.
+* `-o`, `--output`   Choose from either `text`, `csv`, `junit`, or `html` format.
 
 Setting `--exclude` will override the defaults. So don't forget to ignore `node_modules/**/*.js` in addition to project specific folders.
 
