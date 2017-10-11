@@ -25,6 +25,7 @@ describe('cli', () => {
         include: ['**/*.js'],
         output: 'text',
         show_summary: false,
+        list_files: 'all',
         html_file: null,
         csv_file: null,
         junit_file: null,

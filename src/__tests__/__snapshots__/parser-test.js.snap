@@ -2,7 +2,9 @@
 
 exports[`getParser should print the help message 1`] = `
 "usage: index.js [-h] [-v] [-f FLOW_PATH] [-o {text,html-table,csv,junit}]
-                [--summary-only] [--html-file HTML_FILE] [--csv-file CSV_FILE]
+                [--summary-only]
+                [--list-files {all,flow,noflow,flowweak,none}]
+                [--html-file HTML_FILE] [--csv-file CSV_FILE]
                 [--junit-file JUNIT_FILE] [-a] [--allow-weak] [-i INCLUDE]
                 [-x EXCLUDE] [--validate]
                 [root]
@@ -21,6 +23,11 @@ Optional arguments:
                         \`\\"text\\"\`)
   --summary-only        Include summary data. Does not apply to saved file 
                         output or jUnit output. (default: \`false\`)
+  --list-files {all,flow,noflow,flowweak,none}
+                        Filter the list of files based on the reported status.
+                         Use '--allow-weak' to control when flow-weak files 
+                        are included or excluded from the 'flow' or 'noflow' 
+                        checks. (default: \`\\"all\\"\`)
   --html-file HTML_FILE
                         Save the html table output directly into HTML_FILE. 
                         (default: \`null\`)

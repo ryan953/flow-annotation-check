@@ -4,7 +4,8 @@
  * @flow
  */
 
-import type {FlowStatus, StatusReport} from './types';
+import type {EntryFilter} from './flowStatusFilter';
+import type {FlowStatus, StatusReport, VisibileStatusType} from './types';
 
 import os from 'os';
 
@@ -27,8 +28,14 @@ function escapeXML(value: string): string {
     .replace(/'/g, '&#039;');
 }
 
-export function asText(report: StatusReport, showSummary: boolean): Array<string> {
-  const lines = report.map((entry) => `${entry.status}\t${entry.file}`);
+export function asText(
+  report: StatusReport,
+  showSummary: boolean,
+  filter: EntryFilter,
+): Array<string> {
+  const lines = report
+    .filter(filter)
+    .map((entry) => `${entry.status}\t${entry.file}`);
 
   if (showSummary) {
     return lines.concat([
@@ -42,7 +49,11 @@ export function asText(report: StatusReport, showSummary: boolean): Array<string
   }
 }
 
-export function asHTMLTable(report: StatusReport, showSummary: boolean): Array<string> {
+export function asHTMLTable(
+  report: StatusReport,
+  showSummary: boolean,
+  filter: EntryFilter,
+): Array<string> {
   const summaryFooter = [
     '<tfoot>',
     htmlPair('@flow', countByStatus(report, 'flow')),
@@ -56,7 +67,7 @@ export function asHTMLTable(report: StatusReport, showSummary: boolean): Array<s
     '<table>',
     ...(showSummary ? summaryFooter : []),
     '<tbody>',
-    ...report.map((entry) => [
+    ...report.filter(filter).map((entry) => [
       `<tr data-status="${entry.status}">`,
         `<td>${entry.status}</td>`,
         `<td>${escapeXML(entry.file)}</td>`,
@@ -67,11 +78,17 @@ export function asHTMLTable(report: StatusReport, showSummary: boolean): Array<s
   ];
 }
 
-export function asCSV(report: StatusReport, showSummary: boolean): Array<string> {
-  const lines = report.map((entry) => [
-    JSON.stringify(entry.status),
-    JSON.stringify(entry.file),
-  ].join(', '));
+export function asCSV(
+  report: StatusReport,
+  showSummary: boolean,
+  filter: EntryFilter,
+): Array<string> {
+  const lines = report
+    .filter(filter)
+    .map((entry) => [
+      JSON.stringify(entry.status),
+      JSON.stringify(entry.file),
+    ].join(', '));
 
   if (showSummary) {
     return lines.concat([
@@ -85,7 +102,10 @@ export function asCSV(report: StatusReport, showSummary: boolean): Array<string>
   }
 }
 
-export function asJUnit(report: StatusReport): Array<string> {
+export function asJUnit(
+  report: StatusReport,
+  filter: EntryFilter,
+): Array<string> {
   const date = (new Date()).toISOString();
   const host = os.hostname();
   const tests = report.length;
@@ -93,7 +113,7 @@ export function asJUnit(report: StatusReport): Array<string> {
 
   return [
     `<testsuite name="flow-annotation-check" timestamp="${date}" time="0" hostname="${host}" tests="${tests}" failures="${failures}" errors="0">`,
-    ...report.map((entry) => entry.status === 'flow'
+    ...report.filter(filter).map((entry) => entry.status === 'flow'
       ? `<testcase classname="${escapeXML(entry.file)}" name="HasFlowStatus" time="0" />`
       : [
           `<testcase classname="${escapeXML(entry.file)}" name="HasFlowStatus" time="0">`,

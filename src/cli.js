@@ -4,9 +4,19 @@
  * @flow
  */
 
-import type {Args, Flags, OutputFormat, StatusReport, ValidationReport} from './types';
+import type {
+  Args,
+  Flags,
+  OutputFormat,
+  StatusReport,
+  ValidationReport,
+  VisibileStatusType,
+} from './types';
+import type {EntryFilter} from './flowStatusFilter';
+
 import {DEFAULT_FLAGS} from './types';
 
+import flowStatusFilter from './flowStatusFilter';
 import genReport, {genValidate} from './flow-annotation-check';
 import getParser from './parser';
 import loadPkg from 'load-pkg';
@@ -38,6 +48,7 @@ function resolveArgs(args: Args, defaults: Flags): Flags {
     include: args.include || defaults.include,
     output: args.output || defaults.output,
     show_summary: args.show_summary || defaults.show_summary, // flowlint-line sketchy-null-bool:off
+    list_files: args.list_files || defaults.list_files,
     html_file: args.html_file || defaults.html_file, // flowlint-line sketchy-null-string:off
     csv_file: args.csv_file || defaults.csv_file, // flowlint-line sketchy-null-string:off
     junit_file: args.junit_file || defaults.junit_file, // flowlint-line sketchy-null-string:off
@@ -91,30 +102,42 @@ function saveReportToFile(
   if (process.env.VERBOSE) { // flowlint-line sketchy-null-string:off
     console.log(`Saving report as ${output} to ${filename}`);
   }
-  return write(filename, getReport(report, output, false).join("\n"));
+  return write(
+    filename,
+    getReport(report, output, false, flowStatusFilter('all', false)).join("\n")
+  );
 }
 
 function getReport(
   report: StatusReport,
   output: OutputFormat,
   showSummary: boolean,
+  filter: EntryFilter,
 ): Array<string> {
   switch (output) {
     case 'text':
-      return printStatusReportAsText(report, showSummary);
+      return printStatusReportAsText(report, showSummary, filter);
     case 'html-table':
-      return printStatusReportAsHTMLTable(report, showSummary);
+      return printStatusReportAsHTMLTable(report, showSummary, filter);
     case 'csv':
-      return printStatusReportAsCSV(report, showSummary);
+      return printStatusReportAsCSV(report, showSummary, filter);
     case 'junit':
-      return printStatusReportAsJUnit(report);
+      return printStatusReportAsJUnit(report, filter);
     default:
       throw new Error(`Invalid flag \`output\`. Found: ${JSON.stringify(output)}`);
   }
 }
 
 function printStatusReport(report: StatusReport, flags: Flags): StatusReport {
-  getReport(report, flags.output, flags.show_summary).map(
+  getReport(
+    report,
+    flags.output,
+    flags.show_summary,
+    flowStatusFilter(
+      flags.list_files,
+      flags.allow_weak,
+    ),
+  ).map(
     (line) => console.log(line)
   );
 

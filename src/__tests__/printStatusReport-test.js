@@ -19,39 +19,61 @@ const BASIC_REPORT = [
   {status: 'no flow', file: './c.js'},
 ];
 
+const returnTrue = jest.fn();
+
 describe('printStatusReport', () => {
+  beforeEach(() => {
+    returnTrue.mockReset();
+    returnTrue.mockReturnValue(true);
+  });
+
   describe('asText', () => {
     it('should print a simple text report', () => {
-      expect(asText(BASIC_REPORT, false)).toMatchSnapshot();
+      expect(asText(BASIC_REPORT, false, returnTrue)).toMatchSnapshot();
     });
 
     it('should print a summarized text report', () => {
-      expect(asText(BASIC_REPORT, true)).toMatchSnapshot();
+      expect(asText(BASIC_REPORT, true, returnTrue)).toMatchSnapshot();
+    });
+
+    it('should filtered the report based on status', () => {
+      asText(BASIC_REPORT, true, returnTrue);
+      expect(returnTrue).toHaveBeenCalledTimes(BASIC_REPORT.length);
     });
   });
 
   describe('asCSV', () => {
     it('should print a simple csv report', () => {
-      expect(asCSV(BASIC_REPORT, false)).toMatchSnapshot();
+      expect(asCSV(BASIC_REPORT, false, returnTrue)).toMatchSnapshot();
     });
 
     it('should print a summarized csv report', () => {
-      expect(asCSV(BASIC_REPORT, true)).toMatchSnapshot();
+      expect(asCSV(BASIC_REPORT, true, returnTrue)).toMatchSnapshot();
+    });
+
+    it('should filter the csv report', () => {
+      asCSV(BASIC_REPORT, false, returnTrue);
+      expect(returnTrue).toHaveBeenCalledTimes(BASIC_REPORT.length);
     });
   });
 
   describe('asHTMLTable', () => {
     it('should print a simple html-table report', () => {
-      expect(asHTMLTable(BASIC_REPORT, false)).toMatchSnapshot();
+      expect(asHTMLTable(BASIC_REPORT, false, returnTrue)).toMatchSnapshot();
     });
 
     it('should print a summarized html-table report', () => {
-      expect(asHTMLTable(BASIC_REPORT, true)).toMatchSnapshot();
+      expect(asHTMLTable(BASIC_REPORT, true, returnTrue)).toMatchSnapshot();
+    });
+
+    it('should filter the html-table report', () => {
+      asHTMLTable(BASIC_REPORT, true, returnTrue);
+      expect(returnTrue).toHaveBeenCalledTimes(BASIC_REPORT.length);
     });
 
     it('should print an empty html-table report', () => {
       const report = [];
-      expect(asHTMLTable(report, false)).toMatchSnapshot();
+      expect(asHTMLTable(report, false, returnTrue)).toMatchSnapshot();
     });
 
     it('should print an html-table report with even percentages', () => {
@@ -59,13 +81,12 @@ describe('printStatusReport', () => {
         {status: 'flow', file: './a.js'},
         {status: 'flow weak', file: './b.js'},
       ];
-      expect(asHTMLTable(report, false)).toMatchSnapshot();
+      expect(asHTMLTable(report, false, returnTrue)).toMatchSnapshot();
     });
   });
 
   describe('asJUnit', () => {
     beforeEach(() => {
-      // Needed for jUnit tests
       global.Date = jest.fn(() => ({
         toISOString: () => '-mock date-',
       }));
@@ -73,7 +94,12 @@ describe('printStatusReport', () => {
     });
 
     it('should print a jUnit compatible report', () => {
-      expect(asJUnit(BASIC_REPORT)).toMatchSnapshot();
+      expect(asJUnit(BASIC_REPORT, returnTrue)).toMatchSnapshot();
+    });
+
+    it('should filter the jUnit report', () => {
+      asJUnit(BASIC_REPORT, returnTrue);
+      expect(returnTrue).toHaveBeenCalledTimes(BASIC_REPORT.length);
     });
   });
 });
