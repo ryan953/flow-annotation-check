@@ -95,7 +95,7 @@ function main(flags: Flags): void {
 }
 
 function saveReportToFile(
-  filename:string,
+  filename: string,
   report: StatusReport,
   output: OutputFormat,
 ) {
@@ -104,7 +104,7 @@ function saveReportToFile(
   }
   return write(
     filename,
-    getReport(report, output, false, flowStatusFilter('all', false)).join("\n")
+    getReport(report, output, true, flowStatusFilter('all', false)).join("\n")
   );
 }
 
