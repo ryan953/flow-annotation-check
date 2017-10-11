@@ -34,10 +34,17 @@ export default function getParser(): ArgumentParser {
     },
   );
   parser.addArgument(
-    ['--summary-only'],
+    ['--show-summary'],
     {
       action: 'storeTrue',
       help: `Include summary data. Does not apply to saved file output or jUnit output. ${printDefault(DEFAULT_FLAGS.show_summary)} `,
+    },
+  );
+  parser.addArgument(
+    ['--summary-only'],
+    {
+      action: 'storeTrue',
+      help: `Unused. Switch to --show-summary instead.`,
     },
   );
   parser.addArgument(

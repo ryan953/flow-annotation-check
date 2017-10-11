@@ -2,7 +2,7 @@
 
 exports[`getParser should print the help message 1`] = `
 "usage: index.js [-h] [-v] [-f FLOW_PATH] [-o {text,html-table,csv,junit}]
-                [--summary-only]
+                [--show-summary] [--summary-only]
                 [--list-files {all,flow,noflow,flowweak,none}]
                 [--html-file HTML_FILE] [--csv-file CSV_FILE]
                 [--junit-file JUNIT_FILE] [-a] [--allow-weak] [-i INCLUDE]
@@ -21,8 +21,9 @@ Optional arguments:
   -o {text,html-table,csv,junit}, --output {text,html-table,csv,junit}
                         Output format for status/filename pairs. (default: 
                         \`\\"text\\"\`)
-  --summary-only        Include summary data. Does not apply to saved file 
+  --show-summary        Include summary data. Does not apply to saved file 
                         output or jUnit output. (default: \`false\`)
+  --summary-only        Unused. Switch to --show-summary instead.
   --list-files {all,flow,noflow,flowweak,none}
                         Filter the list of files based on the reported status.
                          Use '--allow-weak' to control when flow-weak files 
