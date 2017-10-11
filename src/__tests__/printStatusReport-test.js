@@ -73,11 +73,7 @@ describe('printStatusReport', () => {
     });
 
     it('should print a jUnit compatible report', () => {
-      expect(asJUnit(BASIC_REPORT, false)).toMatchSnapshot();
-    });
-
-    it('should print a jUnit summary report', () => {
-      expect(asJUnit(BASIC_REPORT, true)).toMatchSnapshot();
+      expect(asJUnit(BASIC_REPORT)).toMatchSnapshot();
     });
   });
 });

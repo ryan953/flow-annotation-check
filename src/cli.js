@@ -37,7 +37,7 @@ function resolveArgs(args: Args, defaults: Flags): Flags {
     flow_path: args.flow_path || defaults.flow_path, // flowlint-line sketchy-null-string:off
     include: args.include || defaults.include,
     output: args.output || defaults.output,
-    summary_only: args.summary_only || defaults.summary_only, // flowlint-line sketchy-null-bool:off
+    show_summary: args.show_summary || defaults.show_summary, // flowlint-line sketchy-null-bool:off
     html_file: args.html_file || defaults.html_file, // flowlint-line sketchy-null-string:off
     csv_file: args.csv_file || defaults.csv_file, // flowlint-line sketchy-null-string:off
     junit_file: args.junit_file || defaults.junit_file, // flowlint-line sketchy-null-string:off
@@ -97,24 +97,24 @@ function saveReportToFile(
 function getReport(
   report: StatusReport,
   output: OutputFormat,
-  summaryOnly: boolean,
+  showSummary: boolean,
 ): Array<string> {
   switch (output) {
     case 'text':
-      return printStatusReportAsText(report, summaryOnly);
+      return printStatusReportAsText(report, showSummary);
     case 'html-table':
-      return printStatusReportAsHTMLTable(report, summaryOnly);
+      return printStatusReportAsHTMLTable(report, showSummary);
     case 'csv':
-      return printStatusReportAsCSV(report, summaryOnly);
+      return printStatusReportAsCSV(report, showSummary);
     case 'junit':
-      return printStatusReportAsJUnit(report, summaryOnly);
+      return printStatusReportAsJUnit(report);
     default:
       throw new Error(`Invalid flag \`output\`. Found: ${JSON.stringify(output)}`);
   }
 }
 
 function printStatusReport(report: StatusReport, flags: Flags): StatusReport {
-  getReport(report, flags.output, flags.summary_only).map(
+  getReport(report, flags.output, flags.show_summary).map(
     (line) => console.log(line)
   );
 

@@ -19,9 +19,8 @@ Optional arguments:
   -o {text,html-table,csv,junit}, --output {text,html-table,csv,junit}
                         Output format for status/filename pairs. (default: 
                         \`\\"text\\"\`)
-  --summary-only        Output just the summary data, skipping the long list 
-                        of files. Does not apply to saved file output. 
-                        (default: \`false\`)
+  --summary-only        Include summary data. Does not apply to saved file 
+                        output or jUnit output. (default: \`false\`)
   --html-file HTML_FILE
                         Save the html table output directly into HTML_FILE. 
                         (default: \`null\`)

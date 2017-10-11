@@ -24,7 +24,7 @@ describe('cli', () => {
         flow_path: 'flow',
         include: ['**/*.js'],
         output: 'text',
-        summary_only: false,
+        show_summary: false,
         html_file: null,
         csv_file: null,
         junit_file: null,

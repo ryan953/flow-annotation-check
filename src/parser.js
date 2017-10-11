@@ -37,7 +37,7 @@ export default function getParser(): ArgumentParser {
     ['--summary-only'],
     {
       action: 'storeTrue',
-      help: `Output just the summary data, skipping the long list of files. Does not apply to saved file output. ${printDefault(DEFAULT_FLAGS.summary_only)} `,
+      help: `Include summary data. Does not apply to saved file output or jUnit output. ${printDefault(DEFAULT_FLAGS.show_summary)} `,
     },
   );
   parser.addArgument(
