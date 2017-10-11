@@ -6,7 +6,7 @@
 
 import packageJSON from '../package.json';
 import {ArgumentParser} from 'argparse';
-import {DEFAULT_FLAGS, OutputFormats} from './types';
+import {DEFAULT_FLAGS, OutputFormats, VisibleStatusTypes} from './types';
 
 function printDefault(value) {
   return `(default: \`${JSON.stringify(value)}\`)`;
@@ -37,7 +37,15 @@ export default function getParser(): ArgumentParser {
     ['--summary-only'],
     {
       action: 'storeTrue',
-      help: `Output just the summary data, skipping the long list of files. Does not apply to saved file output. ${printDefault(DEFAULT_FLAGS.summary_only)} `,
+      help: `Include summary data. Does not apply to saved file output or jUnit output. ${printDefault(DEFAULT_FLAGS.show_summary)} `,
+    },
+  );
+  parser.addArgument(
+    ['--list-files'],
+    {
+      action: 'store',
+      help: `Filter the list of files based on the reported status. Use '--allow-weak' to control when flow-weak files are included or excluded from the 'flow' or 'noflow' checks. ${printDefault(DEFAULT_FLAGS.list_files)} `,
+      choices: VisibleStatusTypes,
     },
   );
   parser.addArgument(

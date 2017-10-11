@@ -107,7 +107,7 @@ or if installed globally:
 flow-annotation-check ~/path/to/project
 ```
 
-The available commands can be found by running `flow-annotation-check -h` or `npm run annotations -- --help`.
+The available commands and flags can be found by running `flow-annotation-check -h` or from the example above: `npm run annotations -- --help`. Click through to read the [latest help output](https://github.com/ryan953/flow-annotation-check/blob/master/src/__tests__/__snapshots__/parser-test.js.snap) on master.
 
 The common settings you will use are:
 
@@ -132,6 +132,7 @@ You can also configure cli arguments directly inside your package.json file. Exa
     "flow_path": "flow",
     "include": ["**/*.js"],
     "output": "text",
+    "list_files": "all",
     "root": "."
   }
 }
@@ -190,4 +191,3 @@ Flow has some internal limits on what annotations it will detect. This might mea
 ```bash
 flow-annotation-check --validate
 ```
-
