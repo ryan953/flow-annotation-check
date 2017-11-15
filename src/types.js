@@ -3,7 +3,7 @@
  */
 
 export type OutputFormat = 'text' | 'html-table' | 'csv' | 'junit';
-export type VisibileStatusType = 'all' | 'flow' | 'noflow' | 'flowweak' | 'none';
+export type VisibileStatusType = 'all' | 'flow' | 'noflow' | 'flowweak' | 'flowstrict' | 'none';
 
 export const OutputFormats = {
   text: 'text',
@@ -15,6 +15,7 @@ export const OutputFormats = {
 export const VisibleStatusTypes = {
   all: 'all',
   flow: 'flow',
+  flowstrict: 'flowstrict',
   noflow: 'noflow',
   flowweak: 'flowweak',
   none: 'none',
@@ -68,7 +69,7 @@ export const DEFAULT_FLAGS: Flags = {
   root: '.',
 };
 
-export type FlowStatus = 'flow' | 'flow weak' | 'no flow';
+export type FlowStatus = 'flow strict' | 'flow' | 'flow weak' | 'no flow';
 
 export type StatusEntry = {
   file: string,

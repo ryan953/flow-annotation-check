@@ -7,9 +7,10 @@
 import path from 'path';
 import {genCountVisibleFiles, genCheckFlowStatus, genForceErrors} from '../flow';
 
-const FIXTURE_FILE_COUNT = 17;
+const FIXTURE_FILE_COUNT = 18;
 
 const flowDetectedFixtures = [
+  {status: 'flow strict', file: './fixtures/flow-strict.flow.js'},
   {status: 'flow', file: './fixtures/comment-blocks-09.flow.js'},
   {status: 'flow', file: './fixtures/comment-single-block-09.flow.js'},
   {status: 'flow', file: './fixtures/comment-single-block-10.flow.js'},
@@ -97,6 +98,7 @@ describe('genForceErrors', () => {
     const files = [path.resolve(__dirname, fixture.file)];
 
     switch (fixture.status) {
+      case 'flow strict':
       case 'flow':
       case 'flow weak':
         it(`should list ${fixture.file} because flow checks it`, () => {
