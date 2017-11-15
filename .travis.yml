@@ -9,7 +9,12 @@ node_js:
 
 cache: yarn
 
-script: yarn run test:ci
+script:
+  - yarn flow:check
+  - yarn flow:annotations
+  - yarn flow:coverage
+  - yarn jest --coverage
+  - yarn codecov
 
 before_install: yarn global add greenkeeper-lockfile@1
 before_script: greenkeeper-lockfile-update
