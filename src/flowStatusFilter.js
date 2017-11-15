@@ -30,8 +30,6 @@ export default function makeStatusFilter(
         return entry.status === 'flow strict';
       case 'none':
         return false;
-      default:
-        return true;
     }
   };
 }
