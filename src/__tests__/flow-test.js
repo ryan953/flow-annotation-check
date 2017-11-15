@@ -5,9 +5,7 @@
  */
 
 import path from 'path';
-import {genCountVisibleFiles, genCheckFlowStatus, genForceErrors} from '../flow';
-
-const FIXTURE_FILE_COUNT = 18;
+import {genCheckFlowStatus, genForceErrors} from '../flow';
 
 const flowDetectedFixtures = [
   {status: 'flow strict', file: './fixtures/flow-strict.flow.js'},
@@ -33,29 +31,6 @@ const magicStringFixtures = [
   {status: 'flow', file: './fixtures/use-strict-block.flow.js'},
   {status: 'flow', file: './fixtures/use-strict-statement.flow.js'},
 ];
-
-describe('genCountVisibleFiles', () => {
-  it('should count the fixtures visible', () => {
-    const dir = path.resolve(__dirname, './fixtures');
-
-    return genCountVisibleFiles('flow', dir).then((count) => {
-      expect(count).toEqual(FIXTURE_FILE_COUNT);
-    });
-  });
-
-  it('should count the fixtures visible', () => {
-    const dir = path.resolve(__dirname, './foo-bar');
-
-    return genCountVisibleFiles('flow', dir)
-      .then(() => {
-        expect(false).toBeTruthy();
-      }).catch((error) => {
-      expect(
-        error.toString()
-      ).toMatch(/Error: Could not find file or directory/);
-    });
-  });
-});
 
 describe('genCheckFlowStatus', () => {
   function testCheckFlowStatus(fixture) {

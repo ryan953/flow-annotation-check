@@ -87,20 +87,6 @@ function genCheckFlowStatus(
     .then(astToFlowStatus);
 }
 
-function genCountVisibleFiles(flowPath: string, cwd: string): Promise<number> {
-  const options = {
-    maxBuffer: Infinity,
-  };
-
-  return exec(`${flowPath} ls ${escapeShell(cwd)} | wc -l`, options)
-    .then(({stdout, stderr}) => {
-      if (stderr) {
-        throw new Error(stderr);
-      }
-      return parseInt(String(stdout).trim(), 10);
-    });
-}
-
 function genForceErrors(
   cwd: string,
   files: Array<string>,
@@ -162,6 +148,5 @@ function genForceErrors(
 
 export {
   genCheckFlowStatus,
-  genCountVisibleFiles,
   genForceErrors,
 };
