@@ -14,6 +14,8 @@ function assertFixture(fixture) {
 
 describe('isValidFlowStatus', () => {
   const passThruFixtures = [
+    {status: 'flow strict', fileErrored: false, expected: false},
+    {status: 'flow strict', fileErrored: true, expected: true},
     {status: 'flow', fileErrored: false, expected: false},
     {status: 'flow', fileErrored: true, expected: true},
     {status: 'flow weak', fileErrored: false, expected: false},

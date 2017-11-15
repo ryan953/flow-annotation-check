@@ -29,6 +29,7 @@ type FlowCheckResult = {
 };
 
 const FLOW_MODE = {
+  FLOW_STRICT: 'flow strict',
   FLOW: 'flow',
   FLOW_WEAK: 'flow weak',
   NO_FLOW: 'no flow',
@@ -43,21 +44,24 @@ function astToFlowStatus(ast: AST): FlowStatus {
     switch (comment.type) {
       case 'Line':
         const trimmedLine = comment.value.trim();
-        if (trimmedLine == '@flow') {
-          return FLOW_MODE.FLOW;
+        if (trimmedLine === '@flow strict') {
+          return FLOW_MODE.FLOW_STRICT;
         } else if (trimmedLine == '@flow weak') {
           return FLOW_MODE.FLOW_WEAK;
+        } else if (trimmedLine === '@flow') {
+          return FLOW_MODE.FLOW;
         }
         break;
       case 'Block':
         const lines = comment.value.split('\n').map((line) => {
           return line.trim().replace(/^\*/, '').trim();
         });
-
-        if (lines.indexOf('@flow') >= 0) {
-          return FLOW_MODE.FLOW;
+        if (lines.indexOf('@flow strict') >= 0) {
+          return FLOW_MODE.FLOW_STRICT;
         } else if (lines.indexOf('@flow weak') >= 0) {
           return FLOW_MODE.FLOW_WEAK;
+        } else if (lines.indexOf('@flow') >= 0) {
+          return FLOW_MODE.FLOW;
         }
         break;
       default:

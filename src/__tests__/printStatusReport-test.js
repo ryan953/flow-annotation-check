@@ -14,6 +14,7 @@ import {
 import os from 'os';
 
 const BASIC_REPORT = [
+  {status: 'flow strict', file: './s.js'},
   {status: 'flow', file: './a.js'},
   {status: 'flow weak', file: './b.js'},
   {status: 'no flow', file: './c.js'},

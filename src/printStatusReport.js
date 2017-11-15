@@ -5,7 +5,7 @@
  */
 
 import type {EntryFilter} from './flowStatusFilter';
-import type {FlowStatus, StatusReport, VisibileStatusType} from './types';
+import type {FlowStatus, StatusReport} from './types';
 
 import os from 'os';
 
@@ -40,6 +40,7 @@ export function asText(
   if (showSummary) {
     return lines.concat([
       `@flow ${countByStatus(report, 'flow')}`,
+      `@flow strict ${countByStatus(report, 'flow strict')}`,
       `@flow weak ${countByStatus(report, 'flow weak')}`,
       `no flow ${countByStatus(report, 'no flow')}`,
       `Total Files ${String(report.length)}`,
@@ -57,6 +58,7 @@ export function asHTMLTable(
   const summaryFooter = [
     '<tfoot>',
     htmlPair('@flow', countByStatus(report, 'flow')),
+    htmlPair('@flow strict', countByStatus(report, 'flow strict')),
     htmlPair('@flow weak', countByStatus(report, 'flow weak')),
     htmlPair('no flow', countByStatus(report, 'no flow')),
     htmlPair('Total Files', String(report.length)),
@@ -93,6 +95,7 @@ export function asCSV(
   if (showSummary) {
     return lines.concat([
       `"@flow", "${countByStatus(report, 'flow')}"`,
+      `"@flow strict", "${countByStatus(report, 'flow strict')}"`,
       `"@flow weak", "${countByStatus(report, 'flow weak')}"`,
       `"no flow", "${countByStatus(report, 'no flow')}"`,
       `"Total Files", "${String(report.length)}"`,
