@@ -15,7 +15,7 @@ import type {
 
 import globsToFileList from './globsToFileList';
 import isValidFlowStatus from './isValidFlowStatus';
-import {genCheckFlowStatus, genCountVisibleFiles, genForceErrors} from './flow';
+import {genCheckFlowStatus, genForceErrors} from './flow';
 
 function executeSequentially(promiseFactories, defaultValue) {
   let result = Promise.resolve(defaultValue);
@@ -70,14 +70,12 @@ function coalesceReports(
 }
 
 function genValidate(cwd: string, flags: Flags): Promise<ValidationReport> {
-  return genCountVisibleFiles(flags.flow_path, cwd)
-    .then(() => Promise.all([
-      genReport(cwd, flags),
-      genFilesWithErrors(cwd, flags),
-    ]))
-    .then(([report, errorReport]) => {
-      return coalesceReports(report, errorReport);
-    });
+  return Promise.all([
+    genReport(cwd, flags),
+    genFilesWithErrors(cwd, flags),
+  ]).then(([report, errorReport]) => {
+    return coalesceReports(report, errorReport);
+  });
 }
 
 export default genReport;
