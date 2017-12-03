@@ -6,7 +6,7 @@
 
 
 import glob from 'glob';
-import {flatten, toArray} from './core';
+import {flatten} from './core';
 
 type GlobOptions = {
   absolute?: boolean,
@@ -23,8 +23,8 @@ function coalescePatterns(
 
 function globsToFileList(
   cwd: string,
-  includePatterns: string | Array<string>,
-  excludePatterns: string | Array<string>,
+  includePatterns: Array<string>,
+  excludePatterns: Array<string>,
   options: GlobOptions,
 ): Array<string> {
   const globOptions = Object.assign({}, {
@@ -33,8 +33,8 @@ function globsToFileList(
     matchBase: true,
     absolute: true,
   }, options);
-  const includeFiles = coalescePatterns(toArray(includePatterns), globOptions);
-  const excludeFiles = coalescePatterns(toArray(excludePatterns), globOptions);
+  const includeFiles = coalescePatterns((includePatterns), globOptions);
+  const excludeFiles = coalescePatterns((excludePatterns), globOptions);
 
   return includeFiles.filter((file) => excludeFiles.indexOf(file) < 0);
 }

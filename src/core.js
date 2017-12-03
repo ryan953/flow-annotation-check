@@ -4,22 +4,18 @@
  * @flow
  */
 
-function flatten<T>(arrays: Array<T | Array<any>>): Array<T> {
+type NestedArray<T> = Array<T | NestedArray<T>>
+
+function flatten<T>(arrays: NestedArray<T>): Array<T> {
+  // $FlowFixMe: See https://github.com/facebook/flow/issues/2333
   return [].concat.apply([], arrays);
 }
 
-function toArray<T>(arg: any): Array<T> {
-  return [].concat(arg).filter(_ => _);
-}
-
-function unique(array: Array<any>): Array<string> {
-  const obj = {};
-  array.forEach((item) => { obj[item] = true; });
-  return Object.keys(obj);
+function unique<T>(array: Array<T>): Array<T> {
+  return Array.from(new Set(array));
 }
 
 export {
   flatten,
-  toArray,
   unique,
 };
