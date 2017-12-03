@@ -7,7 +7,7 @@
 import type {ErrorReport, Flags, FlowStatus} from './types';
 import type {IOResult} from './promisified';
 
-import {flatten, unique} from './core';
+import {unique} from './core';
 import {escapeShell, exec, execFile, stat, append, truncate} from './promisified';
 
 type ASTComment = {
@@ -18,14 +18,16 @@ type AST = {
   comments: Array<ASTComment>,
 };
 
+type FlowCheckErrorMessage = {
+  path: string,
+};
+type FlowCheckError = {
+  kind: string,
+  level: string,
+  message: Array<FlowCheckErrorMessage>,
+};
 type FlowCheckResult = {
-  errors?: Array<{
-    kind: string,
-    level: string,
-    message: Array<{
-      path: string,
-    }>,
-  }>,
+  errors?: Array<FlowCheckError>,
 };
 
 const FLOW_MODE = {
@@ -100,50 +102,34 @@ function genForceErrors(
   };
   const ERROR_STATEMENT = 'const FLOW_ANNOTATION_CHECK_INJECTED_ERROR: string = null;';
 
-  return Promise
-    .all(
-      files.map(
-        (file) => append(file, ERROR_STATEMENT)
+  return Promise.resolve(
+    Promise.all(files.map((file) => append(file, ERROR_STATEMENT)))
+      .then(() =>
+        execFile(flags.flow_path, flowCheck, options)
+          .then(({stdout, stderr}: IOResult) => JSON.parse(String(stdout)))
+          .catch(({error, stdout, stderr}: IOResult) => {
+            try {
+              return JSON.parse(String(stdout));
+            } catch (e) {
+              return {};
+            }
+          })
       )
-    )
-    .then(
-      () => execFile(
-        flags.flow_path,
-        flowCheck,
-        options,
-      ).then(
-        ({stdout, stderr}: IOResult) => JSON.parse(String(stdout))
-      ).catch(
-        ({error, stdout, stderr}: IOResult) => {
-          try {
-            return JSON.parse(String(stdout));
-          } catch (e) {
-            return {};
-          }
-        }
+      .then((checkResult: FlowCheckResult) =>
+        Promise.all(files.map((file) => truncate(file, ERROR_STATEMENT)))
+        .then((_): ErrorReport => {
+          return unique(
+            (checkResult.errors || [])
+              .reduce((paths, checkError) =>
+                paths.concat(
+                  checkError.message
+                    .filter((message) => message.path)
+                    .reduce((paths, message) => paths.concat(message.path), [])
+                ), [])
+          );
+        })
       )
-    )
-    .then(
-      (checkResult: FlowCheckResult) => Promise.all(
-        files.map(
-          (file) => truncate(file, ERROR_STATEMENT)
-        )
-      )
-      .then(
-        (_) => {
-          if (checkResult.errors) {
-            return unique(
-              flatten(
-                checkResult.errors.map((entry) => {
-                  return entry.message.map((message) => message.path);
-                })
-              ).filter((_: any) => _)
-            );
-          }
-          return [];
-        }
-      )
-    );
+  );
 }
 
 export {

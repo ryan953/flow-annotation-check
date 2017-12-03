@@ -4,9 +4,9 @@
  * @flow
  */
 
-import type {FlowStatus, StatusReport, VisibileStatusType} from './types';
+import type {FlowStatus, StatusEntry, StatusReport, VisibileStatusType} from './types';
 
-export type EntryFilter = (entry: Object) => boolean;
+export type EntryFilter = (entry: StatusEntry) => boolean;
 
 export default function makeStatusFilter(
   visibleStatus: VisibileStatusType,

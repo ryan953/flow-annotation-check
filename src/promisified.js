@@ -19,7 +19,7 @@ function escapeShell(cmd: string): string {
 
 function exec(
   cmd: string,
-  options: Object,
+  options: child_process$execOpts,
 ): Promise<IOResult> {
   return new Promise((resolve, reject) => {
     childProcess.exec(cmd, options, (error, stdout, stderr) => {
@@ -35,7 +35,7 @@ function exec(
 function execFile(
   file: string,
   args: Array<string>,
-  options: Object,
+  options: child_process$execFileOpts,
 ): Promise<IOResult> {
   return new Promise((resolve, reject) => {
     childProcess.execFile(file, args, options, (error, stdout, stderr) => {

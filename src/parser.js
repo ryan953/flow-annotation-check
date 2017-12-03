@@ -4,6 +4,7 @@
  * @flow
  */
 
+// $FlowFixMe: package.json is untyped
 import packageJSON from '../package.json';
 import {ArgumentParser} from 'argparse';
 import {DEFAULT_FLAGS, OutputFormats, VisibleStatusTypes} from './types';

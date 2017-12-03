@@ -24,7 +24,7 @@ describe('globsToFileList', () => {
   const fixtures = [
     {
       name: 'once',
-      pattern: '*.test.js',
+      pattern: ['*.test.js'],
       calls: 1,
     },
     {
