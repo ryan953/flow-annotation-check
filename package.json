@@ -41,7 +41,7 @@
     "flow-bin": "^0.60.1",
     "flow-coverage-report": "^0.4.0",
     "flow-typed": "^2.1.1",
-    "jest": "^21.0.0"
+    "jest": "^22.0.0"
   },
   "scripts": {
     "preversion": "npm run clean && npm run test && npm run transpile",
