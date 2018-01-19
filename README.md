@@ -185,10 +185,17 @@ flow  src/__tests__/fixtures/comment-statement-09.flow.js
 
 ### Validate mode
 
-Flow has some internal limits on what annotations it will detect. This might mean some files might not report errors when you run `flow check` on the cli (see [docblock.ml](https://github.com/facebook/flow/blob/master/src/parsing/docblock.ml#L39-L101) in facebook/flow). You can use the `validate` command to verify your existing annotations.
+Flow has some internal limits on what annotations it will detect. This might mean some files might not report errors when you run `flow check` on the cli (see [parsing_service_js.ml](https://github.com/facebook/flow/blob/15e0cbfe7139eb56a8f796db7b18515aad413d39/src/parsing/parsing_service_js.ml#L174-L238) in facebook/flow). You can use the `validate` command to verify your existing annotations.
 
 :bangbang::warning: Save your work because `--validate` will modify files in your local filesystem. :warning::bangbang:
 
 ```bash
 flow-annotation-check --validate
+```
+
+The `--validate` mode works by appending a statement that contains an invalid flow type to your files, running flow to collect expected errors, and then cleaning up. By looking at the errors reported we assert that the expected annotation aligns with what flow actually outputs.
+
+The The injected currently statement is:
+```
+const FLOW_ANNOTATION_CHECK_INJECTED_ERROR: string = null
 ```
