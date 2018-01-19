@@ -37,6 +37,22 @@ const FLOW_MODE = {
   NO_FLOW: 'no flow',
 };
 
+function statusFromLines(lines: Array<string>): ?FlowStatus {
+  for (let i = 0, len = lines.length; i < len; i += 1) {
+    const words = lines[i].trim().split(' ');
+    const nextPosition = words.indexOf('@flow') + 1;
+    const nextWord = words[nextPosition];
+    if (nextWord === 'strict') {
+      return FLOW_MODE.FLOW_STRICT;
+    } else if (nextWord === 'weak') {
+      return FLOW_MODE.FLOW_WEAK;
+    } else if (nextPosition) {
+      return FLOW_MODE.FLOW;
+    }
+  }
+  return null;
+}
+
 function astToFlowStatus(ast: AST): FlowStatus {
   for (let i = 0; i < 10; i++) {
     const comment = ast.comments[i];
@@ -44,28 +60,24 @@ function astToFlowStatus(ast: AST): FlowStatus {
       return FLOW_MODE.NO_FLOW;
     }
     switch (comment.type) {
-      case 'Line':
-        const trimmedLine = comment.value.trim();
-        if (trimmedLine === '@flow strict') {
-          return FLOW_MODE.FLOW_STRICT;
-        } else if (trimmedLine == '@flow weak') {
-          return FLOW_MODE.FLOW_WEAK;
-        } else if (trimmedLine === '@flow') {
-          return FLOW_MODE.FLOW;
+      case 'Line': {
+        const status = statusFromLines([comment.value.trim()]);
+        if (status) {
+          return status;
         }
         break;
-      case 'Block':
-        const lines = comment.value.split('\n').map((line) => {
-          return line.trim().replace(/^\*/, '').trim();
-        });
-        if (lines.indexOf('@flow strict') >= 0) {
-          return FLOW_MODE.FLOW_STRICT;
-        } else if (lines.indexOf('@flow weak') >= 0) {
-          return FLOW_MODE.FLOW_WEAK;
-        } else if (lines.indexOf('@flow') >= 0) {
-          return FLOW_MODE.FLOW;
+      }
+      case 'Block': {
+        const status = statusFromLines(
+          comment.value.split('\n')
+            .map((line) => line.trim().replace(/^\*/, '').trim())
+            .filter(Boolean)
+        );
+        if (status) {
+          return status;
         }
         break;
+      }
       default:
         throw new Error(`Unknown comment type ${comment.type} for comment ${JSON.stringify(comment)}`);
     }
