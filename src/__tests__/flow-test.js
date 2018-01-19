@@ -19,6 +19,8 @@ const flowDetectedFixtures = [
   {status: 'flow', file: './fixtures/file-with a-space.js'},
   {status: 'flow', file: './fixtures/file-with-\\-a-slash.js'},
   {status: 'flow', file: './fixtures/file-with-`backtick`-quotes.js'},
+  {status: 'flow', file: './fixtures/pragma-multiple.flow.js'},
+  {status: 'flow strict', file: './fixtures/pragma-multiple-strict.flow.js'},
 ];
 const flowFailedFixtures = [
   {status: 'no flow', file: './fixtures/comment-blocks-10.js'},
@@ -40,8 +42,6 @@ describe('genCheckFlowStatus', () => {
         path.resolve(__dirname, fixture.file)
       ).then((status) => {
         expect(status).toEqual(fixture.status);
-      }).catch((error) => {
-        throw Error(JSON.stringify(error));
       });
     });
   }
@@ -78,14 +78,14 @@ describe('genForceErrors', () => {
       case 'flow weak':
         it(`should list ${fixture.file} because flow checks it`, () => {
           return genForceErrors(dir, files, flags).then((results) => {
-            expect(results).toEqual(files);
+            expect(results).toEqual(expect.arrayContaining(files));
           });
         });
         break;
       case 'no flow':
         it(`should not list ${fixture.file} because flow can't see it`, () => {
           return genForceErrors(dir, files, flags).then((results) => {
-            expect(results).toEqual([]);
+            expect(results).not.toEqual(expect.arrayContaining(files));
           });
         });
         break;
