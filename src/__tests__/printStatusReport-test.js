@@ -15,6 +15,7 @@ import os from 'os';
 
 const BASIC_REPORT = [
   {status: 'flow strict', file: './s.js'},
+  {status: 'flow strict-local', file: './sl.js'},
   {status: 'flow', file: './a.js'},
   {status: 'flow weak', file: './b.js'},
   {status: 'no flow', file: './c.js'},
@@ -80,7 +81,9 @@ describe('printStatusReport', () => {
     it('should print an html-table report with even percentages', () => {
       const report = [
         {status: 'flow', file: './a.js'},
+        {status: 'flow strict', file: './s.js'},
         {status: 'flow weak', file: './b.js'},
+        {status: 'no flow', file: './b.js'},
       ];
       expect(asHTMLTable(report, false, returnTrue)).toMatchSnapshot();
     });

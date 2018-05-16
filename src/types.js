@@ -69,7 +69,7 @@ export const DEFAULT_FLAGS: Flags = {
   root: '.',
 };
 
-export type FlowStatus = 'flow strict' | 'flow' | 'flow weak' | 'no flow';
+export type FlowStatus = 'flow strict' | 'flow strict-local' | 'flow' | 'flow weak' | 'no flow';
 
 export type StatusEntry = {
   file: string,

@@ -3,7 +3,7 @@
 [![Current Version](https://img.shields.io/npm/v/flow-annotation-check.svg)](https://www.npmjs.com/package/flow-annotation-check) [![Build Status](https://travis-ci.org/ryan953/flow-annotation-check.svg?branch=master)](https://travis-ci.org/ryan953/flow-annotation-check) [![codecov](https://codecov.io/gh/ryan953/flow-annotation-check/branch/master/graph/badge.svg)](https://codecov.io/gh/ryan953/flow-annotation-check)
  [![Greenkeeper badge](https://badges.greenkeeper.io/ryan953/flow-annotation-check.svg)](https://greenkeeper.io/)
 
-Verify the `@flow`, `@flow strict` and `@flow weak` annotations in your javascript files.
+Verify the `@flow`, `@flow strict`, `@flow strict-local` and `@flow weak` annotations in your javascript files.
 
 Install with NPM:
 
@@ -41,7 +41,7 @@ type Config = {
   absolute: boolean,
 };
 
-type FlowStatus = 'flow' | 'flow weak' | 'no flow';
+type FlowStatus = 'flow' | 'flow strict' | 'flow strict-local' | 'flow weak' | 'no flow';
 
 type FileReport = {
   file: string,

@@ -3,6 +3,7 @@
 exports[`printStatusReport asCSV should print a simple csv report 1`] = `
 Array [
   "\\"flow strict\\", \\"./s.js\\"",
+  "\\"flow strict-local\\", \\"./sl.js\\"",
   "\\"flow\\", \\"./a.js\\"",
   "\\"flow weak\\", \\"./b.js\\"",
   "\\"no flow\\", \\"./c.js\\"",
@@ -12,14 +13,16 @@ Array [
 exports[`printStatusReport asCSV should print a summarized csv report 1`] = `
 Array [
   "\\"flow strict\\", \\"./s.js\\"",
+  "\\"flow strict-local\\", \\"./sl.js\\"",
   "\\"flow\\", \\"./a.js\\"",
   "\\"flow weak\\", \\"./b.js\\"",
   "\\"no flow\\", \\"./c.js\\"",
-  "\\"@flow\\", \\"1 (25%)\\"",
-  "\\"@flow strict\\", \\"1 (25%)\\"",
-  "\\"@flow weak\\", \\"1 (25%)\\"",
-  "\\"no flow\\", \\"1 (25%)\\"",
-  "\\"Total Files\\", \\"4\\"",
+  "\\"@flow\\", \\"1 (20%)\\"",
+  "\\"@flow strict\\", \\"1 (20%)\\"",
+  "\\"@flow strict-local\\", \\"1 (20%)\\"",
+  "\\"@flow weak\\", \\"1 (20%)\\"",
+  "\\"no flow\\", \\"1 (20%)\\"",
+  "\\"Total Files\\", \\"5\\"",
 ]
 `;
 
@@ -30,6 +33,10 @@ Array [
   "<tr data-status=\\"flow strict\\">
 <td>flow strict</td>
 <td>./s.js</td>
+</tr>",
+  "<tr data-status=\\"flow strict-local\\">
+<td>flow strict-local</td>
+<td>./sl.js</td>
 </tr>",
   "<tr data-status=\\"flow\\">
 <td>flow</td>
@@ -52,16 +59,21 @@ exports[`printStatusReport asHTMLTable should print a summarized html-table repo
 Array [
   "<table>",
   "<tfoot>",
-  "<tr><td>@flow</td><td>1 (25%)</td></tr>",
-  "<tr><td>@flow strict</td><td>1 (25%)</td></tr>",
-  "<tr><td>@flow weak</td><td>1 (25%)</td></tr>",
-  "<tr><td>no flow</td><td>1 (25%)</td></tr>",
-  "<tr><td>Total Files</td><td>4</td></tr>",
+  "<tr><td>@flow</td><td>1 (20%)</td></tr>",
+  "<tr><td>@flow strict</td><td>1 (20%)</td></tr>",
+  "<tr><td>@flow strict-local</td><td>1 (20%)</td></tr>",
+  "<tr><td>@flow weak</td><td>1 (20%)</td></tr>",
+  "<tr><td>no flow</td><td>1 (20%)</td></tr>",
+  "<tr><td>Total Files</td><td>5</td></tr>",
   "</tfoot>",
   "<tbody>",
   "<tr data-status=\\"flow strict\\">
 <td>flow strict</td>
 <td>./s.js</td>
+</tr>",
+  "<tr data-status=\\"flow strict-local\\">
+<td>flow strict-local</td>
+<td>./sl.js</td>
 </tr>",
   "<tr data-status=\\"flow\\">
 <td>flow</td>
@@ -97,8 +109,16 @@ Array [
 <td>flow</td>
 <td>./a.js</td>
 </tr>",
+  "<tr data-status=\\"flow strict\\">
+<td>flow strict</td>
+<td>./s.js</td>
+</tr>",
   "<tr data-status=\\"flow weak\\">
 <td>flow weak</td>
+<td>./b.js</td>
+</tr>",
+  "<tr data-status=\\"no flow\\">
+<td>no flow</td>
 <td>./b.js</td>
 </tr>",
   "</tbody>",
@@ -108,8 +128,9 @@ Array [
 
 exports[`printStatusReport asJUnit should print a jUnit compatible report 1`] = `
 Array [
-  "<testsuite name=\\"flow-annotation-check\\" timestamp=\\"-mock date-\\" time=\\"0\\" hostname=\\"test-host\\" tests=\\"4\\" failures=\\"3\\" errors=\\"0\\">",
+  "<testsuite name=\\"flow-annotation-check\\" timestamp=\\"-mock date-\\" time=\\"0\\" hostname=\\"test-host\\" tests=\\"5\\" failures=\\"2\\" errors=\\"0\\">",
   "<testcase classname=\\"./s.js\\" name=\\"HasFlowStatus\\" time=\\"0\\"><failure type=\\"HasFlowWeakStatus\\">Status is \\"flow strict\\"</failure></testcase>",
+  "<testcase classname=\\"./sl.js\\" name=\\"HasFlowStatus\\" time=\\"0\\"><failure type=\\"HasFlowWeakStatus\\">Status is \\"flow strict-local\\"</failure></testcase>",
   "<testcase classname=\\"./a.js\\" name=\\"HasFlowStatus\\" time=\\"0\\" />",
   "<testcase classname=\\"./b.js\\" name=\\"HasFlowStatus\\" time=\\"0\\"><failure type=\\"HasFlowWeakStatus\\">Status is \\"flow weak\\"</failure></testcase>",
   "<testcase classname=\\"./c.js\\" name=\\"HasFlowStatus\\" time=\\"0\\"><failure type=\\"HasNoneStatus\\">Status is \\"no flow\\"</failure></testcase>",
@@ -120,6 +141,7 @@ Array [
 exports[`printStatusReport asText should print a simple text report 1`] = `
 Array [
   "flow strict	./s.js",
+  "flow strict-local	./sl.js",
   "flow	./a.js",
   "flow weak	./b.js",
   "no flow	./c.js",
@@ -129,13 +151,15 @@ Array [
 exports[`printStatusReport asText should print a summarized text report 1`] = `
 Array [
   "flow strict	./s.js",
+  "flow strict-local	./sl.js",
   "flow	./a.js",
   "flow weak	./b.js",
   "no flow	./c.js",
-  "@flow 1 (25%)",
-  "@flow strict 1 (25%)",
-  "@flow weak 1 (25%)",
-  "no flow 1 (25%)",
-  "Total Files 4",
+  "@flow 1 (20%)",
+  "@flow strict 1 (20%)",
+  "@flow strict-local 1 (20%)",
+  "@flow weak 1 (20%)",
+  "no flow 1 (20%)",
+  "Total Files 5",
 ]
 `;

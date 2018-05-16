@@ -32,6 +32,7 @@ type FlowCheckResult = {
 
 const FLOW_MODE = {
   FLOW_STRICT: 'flow strict',
+  FLOW_STRICT_LOCAL: 'flow strict-local',
   FLOW: 'flow',
   FLOW_WEAK: 'flow weak',
   NO_FLOW: 'no flow',
@@ -44,6 +45,8 @@ function statusFromLines(lines: Array<string>): ?FlowStatus {
     const nextWord = words[nextPosition];
     if (nextWord === 'strict') {
       return FLOW_MODE.FLOW_STRICT;
+    } else if (nextWord === 'strict-local') {
+      return FLOW_MODE.FLOW_STRICT_LOCAL;
     } else if (nextWord === 'weak') {
       return FLOW_MODE.FLOW_WEAK;
     } else if (nextPosition) {
