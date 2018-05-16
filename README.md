@@ -22,13 +22,13 @@ npm install --global flow-annotation-check
 Once installed you can import `flow-annotation-check` into your own module and have the checker return a list of files for you to further process.
 
 ```javascript
-const flowAnnotationCheck = require('flow-annotation-check');
+import genReport, {genCheckFlowStatus, genValidate} from 'flow-annotation-check';
 ```
 
-The most useful methods are:
+The most useful public methods are:
 
 - `genReport(folder: string, config: Config): Promise<Array<FileReport>>`
-- `getStatus(filePath: string): Promise<FlowStatus>`
+- `genCheckFlowStatus(flowPath: string, filePath: string): Promise<FlowStatus>`
 
 The types involved are:
 
@@ -53,10 +53,12 @@ type FileReport = {
 
 If you want to check a whole project at once, then call `genReport`. You can pass in the root folder, like `~/my-project/src` and then a configuration object with some glob strings to find your files. `genReport` will return a Promise that will resolve when all matching files have had their flow-status discovered.
 
-This is a convenience method to make working with globs and mapping over `getStatus` easier. Each file is tested serially in order to avoid setting really long timeouts that lock up the flow server.
+This is a convenience method to make working with globs and mapping over `genCheckFlowStatus` easier. Each file is tested serially in order to avoid setting really long timeouts that lock up the flow server.
 
 ```javascript
-flowAnnotationCheck.genReport(
+import genReport from 'flow-annotation-check';
+
+genReport(
   '~/path/to/project',
   {
     include: ['**/*.js'],
@@ -70,13 +72,15 @@ flowAnnotationCheck.genReport(
 });
 ```
 
-#### getStatus(filePath)
+#### genCheckFlowStatus(flowPath, filePath)
 
-If you're checking one file at a time then go ahead and call `getStatus` directly. This takes a string that will be passed directly into `flow` on the command line.
+If you're checking one file at a time then go ahead and call `genCheckFlowStatus` directly. This takes a string that will be passed directly into the `flow` binary you specify. If flow is installed in your project, or on your system path then pass `'flow'` as the first argument.
 
 ```javascript
+import {genCheckFlowStatus} from 'flow-annotation-check';
+
 const file = '~/path/to/project/src/main.js';
-flowAnnotationCheck.getStatus(file).then((status) => {
+genCheckFlowStatus('flow', file).then((status) => {
   console.log(`The status of ${file} is ${status}`);
 });
 ```
