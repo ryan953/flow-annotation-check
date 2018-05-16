@@ -17,9 +17,12 @@ export default function makeStatusFilter(
       case 'all':
         return true;
       case 'flow':
+        const isFlowOrBetter = entry.status === 'flow strict'
+          || entry.status === 'flow strict-local'
+          || entry.status === 'flow';
         return allowWeak
-          ? entry.status === 'flow strict' || entry.status === 'flow' || entry.status === 'flow weak'
-          : entry.status === 'flow strict' || entry.status === 'flow' ;
+          ? isFlowOrBetter || entry.status === 'flow weak'
+          : isFlowOrBetter;
       case 'noflow':
         return allowWeak
           ? entry.status === 'no flow'
@@ -27,7 +30,7 @@ export default function makeStatusFilter(
       case 'flowweak':
         return entry.status === 'flow weak';
       case 'flowstrict':
-        return entry.status === 'flow strict';
+        return entry.status === 'flow strict' || entry.status === 'flow strict-local';
       case 'none':
         return false;
       default:

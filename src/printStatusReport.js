@@ -41,6 +41,7 @@ export function asText(
     return lines.concat([
       `@flow ${countByStatus(report, 'flow')}`,
       `@flow strict ${countByStatus(report, 'flow strict')}`,
+      `@flow strict-local ${countByStatus(report, 'flow strict-local')}`,
       `@flow weak ${countByStatus(report, 'flow weak')}`,
       `no flow ${countByStatus(report, 'no flow')}`,
       `Total Files ${String(report.length)}`,
@@ -59,6 +60,7 @@ export function asHTMLTable(
     '<tfoot>',
     htmlPair('@flow', countByStatus(report, 'flow')),
     htmlPair('@flow strict', countByStatus(report, 'flow strict')),
+    htmlPair('@flow strict-local', countByStatus(report, 'flow strict-local')),
     htmlPair('@flow weak', countByStatus(report, 'flow weak')),
     htmlPair('no flow', countByStatus(report, 'no flow')),
     htmlPair('Total Files', String(report.length)),
@@ -96,6 +98,7 @@ export function asCSV(
     return lines.concat([
       `"@flow", "${countByStatus(report, 'flow')}"`,
       `"@flow strict", "${countByStatus(report, 'flow strict')}"`,
+      `"@flow strict-local", "${countByStatus(report, 'flow strict-local')}"`,
       `"@flow weak", "${countByStatus(report, 'flow weak')}"`,
       `"no flow", "${countByStatus(report, 'no flow')}"`,
       `"Total Files", "${String(report.length)}"`,
@@ -112,7 +115,11 @@ export function asJUnit(
   const date = (new Date()).toISOString();
   const host = os.hostname();
   const tests = report.length;
-  const failures = report.length - report.filter((entry) => entry.status === 'flow').length;
+  const failures = report.length - report.filter(
+    (entry) => entry.status === 'flow'
+      || entry.status === 'flow strict'
+      || entry.status === 'flow strict-local'
+  ).length;
 
   return [
     `<testsuite name="flow-annotation-check" timestamp="${date}" time="0" hostname="${host}" tests="${tests}" failures="${failures}" errors="0">`,

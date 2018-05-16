@@ -13,6 +13,8 @@ function isValidFlowStatus(
   switch(status) {
     case 'flow strict':
       return threwError;
+    case 'flow strict-local':
+      return threwError;
     case 'flow':
       return threwError;
     case 'flow weak':
