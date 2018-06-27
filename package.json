@@ -34,7 +34,7 @@
     "argparse": "^1.0.9",
     "babel-plugin-transform-object-rest-spread": "^6.20.2",
     "glob": "7.1.1",
-    "load-pkg": "^3.0.1"
+    "load-pkg": "^4.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
