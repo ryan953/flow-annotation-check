@@ -20,6 +20,9 @@
   },
   "bugs": "https://github.com/ryan953/flow-annotation-check/issues",
   "main": "./lib/flow-annotation-check.js",
+  "engines": {
+    "node" : "^8 || >=10"
+  },
   "bin": {
     "flow-annotation-check": "./bin/flow-annotation-check.js"
   },
