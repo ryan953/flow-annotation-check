@@ -60,7 +60,7 @@ function stat(file: string): Promise<{size: number}> {
   });
 }
 
-function write(file: string, data: *): Promise<typeof undefined> {
+function write(file: string, data: Buffer | string): Promise<typeof undefined> {
   return new Promise((resolve, reject) => {
     fs.writeFile(file, data, (error) => {
       if (error) {
@@ -72,7 +72,7 @@ function write(file: string, data: *): Promise<typeof undefined> {
   });
 }
 
-function append(file: string, data: *): Promise<typeof undefined> {
+function append(file: string, data: Buffer | string): Promise<typeof undefined> {
   return new Promise((resolve, reject) => {
     fs.appendFile(file, data, (error) => {
       if (error) {
