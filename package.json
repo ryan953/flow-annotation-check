@@ -1,6 +1,6 @@
 {
   "name": "flow-annotation-check",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "Check your files for the presence of the `@flow` and `@flow weak` annotations",
   "author": {
     "name": "Ryan Albrecht",
@@ -20,6 +20,9 @@
   },
   "bugs": "https://github.com/ryan953/flow-annotation-check/issues",
   "main": "./lib/flow-annotation-check.js",
+  "engines": {
+    "node" : "^8 || >=10"
+  },
   "bin": {
     "flow-annotation-check": "./bin/flow-annotation-check.js"
   },
@@ -31,14 +34,14 @@
     "argparse": "^1.0.9",
     "babel-plugin-transform-object-rest-spread": "^6.20.2",
     "glob": "7.1.1",
-    "load-pkg": "^3.0.1"
+    "load-pkg": "^4.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-plugin-transform-flow-strip-types": "^6.21.0",
     "babel-preset-latest": "^6.16.0",
     "codecov": "^3.0.0",
-    "flow-bin": "^0.60.1",
+    "flow-bin": "^0.71.0",
     "flow-coverage-report": "^0.4.0",
     "flow-typed": "^2.1.1",
     "jest": "^22.1.4"
@@ -72,7 +75,8 @@
     "exclude": [
       "src/__tests__/fixtures/comment-blocks-10.js",
       "src/__tests__/fixtures/comment-statement-10.js",
-      "src/__tests__/fixtures/no-comments.js"
+      "src/__tests__/fixtures/no-comments.js",
+      "src/__tests__/fixtures/flow-weak.js"
     ]
   },
   "flow-coverage-report": {

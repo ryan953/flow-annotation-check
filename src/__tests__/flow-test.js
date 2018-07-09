@@ -9,6 +9,7 @@ import {genCheckFlowStatus, genForceErrors} from '../flow';
 
 const flowDetectedFixtures = [
   {status: 'flow strict', file: './fixtures/flow-strict.flow.js'},
+  {status: 'flow strict-local', file: './fixtures/flow-strict-local.flow.js'},
   {status: 'flow', file: './fixtures/comment-blocks-09.flow.js'},
   {status: 'flow', file: './fixtures/comment-single-block-09.flow.js'},
   {status: 'flow', file: './fixtures/comment-single-block-10.flow.js'},
@@ -26,6 +27,7 @@ const flowFailedFixtures = [
   {status: 'no flow', file: './fixtures/comment-blocks-10.js'},
   {status: 'no flow', file: './fixtures/comment-statement-10.js'},
   {status: 'no flow', file: './fixtures/no-comments.js'},
+  {status: 'flow weak', file: './fixtures/flow-weak.js'},
 ];
 const magicStringFixtures = [
   {status: 'flow', file: './fixtures/use-babel-block.flow.js'},
@@ -74,6 +76,7 @@ describe('genForceErrors', () => {
 
     switch (fixture.status) {
       case 'flow strict':
+      case 'flow strict-local':
       case 'flow':
       case 'flow weak':
         it(`should list ${fixture.file} because flow checks it`, () => {
