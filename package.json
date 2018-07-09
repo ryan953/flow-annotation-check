@@ -20,6 +20,9 @@
   },
   "bugs": "https://github.com/ryan953/flow-annotation-check/issues",
   "main": "./lib/flow-annotation-check.js",
+  "engines": {
+    "node" : "^8 || >=10"
+  },
   "bin": {
     "flow-annotation-check": "./bin/flow-annotation-check.js"
   },
@@ -31,7 +34,7 @@
     "argparse": "^1.0.9",
     "babel-plugin-transform-object-rest-spread": "^6.20.2",
     "glob": "7.1.1",
-    "load-pkg": "^3.0.1"
+    "load-pkg": "^4.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
