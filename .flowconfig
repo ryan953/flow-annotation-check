@@ -8,6 +8,9 @@
 .*/flow-typed/.*
 
 [options]
+module.use_strict=true
+suppress_comment=\\(.\\|\n\\)*\\$FlowFixMe
+suppress_comment=\\(.\\|\n\\)*\\$FlowExpectedError
 
 [lints]
 all=error
