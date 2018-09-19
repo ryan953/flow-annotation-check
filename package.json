@@ -1,6 +1,6 @@
 {
   "name": "flow-annotation-check",
-  "version": "1.8.1",
+  "version": "1.9.0",
   "description": "Check your files for the presence of the `@flow` and `@flow weak` annotations",
   "author": {
     "name": "Ryan Albrecht",
@@ -21,7 +21,7 @@
   "bugs": "https://github.com/ryan953/flow-annotation-check/issues",
   "main": "./lib/flow-annotation-check.js",
   "engines": {
-    "node" : "^8 || >=10"
+    "node": "^8 || >=10"
   },
   "bin": {
     "flow-annotation-check": "./bin/flow-annotation-check.js"
