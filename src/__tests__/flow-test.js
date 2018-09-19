@@ -68,6 +68,7 @@ describe('genForceErrors', () => {
     html_file: null,
     csv_file: null,
     junit_file: null,
+    summary_file: null,
     root: '.',
   };
 

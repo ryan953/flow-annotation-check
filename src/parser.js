@@ -78,6 +78,13 @@ export default function getParser(): ArgumentParser {
     },
   );
   parser.addArgument(
+    ['--summary-file'],
+    {
+      action: 'store',
+      help: `Save a text-format summary of the report into SUMMARY_FILE. ${printDefault(DEFAULT_FLAGS.summary_file)} `,
+    }
+  );
+  parser.addArgument(
     ['-a', '--absolute'],
     {
       action: 'storeTrue',
