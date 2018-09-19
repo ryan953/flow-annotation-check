@@ -158,7 +158,7 @@ The `junit` option prints an xml report suitable to be consumed by CI tools like
 
 The `html-table` option prints an opening and closing `<table>` tag with two columns of data. Each row contains a `data-status` attribute which can be useful for styling. There is a summary of the rows inside the `<tfoot>` element. This does not print a full, valid, html page but it is possible to render it directly. This option, with some custom CSS, could be used as part of a dashboard where only the names of the non-flow files are listed.
 
-In addition to the `--output` flag there are other flags that will return the report in different formats and save it directly to a file for you. You can set `--html-file`, `--csv-file` or `--junit-file` and each one will create a file containing the respective report. This is useful for getting the report in multiple formats at the same time.
+In addition to the `--output` flag there are other flags that will return the report in different formats and save it directly to a file for you. You can set `--html-file`, `--csv-file`, `--junit-file` or `--summary-file` and each one will create a file containing the respective report. This is useful for getting the report in multiple formats at the same time. Try them all at once!
 
 For example, it is desirable for CI logs to not have any extra markup and use the default `text` format with the `-o` flag. But at the same time possible to use the `--junit-file` flag to feed some data into jenkins for tracking over time.
 

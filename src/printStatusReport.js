@@ -28,6 +28,19 @@ function escapeXML(value: string): string {
     .replace(/'/g, '&#039;');
 }
 
+export function asSummary(
+  report: StatusReport,
+): Array<string> {
+  return [
+    `@flow ${countByStatus(report, 'flow')}`,
+    `@flow strict ${countByStatus(report, 'flow strict')}`,
+    `@flow strict-local ${countByStatus(report, 'flow strict-local')}`,
+    `@flow weak ${countByStatus(report, 'flow weak')}`,
+    `no flow ${countByStatus(report, 'no flow')}`,
+    `Total Files ${String(report.length)}`,
+  ];
+}
+
 export function asText(
   report: StatusReport,
   showSummary: boolean,
@@ -37,18 +50,11 @@ export function asText(
     .filter(filter)
     .map((entry) => `${entry.status}\t${entry.file}`);
 
-  if (showSummary) {
-    return lines.concat([
-      `@flow ${countByStatus(report, 'flow')}`,
-      `@flow strict ${countByStatus(report, 'flow strict')}`,
-      `@flow strict-local ${countByStatus(report, 'flow strict-local')}`,
-      `@flow weak ${countByStatus(report, 'flow weak')}`,
-      `no flow ${countByStatus(report, 'no flow')}`,
-      `Total Files ${String(report.length)}`,
-    ]);
-  } else {
-    return lines;
-  }
+  return (
+    showSummary
+      ? lines.concat(asSummary(report))
+      : lines
+  );
 }
 
 export function asHTMLTable(
