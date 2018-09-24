@@ -185,7 +185,7 @@ flow-annotation-check --validate
 
 The `--validate` mode works by appending a statement that contains an invalid flow type to your files, running flow to collect expected errors, and then cleaning up. By looking at the errors reported we assert that the expected annotation aligns with what flow actually outputs.
 
-The The injected currently statement is:
+The injected statement is:
 ```
 const FLOW_ANNOTATION_CHECK_INJECTED_ERROR: string = null
 ```
