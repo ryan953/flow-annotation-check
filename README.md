@@ -7,16 +7,18 @@
 
 Verify the `@flow`, `@flow strict`, `@flow strict-local` and `@flow weak` annotations in your javascript files.
 
-Install with NPM:
+Install with Yarn or NPM to include in your project:
 
 ```bash
-npm install flow-annotation-check
+yarn add --dev flow-annotation-check
+# or
+npm install --save-dev flow-annotation-check
 ```
 
-or use the global flag to easily run from bash:
+or use `npx` to easily run the cli commands:
 
 ```bash
-npm install --global flow-annotation-check
+npx flow-annotation-check ~/path/to/project
 ```
 
 ## As a library
@@ -89,29 +91,10 @@ genCheckFlowStatus('flow', file).then((status) => {
 
 ## CLI
 
-If you don't want to install the package globally you can run `flow-annotation-check` from the CLI by adding it to your `package.json` file:
+You can use [`npx`](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) to run `flow-annotation-check` against your codebase in the terminal. It's as simple as:
 
-```json
-{
-  "dependencies": {
-    "flow-annotation-check": "^1.0.0"
-  },
-  "scripts": {
-    "annotations": "flow-annotation-check"
-  }
-}
 ```
-
-Then run that script:
-
-```bash
-npm run annotations
-```
-
-or if installed globally:
-
-```bash
-flow-annotation-check ~/path/to/project
+npx flow-annotation-check ~/path/to/project
 ```
 
 The available commands and flags can be found by running `flow-annotation-check -h` or from the example above: `npm run annotations -- --help`. Click through to read the [latest help output](https://github.com/ryan953/flow-annotation-check/blob/master/src/__tests__/__snapshots__/parser-test.js.snap) on master.
