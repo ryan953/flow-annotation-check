@@ -1,14 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`getParser should print the help message 1`] = `
-"usage: child.js [-h] [-v] [-f FLOW_PATH]
-                [-o {text,html-table,csv,junit,summary}] [--show-summary]
-                [--summary-only]
-                [--list-files {all,flow,flowstrict,noflow,flowweak,none}]
-                [--html-file HTML_FILE] [--csv-file CSV_FILE]
-                [--junit-file JUNIT_FILE] [--summary-file SUMMARY_FILE] [-a]
-                [--allow-weak] [-i INCLUDE] [-x EXCLUDE] [--validate]
-                [root]
+"usage: jest [-h] [-v] [-f FLOW_PATH] [-o {text,html-table,csv,junit,summary}]
+            [--show-summary] [--summary-only]
+            [--list-files {all,flow,flowstrict,noflow,flowweak,none}]
+            [--html-file HTML_FILE] [--csv-file CSV_FILE]
+            [--junit-file JUNIT_FILE] [--summary-file SUMMARY_FILE] [-a]
+            [--allow-weak] [-i INCLUDE] [-x EXCLUDE] [--validate]
+            [root]
 
 Positional arguments:
   root                  The root directory to glob files from. (default: \`\\".
