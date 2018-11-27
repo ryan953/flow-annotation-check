@@ -19,7 +19,7 @@ describe('cli', () => {
       expect(result).toEqual({
         validate: false,
         absolute: false,
-        allow_weak: false,
+        level: 'flow',
         exclude: ['+(node_modules|build|flow-typed)/**/*.js'],
         flow_path: 'flow',
         include: ['**/*.js'],
@@ -40,6 +40,34 @@ describe('cli', () => {
       expect(result.root).toMatch(/\//);
       expect(result).toMatchObject({
         root: path.resolve(path.join(__dirname, '../..')),
+      });
+    });
+
+    it('should override defaults when allow_weak is enabled', () => {
+      const result = resolveArgs({allow_weak: true}, DEFAULT_FLAGS);
+      expect(result).toMatchObject({
+        level: 'flowweak',
+      });
+    });
+
+    it('should override defaults when require-strict-local is enabled', () => {
+      const result = resolveArgs({require_strict_local: true}, DEFAULT_FLAGS);
+      expect(result).toMatchObject({
+        level: 'flowstrictlocal',
+      });
+    });
+
+    it('should override defaults when require-strict is enabled', () => {
+      const result = resolveArgs({require_strict: true}, DEFAULT_FLAGS);
+      expect(result).toMatchObject({
+        level: 'flowstrict',
+      });
+    });
+
+    it('should override defaults when level is set', () => {
+      const result = resolveArgs({level: 'any'}, DEFAULT_FLAGS);
+      expect(result).toMatchObject({
+        level: 'any',
       });
     });
 

@@ -3,7 +3,9 @@
  */
 
 export type OutputFormat = 'text' | 'html-table' | 'csv' | 'junit' | 'summary' | 'json';
-export type VisibileStatusType = 'all' | 'flow' | 'noflow' | 'flowweak' | 'flowstrict' | 'none';
+export type VisibileStatusType = 'all' | 'noflow' | 'flowweak' | 'flow' | 'flowstrict' | 'flowstrictlocal' | 'none';
+
+export type Level = 'any' | 'flowweak' | 'flow' | 'flowstrictlocal' | 'flowstrict';
 
 export const OutputFormats = {
   text: 'text',
@@ -14,10 +16,19 @@ export const OutputFormats = {
   json: 'json',
 };
 
-export const VisibleStatusTypes = {
+export const VisibleLevelTypes: {[Level]: Level} = {
+  any: 'any',
+  flowweak: 'flowweak',
+  flow: 'flow',
+  flowstrictlocal: 'flowstrictlocal',
+  flowstrict: 'flowstrict',
+};
+
+export const VisibleStatusTypes: {[VisibileStatusType]: VisibileStatusType} = {
   all: 'all',
   flow: 'flow',
   flowstrict: 'flowstrict',
+  flowstrictlocal: 'flowstrictlocal',
   noflow: 'noflow',
   flowweak: 'flowweak',
   none: 'none',
@@ -26,7 +37,10 @@ export const VisibleStatusTypes = {
 export type Args = {
   validate?: boolean,
   absolute?: boolean,
+  level?: Level,
   allow_weak?: boolean,
+  require_strict_local?: boolean,
+  require_strict?: boolean,
   exclude?: Array<string>,
   flow_path?: string,
   include?: Array<string>,
@@ -44,7 +58,7 @@ export type Args = {
 export type Flags = {
   validate: boolean,
   absolute: boolean,
-  allow_weak: boolean,
+  level: Level,
   exclude: Array<string>,
   flow_path: string,
   include: Array<string>,
@@ -62,7 +76,7 @@ export type Flags = {
 export const DEFAULT_FLAGS: Flags = {
   validate: false,
   absolute: false,
-  allow_weak: false,
+  level: 'flow',
   exclude: ['+(node_modules|build|flow-typed)/**/*.js'],
   flow_path: 'flow',
   include: ['**/*.js'],
