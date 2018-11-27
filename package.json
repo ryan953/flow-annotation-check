@@ -75,8 +75,8 @@
     "exclude": [
       "src/__tests__/fixtures/comment-blocks-10.js",
       "src/__tests__/fixtures/comment-statement-10.js",
-      "src/__tests__/fixtures/no-comments.js",
-      "src/__tests__/fixtures/flow-weak.js"
+      "src/__tests__/fixtures/flow-weak.js",
+      "src/__tests__/fixtures/no-comments.js"
     ]
   },
   "flow-coverage-report": {
