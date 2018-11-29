@@ -17,7 +17,7 @@ import type {EntryFilter} from './flowStatusFilter';
 import {DEFAULT_FLAGS} from './types';
 
 import flowStatusFilter from './flowStatusFilter';
-import genReport, {genValidate} from './flow-annotation-check';
+import {genSummarizedReport, genValidate} from './flow-annotation-check';
 import getParser from './parser';
 import loadPkg from 'load-pkg';
 import path from 'path';
@@ -77,7 +77,7 @@ function main(flags: Flags): void {
         });
       break;
     default:
-      genReport(flags.root, flags)
+      genSummarizedReport(flags.root, flags)
         .then((report) => printStatusReport(report, flags))
         .then((report) => Promise.all([
           flags.html_file // flowlint-line sketchy-null-string:off

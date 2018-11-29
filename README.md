@@ -26,12 +26,12 @@ npx flow-annotation-check ~/path/to/project
 Once installed you can import `flow-annotation-check` into your own module and have the checker return a list of files for you to further process.
 
 ```javascript
-import genReport, {genCheckFlowStatus, genValidate} from 'flow-annotation-check';
+import {genSummarizedReport, genCheckFlowStatus, genValidate} from 'flow-annotation-check';
 ```
 
 The most useful public methods are:
 
-- `genReport(folder: string, config: Config): Promise<Report>`
+- `genSummarizedReport(folder: string, config: Config): Promise<Report>`
 - `genCheckFlowStatus(flowPath: string, filePath: string): Promise<FlowStatus>`
 
 The types involved are:
@@ -63,16 +63,16 @@ type Report = {
 };
 ```
 
-#### genReport(folder, config)
+#### genSummarizedReport(folder, config)
 
-If you want to check a whole project at once, then call `genReport`. You can pass in the root folder, like `~/my-project/src` and then a configuration object with some glob strings to find your files. `genReport` will return a Promise that will resolve when all matching files have had their flow-status discovered.
+If you want to check a whole project at once, then call `genSummarizedReport`. You can pass in the root folder, like `~/my-project/src` and then a configuration object with some glob strings to find your files. `genSummarizedReport` will return a Promise that will resolve when all matching files have had their flow-status discovered.
 
 This is a convenience method to make working with globs and mapping over `genCheckFlowStatus` easier. Each file is tested serially in order to avoid setting really long timeouts that lock up the flow server.
 
 ```javascript
-import genReport from 'flow-annotation-check';
+import {genSummarizedReport} from 'flow-annotation-check';
 
-genReport(
+genSummarizedReport(
   '~/path/to/project',
   {
     include: ['**/*.js'],

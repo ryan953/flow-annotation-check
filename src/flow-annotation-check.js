@@ -43,7 +43,7 @@ function summarizeReport(
   };
 }
 
-function genReport(
+function genSummarizedReport(
   cwd: string,
   flags: Flags,
 ): Promise<StatusReport> {
@@ -63,6 +63,14 @@ function genReport(
       summary: summarizeReport(files),
       files: files,
     }))
+}
+
+function genReport(
+  cwd: string,
+  flags: Flags,
+): Promise<Array<StatusEntry>> {
+  return genSummarizedReport(cwd, flags)
+    .then((report) => report.files);
 }
 
 function genFilesWithErrors(
@@ -93,7 +101,7 @@ function coalesceReports(
 
 function genValidate(cwd: string, flags: Flags): Promise<ValidationReport> {
   return Promise.all([
-    genReport(cwd, flags),
+    genSummarizedReport(cwd, flags),
     genFilesWithErrors(cwd, flags),
   ]).then(([report, errorReport]) => {
     return coalesceReports(report, errorReport);
@@ -101,4 +109,4 @@ function genValidate(cwd: string, flags: Flags): Promise<ValidationReport> {
 }
 
 export default genReport;
-export {genCheckFlowStatus, genValidate};
+export {genSummarizedReport, genCheckFlowStatus, genValidate};
