@@ -126,6 +126,12 @@ Array [
 ]
 `;
 
+exports[`printStatusReport asJSON should print a JSON blob 1`] = `
+Array [
+  "{\\"summary\\":{\\"flow\\":1,\\"flowstrict\\":1,\\"flowstrictlocal\\":1,\\"flowweak\\":1,\\"noflow\\":1,\\"total\\":5},\\"files\\":[{\\"status\\":\\"flow strict\\",\\"file\\":\\"./s.js\\"},{\\"status\\":\\"flow strict-local\\",\\"file\\":\\"./sl.js\\"},{\\"status\\":\\"flow\\",\\"file\\":\\"./a.js\\"},{\\"status\\":\\"flow weak\\",\\"file\\":\\"./b.js\\"},{\\"status\\":\\"no flow\\",\\"file\\":\\"./c.js\\"}]}",
+]
+`;
+
 exports[`printStatusReport asJUnit should print a jUnit compatible report 1`] = `
 Array [
   "<testsuite name=\\"flow-annotation-check\\" timestamp=\\"-mock date-\\" time=\\"0\\" hostname=\\"test-host\\" tests=\\"5\\" failures=\\"2\\" errors=\\"0\\">",
@@ -135,6 +141,17 @@ Array [
   "<testcase classname=\\"./b.js\\" name=\\"HasFlowStatus\\" time=\\"0\\"><failure type=\\"HasFlowWeakStatus\\">Status is \\"flow weak\\"</failure></testcase>",
   "<testcase classname=\\"./c.js\\" name=\\"HasFlowStatus\\" time=\\"0\\"><failure type=\\"HasNoneStatus\\">Status is \\"no flow\\"</failure></testcase>",
   "</testsuite>",
+]
+`;
+
+exports[`printStatusReport asSummary should print only a summarized text report 1`] = `
+Array [
+  "@flow 1 (20%)",
+  "@flow strict 1 (20%)",
+  "@flow strict-local 1 (20%)",
+  "@flow weak 1 (20%)",
+  "no flow 1 (20%)",
+  "Total Files 5",
 ]
 `;
 

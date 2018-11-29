@@ -29,6 +29,7 @@ describe('cli', () => {
         html_file: null,
         csv_file: null,
         junit_file: null,
+        json_file: null,
         summary_file: null,
         root: path.resolve(path.join(__dirname, '../..')),
       });

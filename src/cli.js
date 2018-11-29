@@ -28,6 +28,7 @@ import {
   asCSV as printStatusReportAsCSV,
   asJUnit as printStatusReportAsJUnit,
   asSummary as printStatusReportSummary,
+  asJSON as printStatusReportAsJSON,
 } from './printStatusReport';
 
 
@@ -53,6 +54,7 @@ function resolveArgs(args: Args, defaults: Flags): Flags {
     html_file: args.html_file || defaults.html_file, // flowlint-line sketchy-null-string:off
     csv_file: args.csv_file || defaults.csv_file, // flowlint-line sketchy-null-string:off
     junit_file: args.junit_file || defaults.junit_file, // flowlint-line sketchy-null-string:off
+    json_file: args.json_file || defaults.json_file, // flowlint-line sketchy-null-string:off
     summary_file: args.summary_file || defaults.summary_file, // flowlint-line sketchy-null-string:off
     root: path.resolve(args.root || defaults.root), // flowlint-line sketchy-null-string:off
   };
@@ -86,6 +88,9 @@ function main(flags: Flags): void {
             : null,
           flags.junit_file // flowlint-line sketchy-null-string:off
             ? saveReportToFile(flags.junit_file, report, 'junit')
+            : null,
+          flags.json_file // flowlint-line sketchy-null-string:off
+            ? saveReportToFile(flags.json_file, report, 'json')
             : null,
           flags.summary_file // flowlint-line sketchy-null-string:off
             ? saveReportToFile(flags.summary_file, report, 'summary')
@@ -130,6 +135,8 @@ function getReport(
       return printStatusReportAsJUnit(report, filter);
     case 'summary':
       return printStatusReportSummary(report);
+    case 'json':
+      return printStatusReportAsJSON(report);
     default:
       throw new Error(`Invalid flag \`output\`. Found: ${JSON.stringify(output)}`);
   }

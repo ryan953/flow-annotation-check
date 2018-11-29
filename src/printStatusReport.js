@@ -9,15 +9,42 @@ import type {FlowStatus, StatusReport} from './types';
 
 import os from 'os';
 
+type Summary = {
+  flow: number,
+  flowstrict: number,
+  flowstrictlocal: number,
+  flowweak: number,
+  noflow: number,
+  total: number,
+};
+
 function htmlPair(first: string, second: string) {
   return `<tr><td>${first}</td><td>${second}</td></tr>`;
 }
 
-function countByStatus(report: StatusReport, status: FlowStatus): string {
-  const count = report.filter((entry) => entry.status === status).length
-  return report.length === 0
-    ? '0'
-    : `${count} (${Math.round(count/report.length * 10000) / 100}%)`;
+function countByStatus(report: StatusReport, status: FlowStatus): number {
+  return report.filter((entry) => entry.status === status).length;
+}
+
+function displayCount(report: StatusReport, count: number): string {
+  if (report.length === 0) {
+    return '0';
+  } else {
+    return `${count} (${Math.round(count / report.length * 10000) / 100}%)`;
+  }
+}
+
+function summarize(
+  report: StatusReport,
+): Summary {
+  return {
+    flow: countByStatus(report, 'flow'),
+    flowstrict: countByStatus(report, 'flow strict'),
+    flowstrictlocal: countByStatus(report, 'flow strict-local'),
+    flowweak: countByStatus(report, 'flow weak'),
+    noflow: countByStatus(report, 'no flow'),
+    total: report.length,
+  };
 }
 
 function escapeXML(value: string): string {
@@ -31,12 +58,13 @@ function escapeXML(value: string): string {
 export function asSummary(
   report: StatusReport,
 ): Array<string> {
+  const summary = summarize(report);
   return [
-    `@flow ${countByStatus(report, 'flow')}`,
-    `@flow strict ${countByStatus(report, 'flow strict')}`,
-    `@flow strict-local ${countByStatus(report, 'flow strict-local')}`,
-    `@flow weak ${countByStatus(report, 'flow weak')}`,
-    `no flow ${countByStatus(report, 'no flow')}`,
+    `@flow ${displayCount(report, summary.flow)}`,
+    `@flow strict ${displayCount(report, summary.flowstrict)}`,
+    `@flow strict-local ${displayCount(report, summary.flowstrictlocal)}`,
+    `@flow weak ${displayCount(report, summary.flowweak)}`,
+    `no flow ${displayCount(report, summary.noflow)}`,
     `Total Files ${String(report.length)}`,
   ];
 }
@@ -62,13 +90,14 @@ export function asHTMLTable(
   showSummary: boolean,
   filter: EntryFilter,
 ): Array<string> {
+  const summary = summarize(report);
   const summaryFooter = [
     '<tfoot>',
-    htmlPair('@flow', countByStatus(report, 'flow')),
-    htmlPair('@flow strict', countByStatus(report, 'flow strict')),
-    htmlPair('@flow strict-local', countByStatus(report, 'flow strict-local')),
-    htmlPair('@flow weak', countByStatus(report, 'flow weak')),
-    htmlPair('no flow', countByStatus(report, 'no flow')),
+    htmlPair('@flow', displayCount(report, summary.flow)),
+    htmlPair('@flow strict', displayCount(report, summary.flowstrict)),
+    htmlPair('@flow strict-local', displayCount(report, summary.flowstrictlocal)),
+    htmlPair('@flow weak', displayCount(report, summary.flowweak)),
+    htmlPair('no flow', displayCount(report, summary.noflow)),
     htmlPair('Total Files', String(report.length)),
     '</tfoot>',
   ];
@@ -101,12 +130,13 @@ export function asCSV(
     ].join(', '));
 
   if (showSummary) {
+    const summary = summarize(report);
     return lines.concat([
-      `"@flow", "${countByStatus(report, 'flow')}"`,
-      `"@flow strict", "${countByStatus(report, 'flow strict')}"`,
-      `"@flow strict-local", "${countByStatus(report, 'flow strict-local')}"`,
-      `"@flow weak", "${countByStatus(report, 'flow weak')}"`,
-      `"no flow", "${countByStatus(report, 'no flow')}"`,
+      `"@flow", "${displayCount(report, summary.flow)}"`,
+      `"@flow strict", "${displayCount(report, summary.flowstrict)}"`,
+      `"@flow strict-local", "${displayCount(report, summary.flowstrictlocal)}"`,
+      `"@flow weak", "${displayCount(report, summary.flowweak)}"`,
+      `"no flow", "${displayCount(report, summary.noflow)}"`,
       `"Total Files", "${String(report.length)}"`,
     ]);
   } else {
@@ -140,5 +170,16 @@ export function asJUnit(
         ].join(''),
     ),
     '</testsuite>',
+  ];
+}
+
+export function asJSON(
+  report: StatusReport,
+): Array<string> {
+  return [
+    JSON.stringify({
+      summary: summarize(report),
+      files: report,
+    })
   ];
 }

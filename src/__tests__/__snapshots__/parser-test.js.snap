@@ -1,12 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`getParser should print the help message 1`] = `
-"usage: PROG [-h] [-v] [-f FLOW_PATH] [-o {text,html-table,csv,junit,summary}]
-            [--show-summary] [--summary-only]
+"usage: PROG [-h] [-v] [-f FLOW_PATH]
+            [-o {text,html-table,csv,junit,summary,json}] [--show-summary]
+            [--summary-only]
             [--list-files {all,flow,flowstrict,noflow,flowweak,none}]
             [--html-file HTML_FILE] [--csv-file CSV_FILE]
-            [--junit-file JUNIT_FILE] [--summary-file SUMMARY_FILE] [-a]
-            [--allow-weak] [-i INCLUDE] [-x EXCLUDE] [--validate]
+            [--junit-file JUNIT_FILE] [--json-file JSON_FILE]
+            [--summary-file SUMMARY_FILE] [-a] [--allow-weak] [-i INCLUDE]
+            [-x EXCLUDE] [--validate]
             [root]
 
 Positional arguments:
@@ -18,7 +20,7 @@ Optional arguments:
   -v, --version         Show program's version number and exit.
   -f FLOW_PATH, --flow-path FLOW_PATH
                         The path to the flow command. (default: '\\"flow\\"')
-  -o {text,html-table,csv,junit,summary}, --output {text,html-table,csv,junit,summary}
+  -o {text,html-table,csv,junit,summary,json}, --output {text,html-table,csv,junit,summary,json}
                         Output format for status/filename pairs. (default: 
                         '\\"text\\"')
   --show-summary        Include summary data. Does not apply to saved file 
@@ -36,6 +38,9 @@ Optional arguments:
                         'null')
   --junit-file JUNIT_FILE
                         Save jUnit output directly into JUNIT_FILE. (default: 
+                        'null')
+  --json-file JSON_FILE
+                        Save JSON output directly into JSON_FILE. (default: 
                         'null')
   --summary-file SUMMARY_FILE
                         Save a text-format summary of the report into 

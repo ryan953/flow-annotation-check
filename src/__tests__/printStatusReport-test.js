@@ -5,10 +5,12 @@
  */
 
 import {
+  asSummary,
   asText,
   asHTMLTable,
   asCSV,
   asJUnit,
+  asJSON,
 } from '../printStatusReport';
 
 import os from 'os';
@@ -27,6 +29,12 @@ describe('printStatusReport', () => {
   beforeEach(() => {
     returnTrue.mockReset();
     returnTrue.mockReturnValue(true);
+  });
+
+  describe('asSummary', () => {
+    it('should print only a summarized text report', () => {
+      expect(asSummary(BASIC_REPORT)).toMatchSnapshot();
+    });
   });
 
   describe('asText', () => {
@@ -105,6 +113,12 @@ describe('printStatusReport', () => {
     it('should filter the jUnit report', () => {
       asJUnit(BASIC_REPORT, returnTrue);
       expect(returnTrue).toHaveBeenCalledTimes(BASIC_REPORT.length);
+    });
+  });
+
+  describe('asJSON', () => {
+    it('should print a JSON blob', () => {
+      expect(asJSON(BASIC_REPORT)).toMatchSnapshot();
     });
   });
 });

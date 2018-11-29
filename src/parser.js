@@ -80,6 +80,13 @@ export default function getParser(options?: Object = {}): ArgumentParser {
     },
   );
   parser.addArgument(
+    ['--json-file'],
+    {
+      action: 'store',
+      help: `Save JSON output directly into JSON_FILE. ${printDefault(DEFAULT_FLAGS.json_file)} `,
+    }
+  );
+  parser.addArgument(
     ['--summary-file'],
     {
       action: 'store',
