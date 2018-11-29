@@ -10,6 +10,7 @@ import type {
   FlowStatus,
   StatusEntry,
   StatusReport,
+  StatusReportSummary,
   ValidationReport,
 } from './types';
 
@@ -25,22 +26,43 @@ function executeSequentially(promiseFactories, defaultValue) {
   return result;
 }
 
+function countByStatus(files: Array<StatusEntry>, status: FlowStatus): number {
+  return files.filter((entry) => entry.status === status).length;
+}
+
+function summarizeReport(
+  files: Array<StatusEntry>,
+): StatusReportSummary {
+  return {
+    flow: countByStatus(files, 'flow'),
+    flowstrict: countByStatus(files, 'flow strict'),
+    flowstrictlocal: countByStatus(files, 'flow strict-local'),
+    flowweak: countByStatus(files, 'flow weak'),
+    noflow: countByStatus(files, 'no flow'),
+    total: files.length,
+  };
+}
+
 function genReport(
   cwd: string,
   flags: Flags,
-): Promise<Array<StatusEntry>> {
+): Promise<StatusReport> {
   const files = globsToFileList(cwd, flags.include, flags.exclude, {
     absolute: flags.absolute,
   });
 
   return executeSequentially(files.map((file) => {
-    return (entries) => {
-      return genCheckFlowStatus(flags.flow_path, file).then((status) => {
-        entries.push({file, status});
-        return entries;
-      });
-    };
-  }), []);
+      return (entries) => {
+        return genCheckFlowStatus(flags.flow_path, file).then((status) => {
+          entries.push({file, status});
+          return entries;
+        });
+      };
+    }), [])
+    .then((files) => ({
+      summary: summarizeReport(files),
+      files: files,
+    }))
 }
 
 function genFilesWithErrors(
@@ -58,7 +80,7 @@ function coalesceReports(
   report: StatusReport,
   errorReport: ErrorReport,
 ): ValidationReport {
-  return report.map((entry) => {
+  return report.files.map((entry) => {
     const threwError = errorReport.indexOf(entry.file) >= 0;
     return {
       status: entry.status,

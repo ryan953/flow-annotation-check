@@ -155,11 +155,11 @@ function printStatusReport(report: StatusReport, flags: Flags): StatusReport {
     (line) => console.log(line)
   );
 
-  const noFlowFiles = report.filter((entry) => entry.status == 'no flow');
-  const weakFlowFiles = report.filter((entry) => entry.status == 'flow weak');
+  const noFlowFiles = report.summary.noflow;
+  const weakFlowFiles = report.summary.flowweak;
   const failingFileCount = flags.allow_weak
-    ? noFlowFiles.length
-    : noFlowFiles.length + weakFlowFiles.length;
+    ? noFlowFiles
+    : noFlowFiles + weakFlowFiles;
   process.exitCode = failingFileCount ? 1 : 0;
 
   return report;

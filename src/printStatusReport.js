@@ -9,42 +9,16 @@ import type {FlowStatus, StatusReport} from './types';
 
 import os from 'os';
 
-type Summary = {
-  flow: number,
-  flowstrict: number,
-  flowstrictlocal: number,
-  flowweak: number,
-  noflow: number,
-  total: number,
-};
-
 function htmlPair(first: string, second: string) {
   return `<tr><td>${first}</td><td>${second}</td></tr>`;
 }
 
-function countByStatus(report: StatusReport, status: FlowStatus): number {
-  return report.filter((entry) => entry.status === status).length;
-}
-
 function displayCount(report: StatusReport, count: number): string {
-  if (report.length === 0) {
+  if (report.files.length === 0) {
     return '0';
   } else {
-    return `${count} (${Math.round(count / report.length * 10000) / 100}%)`;
+    return `${count} (${Math.round(count / report.files.length * 10000) / 100}%)`;
   }
-}
-
-function summarize(
-  report: StatusReport,
-): Summary {
-  return {
-    flow: countByStatus(report, 'flow'),
-    flowstrict: countByStatus(report, 'flow strict'),
-    flowstrictlocal: countByStatus(report, 'flow strict-local'),
-    flowweak: countByStatus(report, 'flow weak'),
-    noflow: countByStatus(report, 'no flow'),
-    total: report.length,
-  };
 }
 
 function escapeXML(value: string): string {
@@ -58,14 +32,14 @@ function escapeXML(value: string): string {
 export function asSummary(
   report: StatusReport,
 ): Array<string> {
-  const summary = summarize(report);
+  const summary = report.summary;
   return [
     `@flow ${displayCount(report, summary.flow)}`,
     `@flow strict ${displayCount(report, summary.flowstrict)}`,
     `@flow strict-local ${displayCount(report, summary.flowstrictlocal)}`,
     `@flow weak ${displayCount(report, summary.flowweak)}`,
     `no flow ${displayCount(report, summary.noflow)}`,
-    `Total Files ${String(report.length)}`,
+    `Total Files ${String(summary.total)}`,
   ];
 }
 
@@ -74,7 +48,7 @@ export function asText(
   showSummary: boolean,
   filter: EntryFilter,
 ): Array<string> {
-  const lines = report
+  const lines = report.files
     .filter(filter)
     .map((entry) => `${entry.status}\t${entry.file}`);
 
@@ -90,7 +64,7 @@ export function asHTMLTable(
   showSummary: boolean,
   filter: EntryFilter,
 ): Array<string> {
-  const summary = summarize(report);
+  const summary = report.summary;
   const summaryFooter = [
     '<tfoot>',
     htmlPair('@flow', displayCount(report, summary.flow)),
@@ -98,7 +72,7 @@ export function asHTMLTable(
     htmlPair('@flow strict-local', displayCount(report, summary.flowstrictlocal)),
     htmlPair('@flow weak', displayCount(report, summary.flowweak)),
     htmlPair('no flow', displayCount(report, summary.noflow)),
-    htmlPair('Total Files', String(report.length)),
+    htmlPair('Total Files', String(summary.total)),
     '</tfoot>',
   ];
 
@@ -106,7 +80,7 @@ export function asHTMLTable(
     '<table>',
     ...(showSummary ? summaryFooter : []),
     '<tbody>',
-    ...report.filter(filter).map((entry) => [
+    ...report.files.filter(filter).map((entry) => [
       `<tr data-status="${entry.status}">`,
         `<td>${entry.status}</td>`,
         `<td>${escapeXML(entry.file)}</td>`,
@@ -122,7 +96,7 @@ export function asCSV(
   showSummary: boolean,
   filter: EntryFilter,
 ): Array<string> {
-  const lines = report
+  const lines = report.files
     .filter(filter)
     .map((entry) => [
       JSON.stringify(entry.status),
@@ -130,14 +104,14 @@ export function asCSV(
     ].join(', '));
 
   if (showSummary) {
-    const summary = summarize(report);
+    const summary = report.summary;
     return lines.concat([
       `"@flow", "${displayCount(report, summary.flow)}"`,
       `"@flow strict", "${displayCount(report, summary.flowstrict)}"`,
       `"@flow strict-local", "${displayCount(report, summary.flowstrictlocal)}"`,
       `"@flow weak", "${displayCount(report, summary.flowweak)}"`,
       `"no flow", "${displayCount(report, summary.noflow)}"`,
-      `"Total Files", "${String(report.length)}"`,
+      `"Total Files", "${String(summary.total)}"`,
     ]);
   } else {
     return lines;
@@ -150,8 +124,8 @@ export function asJUnit(
 ): Array<string> {
   const date = (new Date()).toISOString();
   const host = os.hostname();
-  const tests = report.length;
-  const failures = report.length - report.filter(
+  const tests = report.summary.total;
+  const failures = tests - report.files.filter(
     (entry) => entry.status === 'flow'
       || entry.status === 'flow strict'
       || entry.status === 'flow strict-local'
@@ -159,7 +133,7 @@ export function asJUnit(
 
   return [
     `<testsuite name="flow-annotation-check" timestamp="${date}" time="0" hostname="${host}" tests="${tests}" failures="${failures}" errors="0">`,
-    ...report.filter(filter).map((entry) => entry.status === 'flow'
+    ...report.files.filter(filter).map((entry) => entry.status === 'flow'
       ? `<testcase classname="${escapeXML(entry.file)}" name="HasFlowStatus" time="0" />`
       : [
           `<testcase classname="${escapeXML(entry.file)}" name="HasFlowStatus" time="0">`,
@@ -177,9 +151,6 @@ export function asJSON(
   report: StatusReport,
 ): Array<string> {
   return [
-    JSON.stringify({
-      summary: summarize(report),
-      files: report,
-    })
+    JSON.stringify(report)
   ];
 }

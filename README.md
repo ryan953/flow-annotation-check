@@ -31,7 +31,7 @@ import genReport, {genCheckFlowStatus, genValidate} from 'flow-annotation-check'
 
 The most useful public methods are:
 
-- `genReport(folder: string, config: Config): Promise<Array<FileReport>>`
+- `genReport(folder: string, config: Config): Promise<Report>`
 - `genCheckFlowStatus(flowPath: string, filePath: string): Promise<FlowStatus>`
 
 The types involved are:
@@ -47,9 +47,19 @@ type Config = {
 
 type FlowStatus = 'flow' | 'flow strict' | 'flow strict-local' | 'flow weak' | 'no flow';
 
-type FileReport = {
-  file: string,
-  status: FlowStatus,
+type Report = {
+  summary: {
+    flow: number,
+    flowstrict: number,
+    flowstrictlocal: number,
+    flowweak: number,
+    noflow: number,
+    total: number,
+  },
+  files: Array<{
+    file: string,
+    status: FlowStatus,
+  }>,
 };
 ```
 
@@ -69,8 +79,8 @@ genReport(
     exclude: ['**/*.coffee'],
     absolute: true,
   }
-).then((entries) => {
-  entries.forEach((entry) => {
+).then((report) => {
+  report.files.forEach((entry) => {
     console.log(entry.status + "\t" + entry.file);
   });
 });
@@ -136,8 +146,8 @@ The common settings to use are:
 * `-i`, `--include`  [Glob](https://github.com/isaacs/node-glob) for files to include. Can be set multiple times.
 * `-x`, `--exclude`  [Glob](https://github.com/isaacs/node-glob) for files to exclude. Can be set multiple times.
 * `-a`, `--absolute` Report absolute path names. The default is to report only filenames.
-* `-o`, `--output`   Choose from either `text`, `csv`, `junit`, or `html` format.
-* `--show-summary`   Include a summary of the data in the `--output` stream. Does not apply to `junit` format.
+* `-o`, `--output`   Choose from either `text`, `csv`, `junit`, `json` or `html` format.
+* `--show-summary`   Include a summary of the data in the `--output` stream. Summary is never included in the `junit` format, and always in the `json` format.
 
 Setting `--exclude` will override the defaults! Don't forget to ignore `node_modules/**/*.js` in addition to project specific folders.
 
@@ -163,9 +173,11 @@ The `csv` option prints a two column list of status value and filename with each
 
 The `junit` option prints an xml report suitable to be consumed by CI tools like Jenkins.
 
+The `json` option prints a json file with the return value of `genSummarizedReport()`, the `Report` type described above.
+
 The `html-table` option prints an opening and closing `<table>` tag with two columns of data. Each row contains a `data-status` attribute which can be useful for styling. There is a summary of the rows inside the `<tfoot>` element. This does not print a full, valid, html page but it is possible to render it directly. This option, with some custom CSS, could be used as part of a dashboard where only the names of the non-flow files are listed.
 
-In addition to the `--output` flag there are other flags that will return the report in different formats and save it directly to a file for you. You can set `--html-file`, `--csv-file`, `--junit-file` or `--summary-file` and each one will create a file containing the respective report. This is useful for getting the report in multiple formats at the same time. Try them all at once!
+In addition to the `--output` flag there are other flags that will return the report in different formats and save it directly to a file for you. You can set `--html-file`, `--csv-file`, `--junit-file`, `--json-file` or `--summary-file` and each one will create a file containing the respective report. This is useful for getting the report in multiple formats at the same time. Try them all at once!
 
 For example, it is desirable for CI logs to not have any extra markup and use the default `text` format with the `-o` flag. But at the same time possible to use the `--junit-file` flag to feed some data into jenkins for tracking over time.
 
