@@ -2,7 +2,7 @@
  * @flow
  */
 
-export type OutputFormat = 'text' | 'html-table' | 'csv' | 'junit' | 'summary';
+export type OutputFormat = 'text' | 'html-table' | 'csv' | 'junit' | 'summary' | 'json';
 export type VisibileStatusType = 'all' | 'flow' | 'noflow' | 'flowweak' | 'flowstrict' | 'none';
 
 export const OutputFormats = {
@@ -11,6 +11,7 @@ export const OutputFormats = {
   csv: 'csv',
   junit: 'junit',
   summary: 'summary',
+  json: 'json',
 };
 
 export const VisibleStatusTypes = {
@@ -35,6 +36,7 @@ export type Args = {
   html_file?: string,
   csv_file?: string,
   junit_file?: string,
+  json_file?: string,
   summary_file?: string,
   root?: string,
 };
@@ -52,6 +54,7 @@ export type Flags = {
   html_file: ?string,
   csv_file: ?string,
   junit_file: ?string,
+  json_file: ?string,
   summary_file: ?string,
   root: string,
 };
@@ -69,6 +72,7 @@ export const DEFAULT_FLAGS: Flags = {
   html_file: null,
   csv_file: null,
   junit_file: null,
+  json_file: null,
   summary_file: null,
   root: '.',
 };
