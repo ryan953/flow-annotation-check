@@ -10,6 +10,9 @@ import {DEFAULT_FLAGS} from '../types';
 
 describe('getParser', () => {
   it('should print the help message', () => {
-    expect(getParser().formatHelp()).toMatchSnapshot();
+    expect(getParser({
+      prog: 'PROG',
+      debug: true,
+    }).formatHelp()).toMatchSnapshot();
   });
 });

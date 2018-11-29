@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`getParser should print the help message 1`] = `
-"usage: jest [-h] [-v] [-f FLOW_PATH] [-o {text,html-table,csv,junit,summary}]
+"usage: PROG [-h] [-v] [-f FLOW_PATH] [-o {text,html-table,csv,junit,summary}]
             [--show-summary] [--summary-only]
             [--list-files {all,flow,flowstrict,noflow,flowweak,none}]
             [--html-file HTML_FILE] [--csv-file CSV_FILE]
@@ -10,48 +10,48 @@ exports[`getParser should print the help message 1`] = `
             [root]
 
 Positional arguments:
-  root                  The root directory to glob files from. (default: \`\\".
-                        \\"\`)
+  root                  The root directory to glob files from. (default: '\\".
+                        \\"')
 
 Optional arguments:
   -h, --help            Show this help message and exit.
   -v, --version         Show program's version number and exit.
   -f FLOW_PATH, --flow-path FLOW_PATH
-                        The path to the flow command. (default: \`\\"flow\\"\`)
+                        The path to the flow command. (default: '\\"flow\\"')
   -o {text,html-table,csv,junit,summary}, --output {text,html-table,csv,junit,summary}
                         Output format for status/filename pairs. (default: 
-                        \`\\"text\\"\`)
+                        '\\"text\\"')
   --show-summary        Include summary data. Does not apply to saved file 
-                        output or jUnit output. (default: \`false\`)
+                        output or jUnit output. (default: 'false')
   --summary-only        Unused. Switch to --show-summary instead.
   --list-files {all,flow,flowstrict,noflow,flowweak,none}
                         Filter the list of files based on the reported status.
                          Use '--allow-weak' to control when flow-weak files 
                         are included or excluded from the 'flow' or 'noflow' 
-                        checks. (default: \`\\"all\\"\`)
+                        checks. (default: '\\"all\\"')
   --html-file HTML_FILE
                         Save the html table output directly into HTML_FILE. 
-                        (default: \`null\`)
+                        (default: 'null')
   --csv-file CSV_FILE   Save CSV output directly into CSV_FILE. (default: 
-                        \`null\`)
+                        'null')
   --junit-file JUNIT_FILE
                         Save jUnit output directly into JUNIT_FILE. (default: 
-                        \`null\`)
+                        'null')
   --summary-file SUMMARY_FILE
                         Save a text-format summary of the report into 
-                        SUMMARY_FILE. (default: \`null\`)
-  -a, --absolute        Report absolute path names. (default: \`false\`)
-  --allow-weak          Consider \`@flow weak\` as a accepable annotation. See 
+                        SUMMARY_FILE. (default: 'null')
+  -a, --absolute        Report absolute path names. (default: 'false')
+  --allow-weak          Consider '@flow weak' as a accepable annotation. See 
                         https://flowtype.org/docs/existing.html#weak-mode for 
                         reasons why this should only be used temporarily. 
-                        (default: \`false\`)
+                        (default: 'false')
   -i INCLUDE, --include INCLUDE
                         Glob for files to include. Can be set multiple times. 
-                        (default: \`[\\"**/*.js\\"]\`)
+                        (default: '[\\"**/*.js\\"]')
   -x EXCLUDE, --exclude EXCLUDE
                         Glob for files to exclude. Can be set multiple times. 
-                        (default: \`[\\"+(node_modules build flow-typed)/**/*.
-                        js\\"]\`)
+                        (default: '[\\"+(node_modules build flow-typed)/**/*.
+                        js\\"]')
   --validate            Run in validation mode. This injects errors into 
                         globbed files and checks the flow-annotation status
 "

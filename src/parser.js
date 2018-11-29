@@ -10,13 +10,15 @@ import {ArgumentParser} from 'argparse';
 import {DEFAULT_FLAGS, OutputFormats, VisibleStatusTypes} from './types';
 
 function printDefault(value) {
-  return `(default: \`${JSON.stringify(value)}\`)`;
+  return `(default: '${JSON.stringify(value)}')`;
 }
 
-export default function getParser(): ArgumentParser {
+// flowlint-next-line unclear-type:off
+export default function getParser(options?: Object = {}): ArgumentParser {
   const parser = new ArgumentParser({
     addHelp: true,
     version: packageJSON.version,
+    ...options,
   });
 
   parser.addArgument(
@@ -95,7 +97,7 @@ export default function getParser(): ArgumentParser {
     ['--allow-weak'],
     {
       action: 'storeTrue',
-      help: `Consider \`@flow weak\` as a accepable annotation. See https://flowtype.org/docs/existing.html#weak-mode for reasons why this should only be used temporarily. ${printDefault(DEFAULT_FLAGS.allow_weak)}`,
+      help: `Consider '@flow weak' as a accepable annotation. See https://flowtype.org/docs/existing.html#weak-mode for reasons why this should only be used temporarily. ${printDefault(DEFAULT_FLAGS.allow_weak)}`,
     },
   );
   parser.addArgument(
