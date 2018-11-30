@@ -93,41 +93,65 @@ genCheckFlowStatus('flow', file).then((status) => {
 
 You can use [`npx`](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) to run `flow-annotation-check` against your codebase in the terminal. It's as simple as:
 
+```bash
+$ npx flow-annotation-check ~/path/to/project
 ```
-npx flow-annotation-check ~/path/to/project
+
+With the default flags typed out it looks like:
+
+```bash
+$ npx flow-annotation-check \
+  --flow-path flow \
+  --output text \
+  --list-files all \
+  --include "**/*.js" \
+  --exclude "+(node_modules|build|flow-typed)/**/*.js" \
+  .
 ```
 
-The available commands and flags can be found by running `flow-annotation-check -h` or from the example above: `npm run annotations -- --help`. Click through to read the [latest help output](https://github.com/ryan953/flow-annotation-check/blob/master/src/__tests__/__snapshots__/parser-test.js.snap) on master.
-
-The common settings you will use are:
-
-* `-i`, `--include`  Glob for files to include. Can be set multiple times.
-* `-x`, `--exclude`  Glob for files to exclude. Can be set multiple times.
-* `-a`, `--absolute` Report absolute path names. The default is to report only filenames.
-* `-o`, `--output`   Choose from either `text`, `csv`, `junit`, or `html` format.
-* `--show-summary`   Include a summary of the data in the `--output` stream, does not apply to `junit` format.
-
-Setting `--exclude` will override the defaults. So don't forget to ignore `node_modules/**/*.js` in addition to project specific folders.
-
-You can also configure cli arguments directly inside your package.json file. Example:
+Or, save your configuration inside `package.json` file under the `flow-annotation-check` field. The defaults look like this:
 
 ```json
 {
-  "dependencies": {
+  "devDependencies": {
     "flow-annotation-check": "^1.0.0"
   },
   "flow-annotation-check": {
     "absolute": false,
     "allow_weak": false,
-    "exclude": ["+(node_modules|build|flow-typed)/**/*.js"],
     "flow_path": "flow",
-    "include": ["**/*.js"],
     "output": "text",
     "list_files": "all",
+    "include": [ "**/*.js" ],
+    "exclude": [ "+(node_modules|build|flow-typed)/**/*.js" ],
     "root": "."
   }
 }
 ```
+
+CLI flags, if included, will override `package.json` settings. Anything not specified as a CLI flag or inside `package.json` will use the default value.
+
+The common settings to use are:
+
+* `-i`, `--include`  [Glob](https://github.com/isaacs/node-glob) for files to include. Can be set multiple times.
+* `-x`, `--exclude`  [Glob](https://github.com/isaacs/node-glob) for files to exclude. Can be set multiple times.
+* `-a`, `--absolute` Report absolute path names. The default is to report only filenames.
+* `-o`, `--output`   Choose from either `text`, `csv`, `junit`, or `html` format.
+* `--show-summary`   Include a summary of the data in the `--output` stream. Does not apply to `junit` format.
+
+Setting `--exclude` will override the defaults! Don't forget to ignore `node_modules/**/*.js` in addition to project specific folders.
+
+Using multiple globs for `--include` and `--exclude` can help keep your configuration easy to understand and modify. The default setting of `--exclude "+(node_modules|build|flow-typed)/**/*.js"` is equivalent to:
+
+```
+$ npx flow-annotation-check \
+  -x node_modules/**/*.js \
+  -x build/**/*.js \
+  -x flow-typed/**/*.js \
+  .
+```
+
+The full list of available commands and flags can be found by running `npx flow-annotation-check -h`.
 
 ### Output format
 
@@ -148,28 +172,32 @@ For example, it is desirable for CI logs to not have any extra markup and use th
 
 ### VERBOSE
 
-If the `VERBOSE` env variable is set to a truthy value then the resolved configuration params will be printed. The config is a union of defaults, values in package.json, and CLI flags. Example:
+If the `VERBOSE` env variable is set to a truthy value then the resolved configuration params will be printed. The package.json settings for this repo are:
 
 ```
 $ VERBOSE=1 flow-annotation-check
 Invoking: { command: 'report',
   flags:
-   { absolute: false,
+   { validate: false,
+     absolute: false,
      allow_weak: false,
      exclude:
       [ 'src/__tests__/fixtures/comment-blocks-10.js',
         'src/__tests__/fixtures/comment-statement-10.js',
+        'src/__tests__/fixtures/flow-weak.js',
         'src/__tests__/fixtures/no-comments.js' ],
      flow_path: 'flow',
      include: [ 'src/**/*.js' ],
      output: 'text',
+     show_summary: false,
+     list_files: 'all',
+     html_file: null,
+     csv_file: null,
+     junit_file: null,
      root: '/Users/ryan/Code/flow-annotation-check' } }
 flow  src/__tests__/cli-test.js
 flow  src/__tests__/core-test.js
 flow  src/__tests__/fixtures/comment-blocks-09.flow.js
-flow  src/__tests__/fixtures/comment-single-block-09.flow.js
-flow  src/__tests__/fixtures/comment-single-block-10.flow.js
-flow  src/__tests__/fixtures/comment-statement-09.flow.js
 ... snip ...
 ```
 
