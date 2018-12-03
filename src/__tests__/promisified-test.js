@@ -7,7 +7,15 @@
 jest.mock('child_process');
 jest.mock('fs');
 
-import {exec, execFile, stat, write, append, truncate} from '../promisified';
+import {
+  append,
+  asyncMap,
+  exec,
+  execFile,
+  stat,
+  truncate,
+  write,
+} from '../promisified';
 const childProcess = require('child_process');
 const fs = require('fs');
 
@@ -214,6 +222,22 @@ describe('promisified', () => {
       callbackArg('failed', 'foo bar');
 
       return promise;
+    });
+  });
+
+  describe('asyncMap', () => {
+    it('should map a list of things to promises', () => {
+      return expect(asyncMap(
+        [1, 2, 3],
+        (num) => Promise.resolve(num * 2)
+      )).resolves.toEqual([2, 4, 6]);
+    });
+
+    it('should return any rejections', () => {
+      return expect(asyncMap(
+        [true, false, true],
+        (b) => b ? Promise.resolve(true) : Promise.reject(false)
+      )).rejects.toEqual(false);
     });
   });
 

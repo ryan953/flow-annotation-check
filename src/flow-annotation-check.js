@@ -10,37 +10,44 @@ import type {
   FlowStatus,
   StatusEntry,
   StatusReport,
+  StatusReportSummary,
   ValidationReport,
 } from './types';
 
 import globsToFileList from './globsToFileList';
 import isValidFlowStatus from './isValidFlowStatus';
+import summarizeReport from './summarizeReport';
+import {asyncMap} from './promisified';
 import {genCheckFlowStatus, genForceErrors} from './flow';
 
-function executeSequentially(promiseFactories, defaultValue) {
-  let result = Promise.resolve(defaultValue);
-  promiseFactories.forEach((promiseFactory) => {
-    result = result.then(promiseFactory);
+function genSummarizedReport(
+  cwd: string,
+  flags: Flags,
+): Promise<StatusReport> {
+  const files = globsToFileList(cwd, flags.include, flags.exclude, {
+    absolute: flags.absolute,
   });
-  return result;
+
+  return asyncMap(
+    files,
+    (file) => genCheckFlowStatus(flags.flow_path, file)
+      .then((status) => ({
+        file: file,
+        status: status,
+      }))
+    )
+  .then((statusEntries) => ({
+    summary: summarizeReport(statusEntries),
+    files: statusEntries,
+  }));
 }
 
 function genReport(
   cwd: string,
   flags: Flags,
 ): Promise<Array<StatusEntry>> {
-  const files = globsToFileList(cwd, flags.include, flags.exclude, {
-    absolute: flags.absolute,
-  });
-
-  return executeSequentially(files.map((file) => {
-    return (entries) => {
-      return genCheckFlowStatus(flags.flow_path, file).then((status) => {
-        entries.push({file, status});
-        return entries;
-      });
-    };
-  }), []);
+  return genSummarizedReport(cwd, flags)
+    .then((report) => report.files);
 }
 
 function genFilesWithErrors(
@@ -58,7 +65,7 @@ function coalesceReports(
   report: StatusReport,
   errorReport: ErrorReport,
 ): ValidationReport {
-  return report.map((entry) => {
+  return report.files.map((entry) => {
     const threwError = errorReport.indexOf(entry.file) >= 0;
     return {
       status: entry.status,
@@ -71,7 +78,7 @@ function coalesceReports(
 
 function genValidate(cwd: string, flags: Flags): Promise<ValidationReport> {
   return Promise.all([
-    genReport(cwd, flags),
+    genSummarizedReport(cwd, flags),
     genFilesWithErrors(cwd, flags),
   ]).then(([report, errorReport]) => {
     return coalesceReports(report, errorReport);
@@ -79,4 +86,4 @@ function genValidate(cwd: string, flags: Flags): Promise<ValidationReport> {
 }
 
 export default genReport;
-export {genCheckFlowStatus, genValidate};
+export {genSummarizedReport, genCheckFlowStatus, genValidate};

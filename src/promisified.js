@@ -91,7 +91,22 @@ function truncate(file: string, data: string | Buffer): Promise<void> {
   });
 }
 
+function asyncMap<I, T>(
+  items: Array<I>,
+  mapper: (item: I) => Promise<T>,
+): Promise<Array<T>> {
+  return items.reduce((prom, item) => {
+    return prom.then((arr) => {
+      return Promise.resolve(mapper(item)).then((result) => {
+        arr.push(result);
+        return arr;
+      })
+    });
+  }, Promise.resolve([]));
+}
+
 export {
+  asyncMap,
   escapeShell,
   exec,
   execFile,

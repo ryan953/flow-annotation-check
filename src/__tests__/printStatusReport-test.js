@@ -15,13 +15,34 @@ import {
 
 import os from 'os';
 
-const BASIC_REPORT = [
-  {status: 'flow strict', file: './s.js'},
-  {status: 'flow strict-local', file: './sl.js'},
-  {status: 'flow', file: './a.js'},
-  {status: 'flow weak', file: './b.js'},
-  {status: 'no flow', file: './c.js'},
-];
+const EMPTY_REPORT = {
+  summary: {
+    flow: 0,
+    flowstrict: 0,
+    flowstrictlocal: 0,
+    flowweak: 0,
+    noflow: 0,
+    total: 0,
+  },
+  files: [],
+}
+const BASIC_REPORT = {
+  summary: {
+    flow: 1,
+    flowstrict: 1,
+    flowstrictlocal: 1,
+    flowweak: 1,
+    noflow: 1,
+    total: 5,
+  },
+  files: [
+    {status: 'flow strict', file: './s.js'},
+    {status: 'flow strict-local', file: './sl.js'},
+    {status: 'flow', file: './a.js'},
+    {status: 'flow weak', file: './b.js'},
+    {status: 'no flow', file: './c.js'},
+  ],
+};
 
 const returnTrue = jest.fn();
 
@@ -48,7 +69,7 @@ describe('printStatusReport', () => {
 
     it('should filtered the report based on status', () => {
       asText(BASIC_REPORT, true, returnTrue);
-      expect(returnTrue).toHaveBeenCalledTimes(BASIC_REPORT.length);
+      expect(returnTrue).toHaveBeenCalledTimes(BASIC_REPORT.files.length);
     });
   });
 
@@ -63,7 +84,7 @@ describe('printStatusReport', () => {
 
     it('should filter the csv report', () => {
       asCSV(BASIC_REPORT, false, returnTrue);
-      expect(returnTrue).toHaveBeenCalledTimes(BASIC_REPORT.length);
+      expect(returnTrue).toHaveBeenCalledTimes(BASIC_REPORT.files.length);
     });
   });
 
@@ -78,21 +99,30 @@ describe('printStatusReport', () => {
 
     it('should filter the html-table report', () => {
       asHTMLTable(BASIC_REPORT, true, returnTrue);
-      expect(returnTrue).toHaveBeenCalledTimes(BASIC_REPORT.length);
+      expect(returnTrue).toHaveBeenCalledTimes(BASIC_REPORT.files.length);
     });
 
     it('should print an empty html-table report', () => {
-      const report = [];
-      expect(asHTMLTable(report, false, returnTrue)).toMatchSnapshot();
+      expect(asHTMLTable(EMPTY_REPORT, false, returnTrue)).toMatchSnapshot();
     });
 
     it('should print an html-table report with even percentages', () => {
-      const report = [
-        {status: 'flow', file: './a.js'},
-        {status: 'flow strict', file: './s.js'},
-        {status: 'flow weak', file: './b.js'},
-        {status: 'no flow', file: './b.js'},
-      ];
+      const report = {
+        summary: {
+          flow: 1,
+          flowstrict: 1,
+          flowstrictlocal: 0,
+          flowweak: 1,
+          noflow: 1,
+          total: 4,
+        },
+        files: [
+          {status: 'flow', file: './a.js'},
+          {status: 'flow strict', file: './s.js'},
+          {status: 'flow weak', file: './b.js'},
+          {status: 'no flow', file: './b.js'},
+        ],
+      };
       expect(asHTMLTable(report, false, returnTrue)).toMatchSnapshot();
     });
   });
@@ -112,7 +142,7 @@ describe('printStatusReport', () => {
 
     it('should filter the jUnit report', () => {
       asJUnit(BASIC_REPORT, returnTrue);
-      expect(returnTrue).toHaveBeenCalledTimes(BASIC_REPORT.length);
+      expect(returnTrue).toHaveBeenCalledTimes(BASIC_REPORT.files.length);
     });
   });
 

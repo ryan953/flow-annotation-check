@@ -91,6 +91,18 @@ export type ValidityEntry = {
   threwError: boolean,
 };
 
-export type StatusReport = Array<StatusEntry>;
+export type StatusReportSummary = {
+  flow: number,
+  flowstrict: number,
+  flowstrictlocal: number,
+  flowweak: number,
+  noflow: number,
+  total: number,
+};
+
+export type StatusReport = {
+  summary: StatusReportSummary,
+  files: Array<StatusEntry>,
+};
 export type ValidationReport = Array<ValidityEntry>;
 export type ErrorReport = Array<string>;
