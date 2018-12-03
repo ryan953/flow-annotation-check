@@ -16,15 +16,8 @@ import type {
 
 import globsToFileList from './globsToFileList';
 import isValidFlowStatus from './isValidFlowStatus';
+import {asyncMap} from './promisified';
 import {genCheckFlowStatus, genForceErrors} from './flow';
-
-function executeSequentially(promiseFactories, defaultValue) {
-  let result = Promise.resolve(defaultValue);
-  promiseFactories.forEach((promiseFactory) => {
-    result = result.then(promiseFactory);
-  });
-  return result;
-}
 
 function countByStatus(files: Array<StatusEntry>, status: FlowStatus): number {
   return files.filter((entry) => entry.status === status).length;
@@ -51,18 +44,18 @@ function genSummarizedReport(
     absolute: flags.absolute,
   });
 
-  return executeSequentially(files.map((file) => {
-      return (entries) => {
-        return genCheckFlowStatus(flags.flow_path, file).then((status) => {
-          entries.push({file, status});
-          return entries;
-        });
-      };
-    }), [])
-    .then((files) => ({
-      summary: summarizeReport(files),
-      files: files,
-    }))
+  return asyncMap(
+    files,
+    (file) => genCheckFlowStatus(flags.flow_path, file)
+      .then((status) => ({
+        file: file,
+        status: status,
+      }))
+    )
+  .then((statusEntries) => ({
+    summary: summarizeReport(statusEntries),
+    files: statusEntries,
+  }));
 }
 
 function genReport(
