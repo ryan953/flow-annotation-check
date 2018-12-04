@@ -80,10 +80,10 @@
     ]
   },
   "flow-coverage-report": {
-    "includeGlob": [
+    "globIncludePatterns": [
       "src/**/*.js"
     ],
-    "type": [
+    "reportTypes": [
       "text",
       "html"
     ]
