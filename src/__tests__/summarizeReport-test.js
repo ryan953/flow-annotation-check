@@ -4,8 +4,6 @@
  * @flow
  */
 
-jest.mock('glob');
-
 import summarizeReport from '../summarizeReport';
 
 describe('summarizeReport', () => {

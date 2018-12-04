@@ -7,6 +7,7 @@
 import type {
   Args,
   Flags,
+  Level,
   OutputFormat,
   StatusReport,
   ValidationReport,
@@ -18,6 +19,7 @@ import {DEFAULT_FLAGS} from './types';
 
 import flowStatusFilter from './flowStatusFilter';
 import {genSummarizedReport, genValidate} from './flow-annotation-check';
+import countFailingFiles from './countFailingFiles';
 import getParser from './parser';
 import loadPkg from 'load-pkg';
 import path from 'path';
@@ -40,16 +42,27 @@ function getPackageJsonArgs(root: string, defaults: Flags): Flags {
   return defaults;
 }
 
+function getMostStrictLevel(args: Args, defaults: Flags): Level {
+  if (args.require_strict === true || defaults.level === 'flowstrict') {
+    return 'flowstrict';
+  } else if (args.require_strict_local === true || defaults.level === 'flowstrictlocal') {
+    return 'flowstrictlocal';
+  } else if (args.allow_weak === true) {
+    return 'flowweak';
+  }
+  return args.level || defaults.level;
+}
+
 function resolveArgs(args: Args, defaults: Flags): Flags {
   return {
-    validate: args.validate || defaults.validate, // flowlint-line sketchy-null-bool:off
-    absolute: args.absolute || defaults.absolute, // flowlint-line sketchy-null-bool:off
-    allow_weak: args.allow_weak || defaults.allow_weak, // flowlint-line sketchy-null-bool:off
+    validate: args.validate === true || defaults.validate,
+    absolute: args.absolute === true || defaults.absolute,
+    level: getMostStrictLevel(args, defaults),
     exclude: args.exclude || defaults.exclude,
     flow_path: args.flow_path || defaults.flow_path, // flowlint-line sketchy-null-string:off
     include: args.include || defaults.include,
     output: args.output || defaults.output,
-    show_summary: args.show_summary || defaults.show_summary, // flowlint-line sketchy-null-bool:off
+    show_summary: args.show_summary === true || defaults.show_summary,
     list_files: args.list_files || defaults.list_files,
     html_file: args.html_file || defaults.html_file, // flowlint-line sketchy-null-string:off
     csv_file: args.csv_file || defaults.csv_file, // flowlint-line sketchy-null-string:off
@@ -78,7 +91,11 @@ function main(flags: Flags): void {
       break;
     default:
       genSummarizedReport(flags.root, flags)
-        .then((report) => printStatusReport(report, flags))
+        .then((report) => {
+          printStatusReport(report, flags);
+          process.exitCode = countFailingFiles(report, flags) ? 1 : 0;
+          return report;
+        })
         .then((report) => Promise.all([
           flags.html_file // flowlint-line sketchy-null-string:off
             ? saveReportToFile(flags.html_file, report, 'html-table')
@@ -114,7 +131,7 @@ function saveReportToFile(
   }
   return write(
     filename,
-    getReport(report, output, true, flowStatusFilter('all', false)).join("\n")
+    getReport(report, output, true, flowStatusFilter('all', 'flow')).join("\n")
   );
 }
 
@@ -142,27 +159,18 @@ function getReport(
   }
 }
 
-function printStatusReport(report: StatusReport, flags: Flags): StatusReport {
+function printStatusReport(report: StatusReport, flags: Flags) {
   getReport(
     report,
     flags.output,
     flags.show_summary,
     flowStatusFilter(
       flags.list_files,
-      flags.allow_weak,
+      flags.level,
     ),
   ).map(
     (line) => console.log(line)
   );
-
-  const noFlowFiles = report.summary.noflow;
-  const weakFlowFiles = report.summary.flowweak;
-  const failingFileCount = flags.allow_weak
-    ? noFlowFiles
-    : noFlowFiles + weakFlowFiles;
-  process.exitCode = failingFileCount ? 1 : 0;
-
-  return report;
 }
 
 function printValidationReport(report: ValidationReport, flags: Flags): void {

@@ -4,13 +4,19 @@
  * @flow
  */
 
-import type {FlowStatus, StatusEntry, StatusReport, VisibileStatusType} from './types';
+import type {
+  FlowStatus,
+  Level,
+  StatusEntry,
+  StatusReport,
+  VisibileStatusType
+} from './types';
 
 export type EntryFilter = (entry: StatusEntry) => boolean;
 
 export default function makeStatusFilter(
   visibleStatus: VisibileStatusType,
-  allowWeak: boolean,
+  level: Level,
 ): EntryFilter {
   return (entry) => {
     switch (visibleStatus) {
@@ -20,11 +26,11 @@ export default function makeStatusFilter(
         const isFlowOrBetter = entry.status === 'flow strict'
           || entry.status === 'flow strict-local'
           || entry.status === 'flow';
-        return allowWeak
+        return level === 'flowweak'
           ? isFlowOrBetter || entry.status === 'flow weak'
           : isFlowOrBetter;
       case 'noflow':
-        return allowWeak
+        return level === 'flowweak'
           ? entry.status === 'no flow'
           : entry.status === 'no flow' || entry.status === 'flow weak';
       case 'flowweak':

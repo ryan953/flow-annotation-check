@@ -7,7 +7,7 @@
 // $FlowFixMe: package.json is untyped
 import packageJSON from '../package.json';
 import {ArgumentParser} from 'argparse';
-import {DEFAULT_FLAGS, OutputFormats, VisibleStatusTypes} from './types';
+import {DEFAULT_FLAGS, OutputFormats, VisibleLevelTypes, VisibleStatusTypes} from './types';
 
 function printDefault(value) {
   return `(default: '${JSON.stringify(value)}')`;
@@ -54,7 +54,7 @@ export default function getParser(options?: Object = {}): ArgumentParser {
     ['--list-files'],
     {
       action: 'store',
-      help: `Filter the list of files based on the reported status. Use '--allow-weak' to control when flow-weak files are included or excluded from the 'flow' or 'noflow' checks. ${printDefault(DEFAULT_FLAGS.list_files)} `,
+      help: `Filter the list of files based on the reported status. See '--level=flowweak' or '--allow-weak' to control when flow-weak files are included or excluded from the 'flow' or 'noflow' checks. ${printDefault(DEFAULT_FLAGS.list_files)}`,
       choices: VisibleStatusTypes,
     },
   );
@@ -101,10 +101,32 @@ export default function getParser(options?: Object = {}): ArgumentParser {
     },
   );
   parser.addArgument(
+    ['--level'],
+    {
+      action: 'store',
+      help: `The minimum strictness required in each file. Levels progress in ascending order through: 'any > weak > flow > strict-local > strict'. The program will exit 1 if any file has a level lower than this setting. ${printDefault(DEFAULT_FLAGS.level)}`,
+      choices: VisibleLevelTypes,
+    },
+  );
+  parser.addArgument(
     ['--allow-weak'],
     {
       action: 'storeTrue',
-      help: `Consider '@flow weak' as a accepable annotation. See https://flowtype.org/docs/existing.html#weak-mode for reasons why this should only be used temporarily. ${printDefault(DEFAULT_FLAGS.allow_weak)}`,
+      help: `Alias for '--level=flowweak'. Consider '@flow weak' as an accepable annotation. See https://flowtype.org/docs/existing.html#weak-mode for reasons why this should only be used temporarily. ${printDefault(false)}`,
+    },
+  );
+  parser.addArgument(
+    ['--require-strict-local'],
+    {
+      action: 'storeTrue',
+      help: `Alias for '--level=flowstrictlocal'. Consider '@flow strict-local' as the minimum allowable level. ${printDefault(false)}`,
+    },
+  );
+  parser.addArgument(
+    ['--require-strict'],
+    {
+      action: 'storeTrue',
+      help: `Alias for '--level=flowstrict'. Consider '@flow strict' as the only accepable annotation. ${printDefault(false)}`,
     },
   );
   parser.addArgument(
@@ -125,7 +147,7 @@ export default function getParser(options?: Object = {}): ArgumentParser {
     ['--validate'],
     {
       action: 'storeTrue',
-      help: 'Run in validation mode. This injects errors into globbed files and checks the flow-annotation status',
+      help: `Run in validation mode. This injects errors into globbed files and checks the flow-annotation status.`,
     },
   );
   parser.addArgument(

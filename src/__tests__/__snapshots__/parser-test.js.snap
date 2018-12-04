@@ -4,11 +4,13 @@ exports[`getParser should print the help message 1`] = `
 "usage: PROG [-h] [-v] [-f FLOW_PATH]
             [-o {text,html-table,csv,junit,summary,json}] [--show-summary]
             [--summary-only]
-            [--list-files {all,flow,flowstrict,noflow,flowweak,none}]
+            [--list-files {all,flow,flowstrict,flowstrictlocal,noflow,flowweak,none}]
             [--html-file HTML_FILE] [--csv-file CSV_FILE]
             [--junit-file JUNIT_FILE] [--json-file JSON_FILE]
-            [--summary-file SUMMARY_FILE] [-a] [--allow-weak] [-i INCLUDE]
-            [-x EXCLUDE] [--validate]
+            [--summary-file SUMMARY_FILE] [-a]
+            [--level {any,flowweak,flow,flowstrictlocal,flowstrict}]
+            [--allow-weak] [--require-strict-local] [--require-strict]
+            [-i INCLUDE] [-x EXCLUDE] [--validate]
             [root]
 
 Positional arguments:
@@ -26,11 +28,11 @@ Optional arguments:
   --show-summary        Include summary data. Does not apply to saved file 
                         output or jUnit output. (default: 'false')
   --summary-only        Unused. Switch to --show-summary instead.
-  --list-files {all,flow,flowstrict,noflow,flowweak,none}
+  --list-files {all,flow,flowstrict,flowstrictlocal,noflow,flowweak,none}
                         Filter the list of files based on the reported status.
-                         Use '--allow-weak' to control when flow-weak files 
-                        are included or excluded from the 'flow' or 'noflow' 
-                        checks. (default: '\\"all\\"')
+                         See '--level=flowweak' or '--allow-weak' to control 
+                        when flow-weak files are included or excluded from 
+                        the 'flow' or 'noflow' checks. (default: '\\"all\\"')
   --html-file HTML_FILE
                         Save the html table output directly into HTML_FILE. 
                         (default: 'null')
@@ -46,10 +48,23 @@ Optional arguments:
                         Save a text-format summary of the report into 
                         SUMMARY_FILE. (default: 'null')
   -a, --absolute        Report absolute path names. (default: 'false')
-  --allow-weak          Consider '@flow weak' as a accepable annotation. See 
-                        https://flowtype.org/docs/existing.html#weak-mode for 
-                        reasons why this should only be used temporarily. 
+  --level {any,flowweak,flow,flowstrictlocal,flowstrict}
+                        The minimum strictness required in each file. Levels 
+                        progress in ascending order through: 'any > weak > 
+                        flow > strict-local > strict'. The program will exit 
+                        1 if any file has a level lower than this setting. 
+                        (default: '\\"flow\\"')
+  --allow-weak          Alias for '--level=flowweak'. Consider '@flow weak' 
+                        as an accepable annotation. See https://flowtype.
+                        org/docs/existing.html#weak-mode for reasons why this 
+                        should only be used temporarily. (default: 'false')
+  --require-strict-local
+                        Alias for '--level=flowstrictlocal'. Consider '@flow 
+                        strict-local' as the minimum allowable level. 
                         (default: 'false')
+  --require-strict      Alias for '--level=flowstrict'. Consider '@flow 
+                        strict' as the only accepable annotation. (default: 
+                        'false')
   -i INCLUDE, --include INCLUDE
                         Glob for files to include. Can be set multiple times. 
                         (default: '[\\"**/*.js\\"]')
@@ -58,6 +73,6 @@ Optional arguments:
                         (default: '[\\"+(node_modules build flow-typed)/**/*.
                         js\\"]')
   --validate            Run in validation mode. This injects errors into 
-                        globbed files and checks the flow-annotation status
+                        globbed files and checks the flow-annotation status.
 "
 `;

@@ -58,7 +58,7 @@ describe('genForceErrors', () => {
   const flags = {
     validate: false,
     absolute: true,
-    allow_weak: false,
+    level: 'flow',
     exclude: [],
     flow_path: 'flow',
     include: [],
