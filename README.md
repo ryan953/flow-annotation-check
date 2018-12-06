@@ -111,6 +111,7 @@ With the default flags typed out it looks like:
 
 ```bash
 $ npx flow-annotation-check \
+  --level=flow \
   --flow-path flow \
   --output text \
   --list-files all \
@@ -128,7 +129,7 @@ Or, save your configuration inside `package.json` file under the `flow-annotatio
   },
   "flow-annotation-check": {
     "absolute": false,
-    "allow_weak": false,
+    "level": "flow",
     "flow_path": "flow",
     "output": "text",
     "list_files": "all",
