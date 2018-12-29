@@ -13,25 +13,6 @@ export type IOResult = {
   error?: Error,
 };
 
-function escapeShell(cmd: string): string {
-  return cmd.replace(/(["\s'$`\\])/g,'\\$1');
-}
-
-function exec(
-  cmd: string,
-  options: child_process$execOpts,
-): Promise<IOResult> {
-  return new Promise((resolve, reject) => {
-    childProcess.exec(cmd, options, (error, stdout, stderr) => {
-      if (error) {
-        reject({error, stdout, stderr});
-      } else {
-        resolve({stdout, stderr});
-      }
-    });
-  });
-}
-
 function execFile(
   file: string,
   args: Array<string>,
@@ -55,6 +36,18 @@ function stat(file: string): Promise<{size: number}> {
         reject(error);
       } else {
         resolve(stats);
+      }
+    });
+  });
+}
+
+function read(file: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    fs.readFile(file, 'utf8', (error, data) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(data);
       }
     });
   });
@@ -107,11 +100,10 @@ function asyncMap<I, T>(
 
 export {
   asyncMap,
-  escapeShell,
-  exec,
   execFile,
   stat,
   append,
   truncate,
+  read,
   write,
 };
