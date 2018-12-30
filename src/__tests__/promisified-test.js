@@ -10,62 +10,16 @@ jest.mock('fs');
 import {
   append,
   asyncMap,
-  exec,
   execFile,
   stat,
   truncate,
+  read,
   write,
 } from '../promisified';
 const childProcess = require('child_process');
 const fs = require('fs');
 
 describe('promisified', () => {
-  describe('exec', () => {
-    beforeEach(() => {
-      childProcess.exec.mockReset();
-    });
-
-    it('passes args through to child_process.exec', () => {
-      exec('foo', {bar: 'baz'});
-
-      expect(childProcess.exec).toHaveBeenCalledWith(
-        'foo',
-        {bar: 'baz'},
-        expect.any(Function),
-      );
-    });
-
-    it('resolves when no cli error is thrown', () => {
-      const promise = exec('foo', {}).then((result) => {
-        expect(result).toEqual({
-          stdout: 'fizz',
-          stderr: 'buzz',
-        });
-      });
-
-      const callbackArg = childProcess.exec.mock.calls[0][2];
-      callbackArg(null, 'fizz', 'buzz');
-
-      return promise;
-    });
-
-    it('throws when a cli error happens', () => {
-      const promise = exec('foo', {}).catch((result) => {
-        expect(result).toEqual({
-          error: 'failed',
-          stdout: 'fizz',
-          stderr: 'buzz',
-        });
-      });
-
-      const callbackArg = childProcess.exec.mock.calls[0][2];
-      callbackArg('failed', 'fizz', 'buzz');
-
-      return promise;
-    });
-  });
-
-
   describe('execFile', () => {
     beforeEach(() => {
       childProcess.execFile.mockReset();
@@ -146,6 +100,22 @@ describe('promisified', () => {
       callbackArg('failed', 'bytes: ?');
 
       return promise;
+    });
+  });
+
+  describe('read', () => {
+    beforeEach(() => {
+      fs.readFile.mockReset();
+    });
+
+    it('passes args through to fs.readFile', () => {
+      read('foo.js');
+
+      expect(fs.readFile).toHaveBeenCalledWith(
+        'foo.js',
+        'utf8',
+        expect.any(Function),
+      );
     });
   });
 

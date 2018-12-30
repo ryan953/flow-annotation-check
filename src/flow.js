@@ -8,7 +8,8 @@ import type {ErrorReport, Flags, FlowStatus} from './types';
 import type {IOResult} from './promisified';
 
 import {unique} from './core';
-import {escapeShell, exec, execFile, stat, append, truncate} from './promisified';
+import {execFile, read, append, truncate} from './promisified';
+import {parse} from 'babel-eslint';
 
 type ASTComment = {
   type: 'Line' | 'Block' | string,
@@ -89,18 +90,11 @@ function astToFlowStatus(ast: AST): FlowStatus {
 }
 
 function genCheckFlowStatus(
-  flowPath: string,
+  _: string,
   file: string,
 ): Promise<FlowStatus> {
-  const options = {maxBuffer: Infinity};
-
-  return exec(`${flowPath} ast ${escapeShell(file)}`, options)
-    .then(({stdout, stderr}): AST => {
-      if (stderr) {
-        throw new Error(stderr);
-      }
-      return JSON.parse(String(stdout));
-    })
+  return read(file)
+    .then((data) => parse(data))
     .then(astToFlowStatus);
 }
 
