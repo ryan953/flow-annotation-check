@@ -9,7 +9,8 @@ import packageJSON from '../package.json';
 import {ArgumentParser} from 'argparse';
 import {DEFAULT_FLAGS, OutputFormats, VisibleLevelTypes, VisibleStatusTypes} from './types';
 
-function printDefault(value) {
+// flowlint-next-line unclear-type:off
+function printDefault(value: any) {
   return `(default: '${JSON.stringify(value)}')`;
 }
 
