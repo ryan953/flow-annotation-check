@@ -26,6 +26,10 @@ const flowDetectedFixtures = [
 const flowFailedFixtures = [
   {status: 'no flow', file: './fixtures/comment-blocks-10.js'},
   {status: 'no flow', file: './fixtures/comment-statement-10.js'},
+  {status: 'no flow', file: './fixtures/comment-block-after-code.js'},
+  {status: 'no flow', file: './fixtures/comment-statement-after-code.js'},
+  {status: 'no flow', file: './fixtures/comment-block-after-code.js'},
+  {status: 'no flow', file: './fixtures/use-strict-block-after-code.js'},
   {status: 'no flow', file: './fixtures/no-comments.js'},
   {status: 'flow weak', file: './fixtures/flow-weak.js'},
 ];

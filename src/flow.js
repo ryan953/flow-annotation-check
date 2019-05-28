@@ -11,12 +11,35 @@ import {unique} from './core';
 import {execFile, read, append, truncate} from './promisified';
 import {parse} from 'babel-eslint';
 
+type ASTPosition = {
+  line: number,
+  column: number,
+};
+type ASTToken = {
+  type: 'String' | 'Punctuator' | string,
+  value: string,
+  start: number,
+  end: number,
+  loc: Array<{
+    start: ASTPosition,
+    end: ASTPosition,
+  }>,
+  range: [number, number],
+};
 type ASTComment = {
   type: 'Line' | 'Block' | string,
   value: string,
+  start: number,
+  end: number,
+  loc: Array<{
+    start: ASTPosition,
+    end: ASTPosition,
+  }>,
+  range: [number, number],
 };
 type AST = {
   comments: Array<ASTComment>,
+  tokens: Array<ASTToken>,
 };
 
 type FlowCheckErrorMessage = {
@@ -57,12 +80,30 @@ function statusFromLines(lines: Array<string>): ?FlowStatus {
   return null;
 }
 
+function getFirstToken(ast: AST): null | ASTToken {
+  for (const token of ast.tokens) {
+    const isString = token.type === 'String';
+    const isSemicolon = token.type === 'Punctuator' && token.value === ';';
+    if (!isString && !isSemicolon) {
+      return token;
+    }
+  }
+  return null;
+}
+
 function astToFlowStatus(ast: AST): FlowStatus {
+  const firstToken = getFirstToken(ast);
+
   for (let i = 0; i < 10; i++) {
     const comment = ast.comments[i];
     if (!comment) {
       return FLOW_MODE.NO_FLOW;
     }
+
+    if (firstToken && firstToken.start < comment.start) {
+      return FLOW_MODE.NO_FLOW;
+    }
+
     switch (comment.type) {
       case 'Line': {
         const status = statusFromLines([comment.value.trim()]);
