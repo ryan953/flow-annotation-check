@@ -45,7 +45,6 @@
     "codecov": "^3.0.0",
     "flow-bin": "^0.98.1",
     "flow-coverage-report": "^0.6.0",
-    "flow-typed": "^2.1.1",
     "jest": "^22.1.4"
   },
   "scripts": {
@@ -58,8 +57,7 @@
     "flow:check": "flow check && flow check ./src/__tests__/fixtures",
     "flow:annotations": "npm run transpile && bin/flow-annotation-check.js",
     "flow:coverage": "flow-coverage-report",
-    "transpile": "rm -Rf lib/* && babel src --out-dir lib --ignore __tests__",
-    "flow-update-dfns": "flow-typed update"
+    "transpile": "rm -Rf lib/* && babel src --out-dir lib --ignore __tests__"
   },
   "babel": {
     "presets": [
