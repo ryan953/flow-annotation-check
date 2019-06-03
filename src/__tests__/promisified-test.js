@@ -19,10 +19,15 @@ import {
 const childProcess = require('child_process');
 const fs = require('fs');
 
+function _mock(mockFn) {
+  // $FlowExpectedError: escape hatch to silence _mockflow
+  return (mockFn: any);
+}
+
 describe('promisified', () => {
   describe('execFile', () => {
     beforeEach(() => {
-      childProcess.execFile.mockReset();
+      _mock(childProcess.execFile).mockReset();
     });
 
     it('passes args through to child_process.execFile', () => {
@@ -44,7 +49,7 @@ describe('promisified', () => {
         });
       });
 
-      const callbackArg = childProcess.execFile.mock.calls[0][3];
+      const callbackArg = _mock(childProcess.execFile).mock.calls[0][3];
       callbackArg(null, 'fizz', 'buzz');
 
       return promise;
@@ -59,7 +64,7 @@ describe('promisified', () => {
         });
       });
 
-      const callbackArg = childProcess.execFile.mock.calls[0][3];
+      const callbackArg = _mock(childProcess.execFile).mock.calls[0][3];
       callbackArg('failed', 'fizz', 'buzz');
 
       return promise;
@@ -68,7 +73,7 @@ describe('promisified', () => {
 
   describe('stat', () => {
     beforeEach(() => {
-      fs.stat.mockReset();
+      _mock(fs.stat).mockReset();
     });
 
     it('passes args through to fs.stat', () => {
@@ -85,7 +90,7 @@ describe('promisified', () => {
         expect(result).toEqual('bytes: 100');
       });
 
-      const callbackArg = fs.stat.mock.calls[0][1];
+      const callbackArg = _mock(fs.stat).mock.calls[0][1];
       callbackArg(null, 'bytes: 100');
 
       return promise;
@@ -96,7 +101,7 @@ describe('promisified', () => {
         expect(result).toEqual('failed');
       });
 
-      const callbackArg = fs.stat.mock.calls[0][1];
+      const callbackArg = _mock(fs.stat).mock.calls[0][1];
       callbackArg('failed', 'bytes: ?');
 
       return promise;
@@ -105,7 +110,7 @@ describe('promisified', () => {
 
   describe('read', () => {
     beforeEach(() => {
-      fs.readFile.mockReset();
+      _mock(fs.readFile).mockReset();
     });
 
     it('passes args through to fs.readFile', () => {
@@ -121,7 +126,7 @@ describe('promisified', () => {
 
   describe('write', () => {
     beforeEach(() => {
-      fs.writeFile.mockReset();
+      _mock(fs.writeFile).mockReset();
     });
 
     it('passes args through to fs.writeFile', () => {
@@ -139,7 +144,7 @@ describe('promisified', () => {
         expect(result).toBeUndefined();
       });
 
-      const callbackArg = fs.writeFile.mock.calls[0][2];
+      const callbackArg = _mock(fs.writeFile).mock.calls[0][2];
       callbackArg(null, 'foo bar');
 
       return promise;
@@ -150,7 +155,7 @@ describe('promisified', () => {
         expect(result).toEqual('failed');
       });
 
-      const callbackArg = fs.writeFile.mock.calls[0][2];
+      const callbackArg = _mock(fs.writeFile).mock.calls[0][2];
       callbackArg('failed', 'foo bar');
 
       return promise;
@@ -159,7 +164,7 @@ describe('promisified', () => {
 
   describe('append', () => {
     beforeEach(() => {
-      fs.appendFile.mockReset();
+      _mock(fs.appendFile).mockReset();
     });
 
     it('passes args through to fs.append', () => {
@@ -177,7 +182,7 @@ describe('promisified', () => {
         expect(result).toBeUndefined();
       });
 
-      const callbackArg = fs.appendFile.mock.calls[0][2];
+      const callbackArg = _mock(fs.appendFile).mock.calls[0][2];
       callbackArg(null, 'foo bar');
 
       return promise;
@@ -188,7 +193,7 @@ describe('promisified', () => {
         expect(result).toEqual('failed');
       });
 
-      const callbackArg = fs.appendFile.mock.calls[0][2];
+      const callbackArg = _mock(fs.appendFile).mock.calls[0][2];
       callbackArg('failed', 'foo bar');
 
       return promise;
