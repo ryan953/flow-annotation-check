@@ -33,7 +33,7 @@
   "dependencies": {
     "argparse": "^1.0.9",
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.11.1",
+    "eslint": "^6.0.0",
     "glob": "7.1.4",
     "load-pkg": "^4.0.0"
   },
