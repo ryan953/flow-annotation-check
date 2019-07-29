@@ -44,7 +44,6 @@
     "babel-preset-latest": "^6.16.0",
     "codecov": "^3.0.0",
     "flow-bin": "^0.104.0",
-    "flow-coverage-report": "^0.6.0",
     "jest": "^22.1.4"
   },
   "scripts": {
@@ -56,7 +55,7 @@
     "clean": "rm -Rf npm-debug.log lib coverage flow-coverage",
     "flow:check": "flow check && flow check ./src/__tests__/fixtures",
     "flow:annotations": "npm run transpile && bin/flow-annotation-check.js",
-    "flow:coverage": "flow-coverage-report",
+    "flow:coverage": "npx flow-coverage-report",
     "transpile": "rm -Rf lib/* && babel src --out-dir lib --ignore __tests__"
   },
   "babel": {
