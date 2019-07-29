@@ -38,13 +38,13 @@
     "load-pkg": "^4.0.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-plugin-transform-flow-strip-types": "^6.21.0",
-    "babel-plugin-transform-object-rest-spread": "^6.20.2",
-    "babel-preset-latest": "^6.16.0",
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-flow": "^7.0.0",
     "codecov": "^3.0.0",
     "flow-bin": "^0.104.0",
-    "jest": "^22.1.4"
+    "jest": "24.8.0"
   },
   "scripts": {
     "preversion": "npm run clean && npm run test && npm run transpile",
@@ -60,11 +60,15 @@
   },
   "babel": {
     "presets": [
-      "latest"
-    ],
-    "plugins": [
-      "transform-flow-strip-types",
-      "transform-object-rest-spread"
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": 8
+          }
+        }
+      ],
+      "@babel/preset-flow"
     ]
   },
   "flow-annotation-check": {
