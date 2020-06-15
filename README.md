@@ -2,7 +2,7 @@
 
 [![Current Version](https://img.shields.io/npm/v/flow-annotation-check.svg)](https://www.npmjs.com/package/flow-annotation-check)
 
-![node](https://img.shields.io/node/v/flow-annotation-check.svg) [![Build Status](https://travis-ci.org/ryan953/flow-annotation-check.svg?branch=master)](https://travis-ci.org/ryan953/flow-annotation-check) [![codecov](https://codecov.io/gh/ryan953/flow-annotation-check/branch/master/graph/badge.svg)](https://codecov.io/gh/ryan953/flow-annotation-check)
+![node](https://img.shields.io/node/v/flow-annotation-check.svg) [![Build Status](https://travis-ci.com/ryan953/flow-annotation-check.svg?branch=master)](https://travis-ci.com/ryan953/flow-annotation-check) [![codecov](https://codecov.io/gh/ryan953/flow-annotation-check/branch/master/graph/badge.svg)](https://codecov.io/gh/ryan953/flow-annotation-check)
 
 Verify the `@flow`, `@flow strict`, `@flow strict-local` and `@flow weak` annotations in your javascript files.
 
