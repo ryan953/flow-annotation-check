@@ -44,7 +44,7 @@
     "@babel/preset-flow": "^7.0.0",
     "codecov": "^3.0.0",
     "flow-bin": "^0.106.3",
-    "jest": "24.8.0"
+    "jest": "26.1.0"
   },
   "scripts": {
     "preversion": "npm run clean && npm run test && npm run transpile",
