@@ -56,7 +56,7 @@
     "flow:check": "flow check && flow check ./src/__tests__/fixtures",
     "flow:annotations": "npm run transpile && bin/flow-annotation-check.js",
     "flow:coverage": "npx flow-coverage-report",
-    "transpile": "rm -Rf lib/* && babel src --out-dir lib --ignore __tests__"
+    "transpile": "rm -Rf lib/* && babel src --out-dir lib --ignore \"**/__tests__\""
   },
   "babel": {
     "presets": [
