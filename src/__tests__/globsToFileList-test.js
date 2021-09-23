@@ -7,7 +7,7 @@
 jest.mock('glob');
 
 // $FlowFixMe need definitions for jest extensions
-const glob = require.requireMock('glob');
+const glob = require('glob');
 import globsToFileList from '../globsToFileList';
 
 describe('globsToFileList', () => {
